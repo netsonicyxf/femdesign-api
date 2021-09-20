@@ -221,6 +221,7 @@
     <Compile Include="Sections\ModelSections.cs" />
     <Compile Include="Sections\Section.cs" />
     <Compile Include="Sections\SectionDatabase.cs" />
+    <Compile Include="Shells\PanelTypeEnum.cs" />
     <Compile Include="Shells\EdgeConnectionBase.cs" />
     <Compile Include="Shells\InternalPanel.cs" />
     <Compile Include="Shells\Panel.cs" />

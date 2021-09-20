@@ -560,6 +560,9 @@
     <Compile Include="..\FemDesign.Core\Shells\Panel.cs">
       <Link>Core\Shells\Panel.cs</Link>
     </Compile>
+    <Compile Include="..\FemDesign.Core\Shells\PanelTypeEnum.cs">
+      <Link>Core\Shells\PanelTypeEnum.cs</Link>
+    </Compile>
     <Compile Include="..\FemDesign.Core\Shells\ShellBucklingType.cs">
       <Link>Core\Shells\ShellBucklingType.cs</Link>
     </Compile>
