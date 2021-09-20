@@ -581,6 +581,9 @@
     <Compile Include="..\FemDesign.Core\Shells\SlabPart.cs">
       <Link>Core\Shells\SlabPart.cs</Link>
     </Compile>
+    <Compile Include="..\FemDesign.Core\Shells\SlabTypeEnum.cs">
+      <Link>Core\Shells\SlabTypeEnum.cs</Link>
+    </Compile>
     <Compile Include="..\FemDesign.Core\Shells\Thickness.cs">
       <Link>Core\Shells\Thickness.cs</Link>
     </Compile>

@@ -231,6 +231,7 @@
     <Compile Include="Shells\ShellOrthotropy.cs" />
     <Compile Include="Shells\Slab.cs" />
     <Compile Include="Shells\SlabPart.cs" />
+    <Compile Include="Shells\SlabTypeEnum.cs" />
     <Compile Include="Shells\Thickness.cs" />
     <Compile Include="Shells\WallCorbel.cs" />
     <Compile Include="StructureGrid\Axes.cs" />
