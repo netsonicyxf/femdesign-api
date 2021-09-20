@@ -467,6 +467,9 @@
     <Compile Include="..\FemDesign.Core\Reinforcement\PunchingReinforcement.cs">
       <Link>Core\Reinforcement\PunchingReinforcement.cs</Link>
     </Compile>
+    <Compile Include="..\FemDesign.Core\Reinforcement\ReinforcementDirection.cs">
+      <Link>Core\Reinforcement\ReinforcementDirection.cs</Link>
+    </Compile>
     <Compile Include="..\FemDesign.Core\Reinforcement\Stirrups.cs">
       <Link>Core\Reinforcement\Stirrups.cs</Link>
     </Compile>

@@ -22,7 +22,7 @@ namespace FemDesign.Reinforcement
         /// <param name="face">"top"/"bottom"</param>
         /// <param name="cover">Reinforcement concrete cover.</param>
         /// <returns></returns>
-        public static Straight ReinforcementLayout(string direction, double space, GenericClasses.Face face, double cover)
+        public static Straight ReinforcementLayout(ReinforcementDirection direction, double space, GenericClasses.Face face, double cover)
         {
             return new Straight(direction, space, face, cover);
         }

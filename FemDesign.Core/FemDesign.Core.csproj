@@ -186,6 +186,7 @@
     <Compile Include="Reinforcement\Ptc.cs" />
     <Compile Include="Reinforcement\PunchingArea.cs" />
     <Compile Include="Reinforcement\PunchingReinforcement.cs" />
+    <Compile Include="Reinforcement\ReinforcementDirection.cs" />
     <Compile Include="Reinforcement\Stirrups.cs" />
     <Compile Include="Reinforcement\Straight.cs" />
     <Compile Include="Reinforcement\SurfaceReinforcement.cs" />
