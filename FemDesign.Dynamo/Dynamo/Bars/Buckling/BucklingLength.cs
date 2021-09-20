@@ -44,7 +44,7 @@ namespace FemDesign.Bars.Buckling
         /// <param name="continuouslyRestrained">Continuously restrained. True/false.</param>
         /// <returns></returns>
         [IsVisibleInDynamoLibrary(true)]
-        public static BucklingLength PressuredTopFlangeDefine(double beta = 1, string loadPosition = "top", bool continuouslyRestrained = false)
+        public static BucklingLength PressuredTopFlangeDefine(GenericClasses.VerticalAlignment loadPosition, double beta = 1, bool continuouslyRestrained = false)
         {
             return PressuredTopFlange(beta, loadPosition, continuouslyRestrained);
         }
@@ -58,7 +58,7 @@ namespace FemDesign.Bars.Buckling
         /// <param name="continuouslyRestrained">Continuously restrained. True/false.</param>
         /// <returns></returns>
         [IsVisibleInDynamoLibrary(true)]
-        public static BucklingLength PressuredBottomFlangeDefine(double beta = 1, string loadPosition = "top", bool continuouslyRestrained = false)
+        public static BucklingLength PressuredBottomFlangeDefine(GenericClasses.VerticalAlignment loadPosition, double beta = 1, bool continuouslyRestrained = false)
         {
             return PressuredBottomFlange(beta, loadPosition, continuouslyRestrained);
         }
@@ -72,7 +72,7 @@ namespace FemDesign.Bars.Buckling
         /// <param name="cantilever">Cantilever. True/false.</param>
         /// <returns></returns>
         [IsVisibleInDynamoLibrary(true)]
-        public static BucklingLength LateralTorsionalDefine(string loadPosition = "top", bool continouslyRestrained = false, bool cantilever = false)
+        public static BucklingLength LateralTorsionalDefine(GenericClasses.VerticalAlignment loadPosition, bool continouslyRestrained = false, bool cantilever = false)
         {
             return LateralTorsional(loadPosition, continouslyRestrained, cantilever);
         }
