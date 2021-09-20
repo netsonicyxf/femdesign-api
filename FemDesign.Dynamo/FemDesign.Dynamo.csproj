@@ -74,6 +74,9 @@
     <Compile Include="..\FemDesign.Core\Bars\BarPart.cs">
       <Link>Core\Bars\BarPart.cs</Link>
     </Compile>
+    <Compile Include="..\FemDesign.Core\Bars\Buckling\BucklingTypeEnum.cs">
+      <Link>Core\Bars\Buckling\BucklingTypeEnum.cs</Link>
+    </Compile>
     <Compile Include="..\FemDesign.Core\Bars\ColumnCorbel.cs">
       <Link>Core\Bars\ColumnCorbel.cs</Link>
     </Compile>
@@ -179,6 +182,9 @@
     <Compile Include="..\FemDesign.Core\GenericClasses\ExtensionMethods.cs">
       <Link>Core\GenericClasses\ExtensionMethods.cs</Link>
     </Compile>
+    <Compile Include="..\FemDesign.Core\GenericClasses\FaceEnum.cs">
+      <Link>Core\GenericClasses\FaceEnum.cs</Link>
+    </Compile>
     <Compile Include="..\FemDesign.Core\GenericClasses\GuidListType.cs">
       <Link>Core\GenericClasses\GuidListType.cs</Link>
     </Compile>
@@ -220,6 +226,9 @@
     </Compile>
     <Compile Include="..\FemDesign.Core\GenericClasses\Tolerance.cs">
       <Link>Core\GenericClasses\Tolerance.cs</Link>
+    </Compile>
+    <Compile Include="..\FemDesign.Core\GenericClasses\VerticalAlignmentEnum.cs">
+      <Link>Core\GenericClasses\VerticalAlignmentEnum.cs</Link>
     </Compile>
     <Compile Include="..\FemDesign.Core\Geometry\Contour.cs">
       <Link>Core\Geometry\Contour.cs</Link>

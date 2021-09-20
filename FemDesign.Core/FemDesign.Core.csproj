@@ -53,6 +53,7 @@
     <Compile Include="Bars\BarPart.cs" />
     <Compile Include="Bars\Buckling\BucklingData.cs" />
     <Compile Include="Bars\Buckling\BucklingLength.cs" />
+    <Compile Include="Bars\Buckling\BucklingTypeEnum.cs" />
     <Compile Include="Bars\Buckling\Position.cs" />
     <Compile Include="Bars\BarType.cs" />
     <Compile Include="Bars\ColumnCorbel.cs" />
@@ -87,6 +88,7 @@
     <Compile Include="GenericClasses\DummyXmlObject.cs" />
     <Compile Include="GenericClasses\EntityBase.cs" />
     <Compile Include="GenericClasses\ExtensionMethods.cs" />
+    <Compile Include="GenericClasses\FaceEnum.cs" />
     <Compile Include="GenericClasses\GuidListType.cs" />
     <Compile Include="GenericClasses\IFemDesignEntity.cs" />
     <Compile Include="GenericClasses\ILibraryBase.cs" />
@@ -102,6 +104,7 @@
     <Compile Include="GenericClasses\RestrictedString.cs" />
     <Compile Include="GenericClasses\StartEndType.cs" />
     <Compile Include="GenericClasses\Tolerance.cs" />
+    <Compile Include="GenericClasses\VerticalAlignmentEnum.cs" />
     <Compile Include="Geometry\Contour.cs" />
     <Compile Include="Geometry\Degree.cs" />
     <Compile Include="Geometry\Edge.cs" />

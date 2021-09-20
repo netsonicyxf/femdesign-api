@@ -29,13 +29,7 @@ namespace FemDesign.Reinforcement
             set {this._space = RestrictedDouble.Positive(value);}
         }
         [XmlAttribute("face")]
-        public string _face; // sf_rc_face. Optional
-        [XmlIgnore]
-        public string Face
-        {
-            get {return this._face;}
-            set {this._face = RestrictedString.SfRcFace(value);}
-        }
+        public GenericClasses.Face Face { get; set; }
         [XmlAttribute("cover")]
         public double _cover; // positive_double. Default = 0.02
         [XmlIgnore]
@@ -56,7 +50,7 @@ namespace FemDesign.Reinforcement
         /// <summary>
         /// Private constructor accessed by static methods.
         /// </summary>
-        public Straight(string direction, double space, string face, double cover)
+        public Straight(string direction, double space, GenericClasses.Face face, double cover)
         {
             this.Direction = direction;
             this.Space = space;

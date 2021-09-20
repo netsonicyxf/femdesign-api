@@ -13,7 +13,7 @@ namespace FemDesign.Bars.Buckling
     public partial class BucklingLength
     {
         [XmlAttribute("type")]
-        public string Type { get; set; } // bar_buckling_type
+        public BucklingType Type { get; set; } // bar_buckling_type
 
         [XmlAttribute("beta")]
         public string _beta; // non_neg_max_100
@@ -103,7 +103,7 @@ namespace FemDesign.Bars.Buckling
         /// <summary>
         /// Constructor for flexural buckling length.
         /// </summary>
-        internal BucklingLength(Position position, string type, double beta = 1, bool sway = false)
+        internal BucklingLength(Position position, BucklingType type, double beta = 1, bool sway = false)
         {
             this.Position = position;
             this.Type = type;
@@ -117,7 +117,7 @@ namespace FemDesign.Bars.Buckling
         /// <summary>
         /// Constructor for pressured flange buckling length.
         /// </summary>
-        internal BucklingLength(Position position, string type, double beta, string loadPosition, bool continouslyRestrained)
+        internal BucklingLength(Position position, BucklingType type, double beta, string loadPosition, bool continouslyRestrained)
         {
             this.Position = position;
             this.Type = type;
@@ -132,7 +132,7 @@ namespace FemDesign.Bars.Buckling
         /// <summary>
         /// Constructor for lateral torsional buckling length.
         /// </summary>
-        internal BucklingLength(Position position, string type, string loadPosition, bool continouslyRestrained, bool cantilever)
+        internal BucklingLength(Position position, BucklingType type, string loadPosition, bool continouslyRestrained, bool cantilever)
         {
             this.Position = position;
             this.Type = type;
@@ -156,8 +156,7 @@ namespace FemDesign.Bars.Buckling
         /// <returns></returns>
         public static BucklingLength FlexuralStiff(double beta = 1, bool sway = false)
         {
-            string _type = "flexural_stiff";
-            return new BucklingLength(Position.AlongBar(), _type, beta, sway);
+            return new BucklingLength(Position.AlongBar(), BucklingType.FlexuralStiff, beta, sway);
         }
         /// <summary>
         /// Define BucklingLength in Flexural Weak direction.
@@ -168,8 +167,7 @@ namespace FemDesign.Bars.Buckling
         /// <returns></returns>
         public static BucklingLength FlexuralWeak(double beta = 1, bool sway = false)
         {
-            string _type = "flexural_weak";
-            return new BucklingLength(Position.AlongBar(), _type, beta, sway);
+            return new BucklingLength(Position.AlongBar(), BucklingType.FlexuralWeak, beta, sway);
         }
         /// <summary>
         /// Define BucklingLength for Pressured Top Flange.
@@ -181,8 +179,7 @@ namespace FemDesign.Bars.Buckling
         /// <returns></returns>
         public static BucklingLength PressuredTopFlange(double beta = 1, string loadPosition = "top", bool continuouslyRestrained = false)
         {
-            string _type = "pressured_flange";
-            return new BucklingLength(Position.AlongBar(), _type, beta, loadPosition, continuouslyRestrained);
+            return new BucklingLength(Position.AlongBar(), BucklingType.PressuredTopFlange, beta, loadPosition, continuouslyRestrained);
         }
         /// <summary>
         /// Define BucklingLength for Pressured Bottom Flange.
@@ -194,8 +191,7 @@ namespace FemDesign.Bars.Buckling
         /// <returns></returns>
         public static BucklingLength PressuredBottomFlange(double beta = 1, string loadPosition = "top", bool continuouslyRestrained = false)
         {
-            string _type = "pressured_bottom_flange";
-            return new BucklingLength(Position.AlongBar(), _type, beta, loadPosition, continuouslyRestrained);
+            return new BucklingLength(Position.AlongBar(), BucklingType.PressuredBottomFlange, beta, loadPosition, continuouslyRestrained);
         }
         /// <summary>
         /// Define BucklingLength for Lateral Torsional buckling.
@@ -207,8 +203,7 @@ namespace FemDesign.Bars.Buckling
         /// <returns></returns>
         public static BucklingLength LateralTorsional(string loadPosition = "top", bool continouslyRestrained = false, bool cantilever = false)
         {
-            string _type = "lateral_torsional";
-            return new BucklingLength(Position.AlongBar(), _type, loadPosition, continouslyRestrained, cantilever);
+            return new BucklingLength(Position.AlongBar(), BucklingType.LateralTorsional, loadPosition, continouslyRestrained, cantilever);
         }
     }
 }

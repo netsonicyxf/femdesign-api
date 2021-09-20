@@ -307,19 +307,7 @@ namespace FemDesign.Shells
         [XmlAttribute("thickness")]
         public double Thickness { get; set; }
         [XmlAttribute("alignment")]
-        public string _alignment; // ver_align
-        [XmlIgnore]
-        public string Alignment
-        {
-            get
-            {
-                return this._alignment;
-            }
-            set
-            {
-                this._alignment = RestrictedString.VerticalAlign(value);
-            }
-        }
+        public GenericClasses.VerticalAlignment Alignment { get; set; }
         [XmlAttribute("align_offset")]
         public double AlignOffset { get; set; }
         [XmlAttribute("ecc_calc")]

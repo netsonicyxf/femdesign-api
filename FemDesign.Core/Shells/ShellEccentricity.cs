@@ -5,12 +5,7 @@ namespace FemDesign.Shells
 {
     public partial class ShellEccentricity
     {
-        private string _alignment; // ver_align
-        public string Alignment
-        {
-            get {return this._alignment;}
-            set {this._alignment = RestrictedString.VerticalAlign(value);}
-        }
+        public GenericClasses.VerticalAlignment Alignment { get; set; }
         private double _eccentricity; // align_offset // abs_max_1e20
         public double Eccentricity
         {
@@ -28,7 +23,7 @@ namespace FemDesign.Shells
 
         }
         
-        public ShellEccentricity(string alignment, double eccentricity, bool eccentricityCalculation, bool eccentricityByCracking)
+        public ShellEccentricity(GenericClasses.VerticalAlignment alignment, double eccentricity, bool eccentricityCalculation, bool eccentricityByCracking)
         {
             this.Alignment = alignment;
             this.Eccentricity = eccentricity;
@@ -43,7 +38,7 @@ namespace FemDesign.Shells
         /// <returns></returns>
         public static ShellEccentricity GetDefault()
         {
-            return new ShellEccentricity("center", 0, false, false);
+            return new ShellEccentricity(GenericClasses.VerticalAlignment.Center, 0, false, false);
         }
     }
 }
