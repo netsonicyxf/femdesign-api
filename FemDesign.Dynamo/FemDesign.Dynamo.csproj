@@ -299,6 +299,9 @@
     <Compile Include="..\FemDesign.Core\Loads\LoadCombTypeEnum.cs">
       <Link>Core\Loads\LoadCombTypeEnum.cs</Link>
     </Compile>
+    <Compile Include="..\FemDesign.Core\Loads\LoadDirTypeEnum.cs">
+      <Link>Core\Loads\LoadDirTypeEnum.cs</Link>
+    </Compile>
     <Compile Include="..\FemDesign.Core\Loads\LoadLocationValue.cs">
       <Link>Core\Loads\LoadLocationValue.cs</Link>
     </Compile>
