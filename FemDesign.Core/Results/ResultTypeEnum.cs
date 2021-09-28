@@ -16,25 +16,25 @@ namespace FemDesign.Results
         /// Quantity estimation, Concrete
         /// </summary>
         [Parseable("QuantityEstimationConcrete")]
-        [Result(typeof(QuantityEstimationConcrete), ListProc.QuantityEstimationConcrete, ListProc.QuantityEstimationConcrete)]
+        [Result(typeof(QuantityEstimationConcrete), ListProc.QuantityEstimationConcrete)]
         QuantityEstimationConcrete,
         /// <summary>
         /// Quantity estimation, Steel
         /// </summary>
         [Parseable("QuantityEstimationSteel")]
-        [Result(typeof(QuantityEstimationSteel), ListProc.QuantityEstimationSteel, ListProc.QuantityEstimationSteel)]
+        [Result(typeof(QuantityEstimationSteel), ListProc.QuantityEstimationSteel)]
         QuantityEstimationSteel,
         /// <summary>
         /// Quantity estimation, Timber
         /// </summary>
         [Parseable("QuantityEstimationTimber")]
-        [Result(typeof(QuantityEstimationTimber), ListProc.QuantityEstimationTimber, ListProc.QuantityEstimationTimber)]
+        [Result(typeof(QuantityEstimationTimber), ListProc.QuantityEstimationTimber)]
         QuantityEstimationTimber,
         /// <summary>
         /// Quantity estimation, Profiled panel
         /// </summary>
         [Parseable("QuantityEstimationProfiledPanel")]
-        [Result(typeof(QuantityEstimationProfiledPlate), ListProc.QuantityEstimationProfiledPanel, ListProc.QuantityEstimationProfiledPanel)]
+        [Result(typeof(QuantityEstimationProfiledPlate), ListProc.QuantityEstimationProfiledPanel)]
         QuantityEstimationProfiledPanel,
 
         /* LOAD CASES AND COMBINATIONS */
