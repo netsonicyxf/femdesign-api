@@ -28,9 +28,9 @@ namespace FemDesign.Results
 
             Type iResultType = typeof(Results.IResult);
             var resultTypes = AppDomain.CurrentDomain.GetAssemblies()
-                .Where(a => a.GetName().FullName.StartsWith("FemDesign"))
+                .Where(a => a.GetName().FullName.StartsWith("FemDesign.Core"))
                 .SelectMany(s => s.GetTypes())
-                .Where(p => iResultType.IsAssignableFrom(p) && p.IsClass);
+                .Where(p => iResultType.IsAssignableFrom(p) && p.IsClass && p.IsPublic);
 
             HeaderExpression = new Regex(string.Join("|", resultTypes.Select(GetHeaderExpression).Select(r => r.ToString())));
             ResultTypesIdentificationExpressions = resultTypes.ToDictionary(t => t, GetIdentificationExpression);
@@ -159,6 +159,9 @@ namespace FemDesign.Results
             PropertyInfo propertyInfo = type.GetProperty("IdentificationExpression", BindingFlags.Static | BindingFlags.NonPublic);
             Regex identificationExpression = (Regex)propertyInfo.GetValue(null, null);
 
+            if (identificationExpression == null)
+                throw new ApplicationException($"{type.FullName} does not have a HeaderExpression property but is inheriting from {typeof(Results.IResult).FullName}");
+
             return identificationExpression;
         }
 
@@ -168,6 +171,10 @@ namespace FemDesign.Results
                 throw new Exception();
 
             PropertyInfo propertyInfo = type.GetProperty("HeaderExpression", BindingFlags.Static | BindingFlags.NonPublic);
+
+            if (propertyInfo == null)
+                throw new ApplicationException($"{type.FullName} does not have a HeaderExpression property but is inheriting from {typeof(Results.IResult).FullName}");
+
             Regex headerExpression = (Regex)propertyInfo.GetValue(null, null);
 
             return headerExpression;
