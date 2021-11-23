@@ -52,21 +52,21 @@ namespace FemDesign.Results
         /// </summary>
         public string Quality { get; }
         /// <summary>
-        /// Volume quantity [mm3]
+        /// Weight quantity [t]
         /// </summary>
-        public double Volume { get; }
+        public double TotalWeight { get; }
         /// <summary>
-        /// Formwork quantity [mm2]
+        /// Formwork quantity [m2]
         /// </summary>
         public double Formwork { get; }
 
-        internal QuantityEstimationConcrete(string id, string storey, string structure, string quality, double volume, double formwork)
+        internal QuantityEstimationConcrete(string id, string storey, string structure, string quality, double weight, double formwork)
         {
             Storey = storey;
             Structure = structure;
             Id = id;
             Quality = quality;
-            Volume = volume;
+            TotalWeight = weight;
             Formwork = formwork;
         }
 
@@ -93,13 +93,32 @@ namespace FemDesign.Results
 
         internal static QuantityEstimationConcrete Parse(string[] row, CsvParser reader, Dictionary<string, string> HeaderData)
         {
-            string storey = row[0] == "-" ? null : row[0];
-            string structure = row[1];
-            string id = row[2];
-            string quality = row[3];
-            double volume = double.Parse(row[4], CultureInfo.InvariantCulture);
-            double formwork = double.Parse(row[5], CultureInfo.InvariantCulture);
-            return new QuantityEstimationConcrete(id, storey, structure, quality, volume, formwork);
+            if (row.Length == 6) {
+                string storey = row[0] == "-" ? null : row[0];
+                string structure = row[1];
+                string id = row[2];
+                string quality = row[3];
+                double volume = double.Parse(row[4], CultureInfo.InvariantCulture);
+                double formwork = double.Parse(row[5], CultureInfo.InvariantCulture);
+
+                // TODO: Get a better estimate or remove compatability with old results from FEM-Design 20 and earlier
+                // double weight = volume * getMaterialDensity(quality);
+                double weight = volume * 2.4; // 2.4 ton per m3 for concrete as a rough estimate
+
+                return new QuantityEstimationConcrete(id, storey, structure, quality, weight, formwork);
+            }
+            else if (row.Length == 12) // FEM-Design 21
+            {
+                string storey = row[0] == "-" ? null : row[0];
+                string structure = row[1];
+                string id = row[2];
+                string quality = row[3];
+                double volume = double.Parse(row[8], CultureInfo.InvariantCulture);
+                double weight = double.Parse(row[9], CultureInfo.InvariantCulture);
+                double formwork = double.Parse(row[10], CultureInfo.InvariantCulture);
+                return new QuantityEstimationConcrete(id, storey, structure, quality, volume, formwork);
+            }
+            throw new FormatException("Invalid row length");
         }
     }
 
