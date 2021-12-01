@@ -31,6 +31,12 @@ namespace FemDesign.Results
         [Result(typeof(QuantityEstimationTimber), ListProc.QuantityEstimationTimber)]
         QuantityEstimationTimber,
         /// <summary>
+        /// Quantity estimation, Timber panel
+        /// </summary>
+        [Parseable("QuantityEstimationTimberPanel")]
+        [Result(typeof(QuantityEstimationTimberPanel), ListProc.QuantityEstimationTimberPanel)]
+        QuantityEstimationTimberPanel,
+        /// <summary>
         /// Quantity estimation, Reinforcement
         /// </summary>
         [Parseable("QuantityEstimationReinforcement")]

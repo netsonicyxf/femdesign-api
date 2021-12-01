@@ -79,7 +79,7 @@ namespace FemDesign.Results
         {
             get
             {
-                return new Regex(@"(?'type'Quantity estimation), (?'result'Concrete)");
+                return new Regex(@"^(?'type'Quantity estimation), (?'result'Concrete)$");
             }
         }
 
@@ -113,10 +113,9 @@ namespace FemDesign.Results
                 string structure = row[1];
                 string id = row[2];
                 string quality = row[3];
-                double volume = double.Parse(row[8], CultureInfo.InvariantCulture);
                 double weight = double.Parse(row[9], CultureInfo.InvariantCulture);
                 double formwork = double.Parse(row[10], CultureInfo.InvariantCulture);
-                return new QuantityEstimationConcrete(id, storey, structure, quality, volume, formwork);
+                return new QuantityEstimationConcrete(id, storey, structure, quality, weight, formwork);
             }
             throw new FormatException("Invalid row length");
         }
@@ -171,7 +170,7 @@ namespace FemDesign.Results
         {
             get
             {
-                return new Regex(@"(?'type'Quantity estimation), (?'result'Reinforcement)");
+                return new Regex(@"^(?'type'Quantity estimation), (?'result'Reinforcement)$");
             }
         }
 
@@ -258,7 +257,7 @@ namespace FemDesign.Results
         {
             get
             {
-                return new Regex(@"(?'type'Quantity estimation), (?'result'Steel)");
+                return new Regex(@"^(?'type'Quantity estimation), (?'result'Steel)$");
             }
         }
 
@@ -348,7 +347,7 @@ namespace FemDesign.Results
         {
             get
             {
-                return new Regex(@"(?'type'Quantity estimation), (?'result'Timber)");
+                return new Regex(@"^(?'type'Quantity estimation), (?'result'Timber)$");
             }
         }
 
@@ -372,6 +371,118 @@ namespace FemDesign.Results
             double totalWeight = double.Parse(row[7], CultureInfo.InvariantCulture);
             double paintedArea = double.Parse(row[8], CultureInfo.InvariantCulture);
             return new QuantityEstimationTimber(id, storey, structure, quality, section, unitWeight, subtotal, totalWeight, paintedArea);
+        }
+    }
+
+    /// <summary>
+    /// FemDesign "Quantity estimation, Timber panel" result
+    /// </summary>
+    public class QuantityEstimationTimberPanel : IQuantityEstimationResult
+    {
+        /// <summary>
+        /// Element name identifier
+        /// </summary>
+        public string Id { get; }
+        /// <summary>
+        /// Storey identifier
+        /// </summary>
+        public string Storey { get; }
+        /// <summary>
+        /// Structural element type
+        /// </summary>
+        public string Structure { get; }
+        /// <summary>
+        /// Material quality identifier
+        /// </summary>
+        public string Quality { get; }
+        /// <summary>
+        /// Thickness [mm]
+        /// </summary>
+        public double Thickness { get; }
+        /// <summary>
+        /// Panel type
+        /// </summary>
+        public string PanelType { get; }
+        /// <summary>
+        /// Length of panel
+        /// </summary>
+        public double Length { get; }
+        /// <summary>
+        /// Width of panel
+        /// </summary>
+        public double Width { get; }
+        /// <summary>
+        /// Area of panel
+        /// </summary>
+        public double Area { get; }
+        /// <summary>
+        /// Weight per unit [t]
+        /// </summary>
+        public double Weight { get; }
+        /// <summary>
+        /// Number of panels of type
+        /// </summary>
+        public int Pcs { get; }
+        /// <summary>
+        /// Total weight [t]
+        /// </summary>
+        public double TotalWeight { get; }
+        /// <summary>
+        /// Painted area [m2]
+        /// </summary>
+        public double PaintedArea { get; }
+        internal QuantityEstimationTimberPanel(string id, string storey, string structure, string quality, double thickness, string panelType, double length, double width, double area, double weight, int pcs, double totalWeight)
+        {
+            Storey = storey;
+            Structure = structure;
+            Id = id;
+            Quality = quality;
+            Thickness = thickness;
+            PanelType = panelType;
+            Length = length;
+            Width = width;
+            Area = area;
+            Weight = weight;
+            Pcs = pcs;
+            TotalWeight = totalWeight;
+        }
+
+        public override string ToString()
+        {
+            return $"{base.ToString()}, {Id}, {PanelType}";
+        }
+
+        internal static Regex IdentificationExpression
+        {
+            get
+            {
+                return new Regex(@"^(?'type'Quantity estimation), (?'result'Timber panel)$");
+            }
+        }
+
+        internal static Regex HeaderExpression
+        {
+            get
+            {
+                return new Regex(@"Quantity estimation, Timber panel|Storey\t|\t*\[.+\]|TOTAL\t");
+            }
+        }
+
+        internal static QuantityEstimationTimberPanel Parse(string[] row, CsvParser reader, Dictionary<string, string> HeaderData)
+        {
+            string storey = row[0] == "-" ? null : row[0];
+            string structure = row[1];
+            string id = row[2];
+            string quality = row[3];
+            double thickness = double.Parse(row[4], CultureInfo.InvariantCulture);
+            string panelType = row[5];
+            double length = double.Parse(row[6], CultureInfo.InvariantCulture);
+            double width = double.Parse(row[7], CultureInfo.InvariantCulture);
+            double area = double.Parse(row[8], CultureInfo.InvariantCulture);
+            double weight = double.Parse(row[9], CultureInfo.InvariantCulture);
+            int pcs = int.Parse(row[10], CultureInfo.InvariantCulture);
+            double totalWeight = double.Parse(row[11], CultureInfo.InvariantCulture);
+            return new QuantityEstimationTimberPanel(id, storey, structure, quality, thickness, panelType, length, width, area, weight, pcs, totalWeight);
         }
     }
 
@@ -451,7 +562,7 @@ namespace FemDesign.Results
         {
             get
             {
-                return new Regex(@"(?'type'Quantity estimation), (?'result'Profiled panel)");
+                return new Regex(@"^(?'type'Quantity estimation), (?'result'Profiled panel)$");
             }
         }
 
