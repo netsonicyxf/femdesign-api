@@ -28,6 +28,8 @@ namespace FemDesign.Results
         /// Material quality identifier
         /// </summary>
         string Quality { get; }
+
+        double TotalWeight { get; }
     }
 
     /// <summary>
@@ -149,7 +151,7 @@ namespace FemDesign.Results
         /// <summary>
         /// Quantity [t]
         /// </summary>
-        public double Quantity { get; }
+        public double TotalWeight { get; }
 
         internal QuantityEstimationReinforcement(string id, string storey, string structure, string quality, double diameter, double quantity)
         {
@@ -158,7 +160,7 @@ namespace FemDesign.Results
             Id = id;
             Quality = quality;
             Diameter = diameter;
-            Quantity = quantity;
+            TotalWeight = quantity;
         }
 
         public override string ToString()
