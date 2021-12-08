@@ -107,7 +107,11 @@ namespace FemDesign.Calculate
         public static List<string> GetOpenFileNames()
         {
             Process[] processes = Process.GetProcessesByName("fd3dstruct");
-            return processes.Select(p => p.MainWindowTitle.Split(new string[] { " - " }, System.StringSplitOptions.None)[2]).ToList();
+            return processes.Select(p =>
+            {
+                string[] parts = p.MainWindowTitle.Split(new string[] { " - " }, System.StringSplitOptions.None);
+                return parts.Length > 2 ? parts[2] : null;
+            }).ToList();
         }
 
         /// <summary>
