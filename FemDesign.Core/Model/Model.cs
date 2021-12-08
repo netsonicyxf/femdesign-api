@@ -180,7 +180,7 @@ namespace FemDesign
             }
             catch (System.InvalidOperationException ex)
             {
-                throw ex.InnerException.InnerException;
+                throw ex;
             }
 
             // close reader
