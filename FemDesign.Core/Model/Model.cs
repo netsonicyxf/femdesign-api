@@ -1,5 +1,6 @@
 // https://strusoft.com/
 
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -175,7 +176,7 @@ namespace FemDesign
             //
             XmlSerializer deserializer = new XmlSerializer(typeof(Model));
             TextReader reader = new StreamReader(filePath);
-            
+
             object obj;
             try
             {
@@ -420,7 +421,7 @@ namespace FemDesign
         {
             foreach (Reinforcement.Ptc ptc in obj.Ptc)
             {
-                    this.AddPtc(ptc, overwrite);
+                this.AddPtc(ptc, overwrite);
             }
         }
 
@@ -1709,7 +1710,7 @@ namespace FemDesign
             else if (inModel && overwrite)
             {
                 this.Entities.BarReinforcements.RemoveAll(x => x.Guid == obj.Guid);
-            } 
+            }
 
             // add obj
             this.Entities.BarReinforcements.Add(obj);
@@ -2489,7 +2490,7 @@ namespace FemDesign
 
 
         private void AddEntity(Cover obj, bool overwrite) => AddCover(obj, overwrite);
-        
+
         private void AddEntity(ModellingTools.FictitiousShell obj, bool overwrite) => AddFictShell(obj, overwrite);
         private void AddEntity(ModellingTools.FictitiousBar obj, bool overwrite) => AddFictBar(obj, overwrite);
         private void AddEntity(ModellingTools.ConnectedPoints obj, bool overwrite) => AddConnectedPoints(obj, overwrite);
@@ -2528,50 +2529,55 @@ namespace FemDesign
         /// </summary>
         internal void GetBars()
         {
-            foreach (Bars.Bar item in this.Entities.Bars)
+            Dictionary<Guid, Sections.ComplexSection> complexSectionsMap = this.Sections.ComplexSection.ToDictionary(s => s.Guid, s => s.DeepClone());
+
+            Dictionary<Guid, Materials.Material> materialMap = this.Materials.Material.ToDictionary(d => d.Guid);
+
+            Dictionary<Guid, Reinforcement.BarReinforcement> reinforcementMap = this.Entities.BarReinforcements.ToDictionary(b => b.BaseBar.Guid);
+
+            Dictionary<Guid, Sections.Section> sectionsMap = this.Sections.Section.ToDictionary(s => s.Guid, s => s.DeepClone());
+
+            foreach (Bars.Bar bar in this.Entities.Bars)
             {
-                // set type on barPart
-                item.BarPart.Type = item.Type;
+                // Set type on barPart
+                bar.BarPart.Type = bar.Type;
 
-                // get complex section
-                if (item.Type != Bars.BarType.Truss)
+                // Get complex section
+                if (bar.Type != Bars.BarType.Truss)
                 {
-                    foreach (FemDesign.Sections.ComplexSection complexSection in this.Sections.ComplexSection)
+                    try
                     {
-                        var complexSectionClone = complexSection.DeepClone();
-                        if (complexSection.Guid == item.BarPart.ComplexSectionRef)
-                        {
-                            item.BarPart.ComplexSection = complexSectionClone;
-                        }
+                        bar.BarPart.ComplexSection = complexSectionsMap[bar.BarPart.ComplexSectionRef];
                     }
-
-                    // check if complex section found
-                    if (item.BarPart.ComplexSectionIsNull)
+                    catch (KeyNotFoundException)
                     {
-                        throw new System.ArgumentException("No matching complex section found. Model.GetBars() failed.");
+                        throw new ArgumentException("No matching complex section found. Model.GetBars() failed.");
+                    }
+                    catch (ArgumentNullException)
+                    {
+                        throw new ArgumentNullException($"BarPart {bar.BarPart.Identifier} BarPart.ComplexSectionRef is null");
                     }
                 }
 
 
-                // get material
-                foreach (Materials.Material material in this.Materials.Material)
+                // Get material
+                try
                 {
-                    if (material.Guid == item.BarPart.ComplexMaterialRef)
-                    {
-                        item.BarPart.Material = material;
-                    }
+                    bar.BarPart.Material = materialMap[bar.BarPart.ComplexMaterialRef];
+                }
+                catch (KeyNotFoundException)
+                {
+                    throw new ArgumentException("No matching material found. Model.GetBars() failed.");
+                }
+                catch (ArgumentNullException)
+                {
+                    throw new ArgumentNullException($"BarPart {bar.BarPart.Identifier} BarPart.ComplexMaterialRef is null");
                 }
 
-                // check if material found
-                if (item.BarPart.Material == null)
-                {
-                    throw new System.ArgumentException("No matching material found. Model.GetBars() failed.");
-                }
-
-                // get bar reinforcement
+                // Get bar reinforcement
                 foreach (Reinforcement.BarReinforcement barReinf in this.Entities.BarReinforcements)
                 {
-                    if (barReinf.BaseBar.Guid == item.BarPart.Guid)
+                    if (barReinf.BaseBar.Guid == bar.BarPart.Guid)
                     {
                         // get wire material
                         foreach (Materials.Material material in this.ReinforcingMaterials.Material)
@@ -2590,7 +2596,7 @@ namespace FemDesign
                         else
                         {
                             // add bar reinforcement to bar
-                            item.Reinforcement.Add(barReinf);
+                            bar.Reinforcement.Add(barReinf);
                         }
 
                     }
@@ -2599,7 +2605,7 @@ namespace FemDesign
                 // get ptc
                 foreach (Reinforcement.Ptc ptc in this.Entities.PostTensionedCables)
                 {
-                    if (ptc.BaseObject == item.BarPart.Guid)
+                    if (ptc.BaseObject == bar.BarPart.Guid)
                     {
                         // get strand material
                         foreach (Reinforcement.PtcStrandLibType material in this.PtcStrandTypes.PtcStrandLibTypes)
@@ -2618,42 +2624,29 @@ namespace FemDesign
                         else
                         {
                             // add ptc to bar
-                            item.Ptc.Add(ptc);
+                            bar.Ptc.Add(ptc);
                         }
                     }
                 }
 
-                // get section
-                foreach (Sections.Section section in this.Sections.Section)
+                // Get section
+                try
                 {
-                    var sectionClone = section.DeepClone();
-                    
-                    if (item.BarPart.Type == Bars.BarType.Truss)
+
+                    if (bar.BarPart.Type == Bars.BarType.Truss)
                     {
-                        if (sectionClone.Guid == item.BarPart.ComplexSectionRef)
-                        {
-                            item.BarPart.StartSection = sectionClone;
-                            item.BarPart.EndSection = sectionClone;
-                        }
+                        bar.BarPart.StartSection = sectionsMap[bar.BarPart.ComplexSectionRef];
+                        bar.BarPart.EndSection = sectionsMap[bar.BarPart.ComplexSectionRef];
                     }
                     else
                     {
-                        if (sectionClone.Guid == item.BarPart.ComplexSection.Section[0].SectionRef)
-                        {
-                            item.BarPart.StartSection = sectionClone;
-                        }
-
-                        if (sectionClone.Guid == item.BarPart.ComplexSection.Section.Last().SectionRef)
-                        {
-                            item.BarPart.EndSection = sectionClone;
-                        }
+                        bar.BarPart.StartSection = sectionsMap[bar.BarPart.ComplexSection.Section[0].SectionRef];
+                        bar.BarPart.EndSection = sectionsMap[bar.BarPart.ComplexSection.Section.Last().SectionRef];
                     }
                 }
-
-                // check if section found
-                if (item.BarPart.StartSection == null || item.BarPart.EndSection == null)
+                catch (KeyNotFoundException)
                 {
-                    throw new System.ArgumentException("No matching section found. Model.GetBars() failed");
+                    throw new ArgumentException("No matching section found. Model.GetBars() failed.");
                 }
             }
         }
