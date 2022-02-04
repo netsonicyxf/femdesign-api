@@ -35,12 +35,13 @@ namespace FemDesign.Installer
             this.DownloadButton = new System.Windows.Forms.Button();
             this.GrasshopperCheckBox = new System.Windows.Forms.CheckBox();
             this.DynamoCheckBox = new System.Windows.Forms.CheckBox();
+            this.IncludePreReleaseCheckBox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // RefreshButton
             // 
             this.RefreshButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.RefreshButton.Location = new System.Drawing.Point(392, 35);
+            this.RefreshButton.Location = new System.Drawing.Point(392, 56);
             this.RefreshButton.Name = "RefreshButton";
             this.RefreshButton.Size = new System.Drawing.Size(21, 23);
             this.RefreshButton.TabIndex = 0;
@@ -53,10 +54,10 @@ namespace FemDesign.Installer
             this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.Location = new System.Drawing.Point(35, 131);
+            this.textBox1.Location = new System.Drawing.Point(35, 156);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(378, 249);
+            this.textBox1.Size = new System.Drawing.Size(378, 224);
             this.textBox1.TabIndex = 1;
             // 
             // VersionSelector
@@ -68,7 +69,7 @@ namespace FemDesign.Installer
             "Item1",
             "Item2",
             "Item3"});
-            this.VersionSelector.Location = new System.Drawing.Point(35, 35);
+            this.VersionSelector.Location = new System.Drawing.Point(35, 56);
             this.VersionSelector.Name = "VersionSelector";
             this.VersionSelector.Size = new System.Drawing.Size(351, 21);
             this.VersionSelector.TabIndex = 2;
@@ -78,7 +79,7 @@ namespace FemDesign.Installer
             // 
             this.DownloadButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.DownloadButton.Location = new System.Drawing.Point(35, 86);
+            this.DownloadButton.Location = new System.Drawing.Point(35, 111);
             this.DownloadButton.Name = "DownloadButton";
             this.DownloadButton.Size = new System.Drawing.Size(378, 39);
             this.DownloadButton.TabIndex = 3;
@@ -91,7 +92,7 @@ namespace FemDesign.Installer
             this.GrasshopperCheckBox.AutoSize = true;
             this.GrasshopperCheckBox.Checked = true;
             this.GrasshopperCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.GrasshopperCheckBox.Location = new System.Drawing.Point(35, 62);
+            this.GrasshopperCheckBox.Location = new System.Drawing.Point(35, 83);
             this.GrasshopperCheckBox.Name = "GrasshopperCheckBox";
             this.GrasshopperCheckBox.Size = new System.Drawing.Size(86, 17);
             this.GrasshopperCheckBox.TabIndex = 4;
@@ -102,18 +103,30 @@ namespace FemDesign.Installer
             // 
             this.DynamoCheckBox.AutoSize = true;
             this.DynamoCheckBox.Enabled = false;
-            this.DynamoCheckBox.Location = new System.Drawing.Point(127, 62);
+            this.DynamoCheckBox.Location = new System.Drawing.Point(127, 83);
             this.DynamoCheckBox.Name = "DynamoCheckBox";
             this.DynamoCheckBox.Size = new System.Drawing.Size(65, 17);
             this.DynamoCheckBox.TabIndex = 5;
             this.DynamoCheckBox.Text = "Dynamo";
             this.DynamoCheckBox.UseVisualStyleBackColor = true;
             // 
+            // IncludePreReleaseCheckBox
+            // 
+            this.IncludePreReleaseCheckBox.AutoSize = true;
+            this.IncludePreReleaseCheckBox.Location = new System.Drawing.Point(35, 33);
+            this.IncludePreReleaseCheckBox.Name = "IncludePreReleaseCheckBox";
+            this.IncludePreReleaseCheckBox.Size = new System.Drawing.Size(122, 17);
+            this.IncludePreReleaseCheckBox.TabIndex = 6;
+            this.IncludePreReleaseCheckBox.Text = "Include Pre-releases";
+            this.IncludePreReleaseCheckBox.UseVisualStyleBackColor = true;
+            this.IncludePreReleaseCheckBox.CheckedChanged += new System.EventHandler(this.IncludePreReleaseCheckBox_CheckedChanged);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(444, 411);
+            this.Controls.Add(this.IncludePreReleaseCheckBox);
             this.Controls.Add(this.DynamoCheckBox);
             this.Controls.Add(this.GrasshopperCheckBox);
             this.Controls.Add(this.DownloadButton);
@@ -135,6 +148,7 @@ namespace FemDesign.Installer
         private System.Windows.Forms.Button DownloadButton;
         private System.Windows.Forms.CheckBox GrasshopperCheckBox;
         private System.Windows.Forms.CheckBox DynamoCheckBox;
+        private System.Windows.Forms.CheckBox IncludePreReleaseCheckBox;
     }
 }
 

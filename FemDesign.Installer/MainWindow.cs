@@ -41,7 +41,11 @@ namespace FemDesign.Installer
 
             var releases = await GithubClient.Repository.Release.GetAll("StruSoft", "femdesign-api");
 
-            VersionSelector.Items.AddRange(releases.Select(r => (object)$"{r.TagName} - {r.Name}").ToArray());
+            VersionSelector.Items.AddRange(releases
+                .Where(r => !r.Prerelease || IncludePreReleaseCheckBox.Checked)
+                .Select(r => (object)$"{r.TagName} - {r.Name}")
+                .ToArray()
+                );
             Releases = releases.ToDictionary(r => r.Id);
 
             if (VersionSelector.SelectedIndex < 0)
@@ -111,6 +115,11 @@ namespace FemDesign.Installer
             }
             ZipFile.ExtractToDirectory(zipPath, directory, Encoding.UTF8);
             File.Delete(zipPath);
+        }
+
+        private void IncludePreReleaseCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateReleaseList();
         }
     }
 }
