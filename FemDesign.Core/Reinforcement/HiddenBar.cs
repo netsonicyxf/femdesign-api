@@ -39,5 +39,21 @@ namespace FemDesign.Reinforcement
 
         [XmlAttribute("base_shell")]
         public Guid BaseShell { get; set; }
+        private HiddenBar() { }
+        public HiddenBar(FemDesign.Shells.Slab baseShell, Geometry.RectangleType rectangle, String identifier="CB")
+        {
+            BaseShell = baseShell.SlabPart.Guid;
+            Rectangle = rectangle;
+            Identifier = identifier;
+
+            this.BucklingData = new Bars.Buckling.BucklingData(
+                Bars.Buckling.BucklingLength.FlexuralStiff(),
+                Bars.Buckling.BucklingLength.FlexuralWeak()
+            );
+
+            base.EntityCreated();
+        }
     }
+
+
 }

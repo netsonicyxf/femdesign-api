@@ -13,6 +13,28 @@ namespace FemDesign.Bars.Buckling
         {
 
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="flexuralStiff">BucklingLength definition in Flexural Stiff direction.</param>
+        /// <param name="flexuralWeak">BucklingLength definition in Flexural Weak direction.</param>
+        public BucklingData(BucklingLength flexuralStiff, BucklingLength flexuralWeak)
+        {
+            if (flexuralStiff.Type != BucklingType.FlexuralStiff)
+            {
+                throw new System.ArgumentException("flexuralStiff is not of type FlexuralStiff!");
+            }
+            if (flexuralWeak.Type != BucklingType.FlexuralWeak)
+            {
+                throw new System.ArgumentException("flexuralWeak is not of type FlexuralWeak!");
+            }
+
+            // add input
+            BucklingLength.Add(flexuralStiff);
+            BucklingLength.Add(flexuralWeak);
+        }
+
         /// <summary>
         /// Set BucklingData on a Concrete bar-element.
         /// </summary>
