@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FemDesign.Samples
+namespace FemDesign.Examples
 {
-    public partial class SampleProgram
+    public partial class ExampleProgram
     {
         private static void CreateSimpleModel()
         {
@@ -31,6 +31,7 @@ namespace FemDesign.Samples
                 connectivities: new Bars.Connectivity[] { Bars.Connectivity.GetRigid() }, 
                 eccentricities: new Bars.Eccentricity[] { Bars.Eccentricity.GetDefault() }, 
                 identifier: "B");
+            bar.BarPart.LocalY = FemDesign.Geometry.FdVector3d.UnitY(); // Orient the Beam/Section
             var elements = new List<GenericClasses.IStructureElement>() { bar };
 
             // Create supports

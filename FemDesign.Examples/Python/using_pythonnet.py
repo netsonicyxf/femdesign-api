@@ -9,11 +9,11 @@ Read more about Python.NET (clr) at http://pythonnet.github.io/
 """
 
 # Load FemDesign API as a python module.
-# Needs the file C# assembly FemDesign.Samples\\Python\\bin\\FemDesign.Core.dll.
+# Needs the file C# assembly FemDesign.Examples\\Python\\bin\\FemDesign.Core.dll.
 # Download FemDesign.Core.dll from https://github.com/strusoft/femdesign-api/releases
 # and place in the folder.
 import os, sys, clr, math
-sys.path.append(os.path.abspath("FemDesign.Samples\\Python\\bin"))
+sys.path.append(os.path.abspath("FemDesign.Examples\\Python\\bin"))
 clr.AddReference("FemDesign.Core")
 import FemDesign
 

@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "FemDesign.Samples": {
+    "FemDesign.Examples": {
       "commandName": "Project",
       "remoteDebugEnabled": false
     }

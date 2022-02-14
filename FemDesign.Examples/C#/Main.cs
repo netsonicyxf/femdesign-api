@@ -5,9 +5,9 @@ using System.Linq;
 using FemDesign;
 
 
-namespace FemDesign.Samples
+namespace FemDesign.Examples
 {
-    public partial class SampleProgram
+    public partial class ExampleProgram
     {
         /// <summary>
         /// NOTE: CHANGE THIS TO YOUR LOCAL MATERIALS
@@ -28,7 +28,9 @@ namespace FemDesign.Samples
 
             Console.WriteLine("Running some sample code using the FEM-Design api!");
 
-            ChangeLengthOfBeam();
+            //CreateSimpleModel();
+            //CreatePostTensionedCable();
+            //ChangeLengthOfBeam();
             //RunAnalysis();
         }
     }

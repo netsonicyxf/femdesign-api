@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FemDesign.Samples
+namespace FemDesign.Examples
 {
-    public partial class SampleProgram
+    public partial class ExampleProgram
     
     {
         private static void ChangeLengthOfBeam()

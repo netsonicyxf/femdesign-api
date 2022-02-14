@@ -11,4 +11,4 @@ packages/
 .vscode/
 *.csproj.user
 fdscript.xsd
-FemDesign.Samples/**/Local/**
+FemDesign.Examples/**/Local/**
