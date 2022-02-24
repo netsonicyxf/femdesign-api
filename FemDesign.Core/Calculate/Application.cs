@@ -1,9 +1,10 @@
 // https://strusoft.com/
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-
+using System.Runtime.Serialization;
 
 namespace FemDesign.Calculate
 {
@@ -15,22 +16,44 @@ namespace FemDesign.Calculate
     [System.Serializable]
     public partial class Application
     {
+        public class FemDesignNotRunningException : ApplicationException
+        {
+            public FemDesignNotRunningException() : base($"FEM-Design {FdTargetVersion} - 3D Structure must be running! Start FEM-Design {FdTargetVersion} - 3D Structure and reload script.")
+            {
+            }
+
+            public FemDesignNotRunningException(Exception innerException) : base($"FEM-Design {FdTargetVersion} - 3D Structure must be running! Start FEM-Design {FdTargetVersion} - 3D Structure and reload script.", innerException)
+            {
+            }
+        }
+
+        public class FileAlreadyOpenedException : ApplicationException
+        {
+            public FileAlreadyOpenedException(string filename) : base($"File {filename} already open in fd3dstruct process. Please close the file and try again.")
+            {
+            }
+
+            public FileAlreadyOpenedException(string filename, Exception innerException) : base($"File {filename} already open in fd3dstruct process. Please close the file and try again.", innerException)
+            {
+            }
+        }
+
         /// <summary>
-        /// Path to fd3dstruct.
+        /// Path to fd3dstruct.exe
         /// </summary>
         /// <value></value>
         internal string FdPath { get; set; }
 
         /// <summary>
-        /// Version of running fd3dstruct process.
+        /// Version of running fd3dstruct process
         /// </summary>
         /// <value></value>
         internal string FdVersion { get; set; }
 
         /// <summary>
-        /// Target version of class library.
+        /// Target FEM-Design version of class library
         /// </summary>
-        internal string FdTargetVersion = "21";
+        internal static string FdTargetVersion = "21";
 
         public Application()
         {
@@ -57,11 +80,11 @@ namespace FemDesign.Calculate
                 }
                 this.FdVersion = firstProcess.MainModule.FileVersionInfo.FileVersion.Split(new char[] { '.' })[0];
             }
-            
+
             // Check if process information matches target version
-            if (this.FdVersion == null || this.FdVersion != this.FdTargetVersion || this.FdPath == null)
+            if (this.FdVersion == null || this.FdVersion != FdTargetVersion || this.FdPath == null)
             {
-                throw new System.ArgumentException("FEM-Design " + this.FdTargetVersion + " - 3D Structure must be running! Start FEM-Design " + this.FdTargetVersion + " - 3D Structure and reload script.");
+                throw new FemDesignNotRunningException();
             }
         }
 
@@ -96,7 +119,7 @@ namespace FemDesign.Calculate
                 CheckProcess();
                 return true;
             }
-            catch (System.ArgumentException)
+            catch (FemDesignNotRunningException)
             {
                 return false;
             }
@@ -158,13 +181,14 @@ namespace FemDesign.Calculate
             }
 
             // Check if files are already open
-            if (checkOpenFiles) {
+            if (checkOpenFiles)
+            {
                 var openFiles = GetOpenFileNames();
                 var filename = fdScript.CmdOpen?.Filename;
                 filename = Path.GetFileName(filename);
                 if (filename != null && openFiles.Contains(filename))
                 {
-                    throw new System.Exception($"File {filename} already open in fd3dstruct process. Please close the file and try again. ");
+                    throw new FileAlreadyOpenedException(filename);
                 }
 
                 filename = fdScript.CmdSave?.FilePath;
@@ -207,7 +231,7 @@ namespace FemDesign.Calculate
             return this.RunFdScript(fdScript, closeOpenWindows, endSession, false);
         }
 
-        public bool RunDesign(string mode,string struxmlPath, Analysis analysis, Design design, List<string> bscPath, string docxTemplatePath, bool endSession, bool closeOpenWindows)
+        public bool RunDesign(string mode, string struxmlPath, Analysis analysis, Design design, List<string> bscPath, string docxTemplatePath, bool endSession, bool closeOpenWindows)
         {
             FdScript fdScript = FdScript.Design(mode, struxmlPath, analysis, design, bscPath, docxTemplatePath, endSession);
             return this.RunFdScript(fdScript, closeOpenWindows, endSession, false);
