@@ -2533,10 +2533,11 @@ namespace FemDesign
 
             Dictionary<Guid, Materials.Material> materialMap = this.Materials.Material.ToDictionary(d => d.Guid);
 
-            Dictionary<Guid, Reinforcement.BarReinforcement> reinforcementMap = this.Entities.BarReinforcements.ToDictionary(b => b.BaseBar.Guid);
-
             Dictionary<Guid, Sections.Section> sectionsMap = this.Sections.Section.ToDictionary(s => s.Guid, s => s.DeepClone());
 
+            Dictionary<Guid, Bars.Bar> barsMap = this.Entities.Bars.ToDictionary(b => b.BarPart.Guid);
+
+            // Get bar sections and materials
             foreach (Bars.Bar bar in this.Entities.Bars)
             {
                 // Set type on barPart
@@ -2559,7 +2560,6 @@ namespace FemDesign
                     }
                 }
 
-
                 // Get material
                 try
                 {
@@ -2572,61 +2572,6 @@ namespace FemDesign
                 catch (ArgumentNullException)
                 {
                     throw new ArgumentNullException($"BarPart {bar.BarPart.Identifier} BarPart.ComplexMaterialRef is null");
-                }
-
-                // Get bar reinforcement
-                foreach (Reinforcement.BarReinforcement barReinf in this.Entities.BarReinforcements)
-                {
-                    if (barReinf.BaseBar.Guid == bar.BarPart.Guid)
-                    {
-                        // get wire material
-                        foreach (Materials.Material material in this.ReinforcingMaterials.Material)
-                        {
-                            if (barReinf.Wire.ReinforcingMaterialGuid == material.Guid)
-                            {
-                                barReinf.Wire.ReinforcingMaterial = material;
-                            }
-                        }
-
-                        // check if material found
-                        if (barReinf.Wire.ReinforcingMaterial == null)
-                        {
-                            throw new System.ArgumentException("No matching reinforcement wire material found. Model.GetBars() failed.");
-                        }
-                        else
-                        {
-                            // add bar reinforcement to bar
-                            bar.Reinforcement.Add(barReinf);
-                        }
-
-                    }
-                }
-
-                // get ptc
-                foreach (Reinforcement.Ptc ptc in this.Entities.PostTensionedCables)
-                {
-                    if (ptc.BaseObject == bar.BarPart.Guid)
-                    {
-                        // get strand material
-                        foreach (Reinforcement.PtcStrandLibType material in this.PtcStrandTypes.PtcStrandLibTypes)
-                        {
-                            if (ptc.StrandTypeGuid == material.Guid)
-                            {
-                                ptc.StrandType = material;
-                            }
-                        }
-
-                        // check if material found
-                        if (ptc.StrandType == null)
-                        {
-                            throw new System.ArgumentException("No matching ptc strand found. Model.GetBars() failed.");
-                        }
-                        else
-                        {
-                            // add ptc to bar
-                            bar.Ptc.Add(ptc);
-                        }
-                    }
                 }
 
                 // Get section
@@ -2647,6 +2592,63 @@ namespace FemDesign
                 catch (KeyNotFoundException)
                 {
                     throw new ArgumentException("No matching section found. Model.GetBars() failed.");
+                }
+            }
+
+            // Get bar reinforcement
+            if (!(this.ReinforcingMaterials is null))
+            {
+                Dictionary<Guid, Materials.Material> reinforcementMaterialsMap = this.ReinforcingMaterials.Material.ToDictionary(m => m.Guid);
+                foreach (Reinforcement.BarReinforcement barReinf in this.Entities.BarReinforcements)
+                {
+                    // Get wire material
+                    try
+                    {
+                        barReinf.Wire.ReinforcingMaterial = reinforcementMaterialsMap[barReinf.Wire.ReinforcingMaterialGuid];
+                    }
+                    catch (KeyNotFoundException)
+                    {
+                        throw new ArgumentException("No matching reinforcement material found. Model.GetBars() failed.");
+                    }
+
+                    // Add bar reinforcement to bar
+                    try
+                    {
+                        var bar = barsMap[barReinf.BaseBar.Guid];
+                        bar.Reinforcement.Add(barReinf);
+                    }
+                    catch (KeyNotFoundException)
+                    {
+                        throw new ArgumentException($"No matching bar found for the bar reinforcement. Model.GetBars() failed. BaseBar {barReinf.BaseBar.Guid}");
+                    }
+                }
+            }
+
+            // Get ptc
+            if (!(this.PtcStrandTypes is null))
+            {
+                Dictionary<Guid, Reinforcement.PtcStrandLibType> ptcStrandMap = this.PtcStrandTypes.PtcStrandLibTypes.ToDictionary(p => p.Guid);
+                foreach (Reinforcement.Ptc ptc in this.Entities.PostTensionedCables)
+                {
+                    // Get ptc strand material
+                    try
+                    {
+                        ptc.StrandType = ptcStrandMap[ptc.StrandTypeGuid];
+                    }
+                    catch (KeyNotFoundException)
+                    {
+                        throw new ArgumentException("No matching reinforcement material found. Model.GetBars() failed.");
+                    }
+
+                    try
+                    {
+                        var bar = barsMap[ptc.BaseObject];
+                        bar.Ptc.Add(ptc);
+                    }
+                    catch (KeyNotFoundException)
+                    {
+                        throw new ArgumentException($"No matching bar found for the bar PTC. Model.GetBars() failed. Ptc BaseObject {ptc.BaseObject}");
+                    }
                 }
             }
         }
