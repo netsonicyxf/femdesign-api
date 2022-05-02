@@ -195,11 +195,15 @@ namespace FemDesign
 
             if (model.Entities == null) model.Entities = new Entities();
 
-            // prepare elements with library references
-            model.GetBars();
+            // Maps
+            Dictionary<Guid, Materials.Material> materialMap = model.Materials.Material.ToDictionary(d => d.Guid);
+            Dictionary<Guid, Sections.Section> sectionsMap = model.Sections.Section.ToDictionary(s => s.Guid, s => s.DeepClone());
+
+            // Prepare elements with library references
+            model.GetBars(materialMap, sectionsMap);
             model.GetFictitiousShells();
             model.GetLineSupports();
-            model.GetPanels();
+            model.GetPanels(materialMap, sectionsMap);
             model.GetPointSupports();
             model.GetSlabs();
             model.GetSurfaceSupports();
@@ -2527,13 +2531,9 @@ namespace FemDesign
         /// Get Bars from Model. 
         /// Bars will be reconstructed from Model incorporating all references: ComplexSection, Section, Material.
         /// </summary>
-        internal void GetBars()
+        internal void GetBars(Dictionary<Guid, Materials.Material> materialMap, Dictionary<Guid, Sections.Section> sectionsMap)
         {
             Dictionary<Guid, Sections.ComplexSection> complexSectionsMap = this.Sections.ComplexSection.ToDictionary(s => s.Guid, s => s.DeepClone());
-
-            Dictionary<Guid, Materials.Material> materialMap = this.Materials.Material.ToDictionary(d => d.Guid);
-
-            Dictionary<Guid, Sections.Section> sectionsMap = this.Sections.Section.ToDictionary(s => s.Guid, s => s.DeepClone());
 
             Dictionary<Guid, Bars.Bar> barsMap = this.Entities.Bars.ToDictionary(b => b.BarPart.Guid);
 
@@ -2737,72 +2737,42 @@ namespace FemDesign
             }
         }
 
-        internal void GetPanels()
+        internal void GetPanels(Dictionary<Guid, Materials.Material> materialMap, Dictionary<Guid, Sections.Section> sectionsMap)
         {
+            Dictionary<Guid, Materials.OrthotropicPanelLibraryType> orthothropicMap = new Dictionary<Guid, Materials.OrthotropicPanelLibraryType>();
+            if (this.OrthotropicPanelTypes?.OrthotropicPanelLibraryTypes != null)
+                orthothropicMap = this.OrthotropicPanelTypes.OrthotropicPanelLibraryTypes.ToDictionary(o => o.Guid);
+
+            Dictionary<Guid, Materials.CltPanelLibraryType> cltMap = new Dictionary<Guid, Materials.CltPanelLibraryType>();
+            if (this.CltPanelTypes?.CltPanelLibraryTypes != null)
+                cltMap = this.CltPanelTypes.CltPanelLibraryTypes.ToDictionary(c => c.Guid);
+
+            Dictionary<Guid, Materials.GlcPanelLibraryType> glcMap = new Dictionary<Guid, Materials.GlcPanelLibraryType>();
+            if (this.GlcPanelTypes?.GlcPanelLibraryTypes != null)
+                glcMap = this.GlcPanelTypes.GlcPanelLibraryTypes.ToDictionary(g => g.Guid);
+
             foreach (Shells.Panel panel in this.Entities.Panels)
             {
-                // get material
-                foreach (Materials.Material material in this.Materials.Material)
-                {
-                    if (material.Guid == panel.ComplexMaterial)
-                    {
-                        panel.Material = material;
-                    }
-                }
+                // Get material
+                if (materialMap.ContainsKey(panel.ComplexMaterial))
+                    panel.Material = materialMap[panel.ComplexMaterial];
 
-                // get section
-                foreach (Sections.Section section in this.Sections.Section)
-                {
-                    if (section.Guid == panel.ComplexSection)
-                    {
-                        panel.Section = section;
-                    }
-                }
+                // Get section
+                if (sectionsMap.ContainsKey(panel.ComplexSection))
+                    panel.Section = sectionsMap[panel.ComplexSection];
 
-                // get timber application data
+                // Get timber application data / Timber panel data
                 if (panel.TimberPanelData != null)
                 {
-                    // timber panel types
-                    if (this.OrthotropicPanelTypes != null && this.OrthotropicPanelTypes.OrthotropicPanelLibraryTypes != null)
-                    {
-                        foreach (FemDesign.Materials.OrthotropicPanelLibraryType libItem in this.OrthotropicPanelTypes.OrthotropicPanelLibraryTypes)
-                        {
-                            if (libItem.Guid == panel.TimberPanelData._panelTypeReference)
-                            {
-                                panel.TimberPanelData.PanelType = libItem;
-                            }
-                        }
-                    }
-
-                    // clt panel types
-                    if (this.CltPanelTypes != null && this.CltPanelTypes.CltPanelLibraryTypes != null)
-                    {
-                        foreach (FemDesign.Materials.CltPanelLibraryType libItem in this.CltPanelTypes.CltPanelLibraryTypes)
-                        {
-                            if (libItem.Guid == panel.TimberPanelData._panelTypeReference)
-                            {
-                                panel.TimberPanelData.PanelType = libItem;
-                            }
-                        }
-                    }
-
-                    // glc panel types
-                    if (this.GlcPanelTypes != null && this.GlcPanelTypes.GlcPanelLibraryTypes != null)
-                    {
-                        foreach (FemDesign.Materials.GlcPanelLibraryType libItem in this.GlcPanelTypes.GlcPanelLibraryTypes)
-                        {
-                            if (libItem.Guid == panel.TimberPanelData._panelTypeReference)
-                            {
-                                panel.TimberPanelData.PanelType = libItem;
-                            }
-                        }
-                    }
-
-                    // check if libItem found
-                    if (panel.TimberPanelData.PanelType == null)
-                    {
-                        throw new System.ArgumentException("An orthotropic/clt/glc library item was expected but not found. Can't construct Panel. Model.GetPanels() failed.");
-                    }
+                    // Timber panel types
+                    if (orthothropicMap.ContainsKey(panel.TimberPanelData._panelTypeReference))
+                        panel.TimberPanelData.PanelType = orthothropicMap[panel.TimberPanelData._panelTypeReference];
+                    else if (cltMap.ContainsKey(panel.TimberPanelData._panelTypeReference))
+                        panel.TimberPanelData.PanelType = cltMap[panel.TimberPanelData._panelTypeReference];
+                    else if (cltMap.ContainsKey(panel.TimberPanelData._panelTypeReference))
+                        panel.TimberPanelData.PanelType = cltMap[panel.TimberPanelData._panelTypeReference];
+                    else
+                        throw new System.ArgumentException($"An orthotropic/clt/glc library item was expected but not found. Can't construct Panel. Model.GetPanels() failed. panel.TimberPanelData._panelTypeReference {panel.TimberPanelData._panelTypeReference}");
                 }
 
                 // predefined rigidity

@@ -256,6 +256,7 @@ namespace FemDesign.Geometry
                     {
                         if (edge.EdgeConnection._predefRigidityRef != null)
                         {
+                            // OPTIMIZE: Needs to be rewritten to reduce unnecessary looping
                             foreach (Releases.RigidityDataLibType3 predefinedType in predefinedTypes)
                             {
                                 // add predefined type to edge connection if edge connection predef rigidity reference matches guid of predefine type
