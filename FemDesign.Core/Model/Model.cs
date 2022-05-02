@@ -199,13 +199,17 @@ namespace FemDesign
             Dictionary<Guid, Materials.Material> materialMap = model.Materials.Material.ToDictionary(d => d.Guid);
             Dictionary<Guid, Sections.Section> sectionsMap = model.Sections.Section.ToDictionary(s => s.Guid, s => s.DeepClone());
 
+            Dictionary<Guid, Materials.Material> reinforcementMaterialsMap = new Dictionary<Guid, Materials.Material>();
+            if (model.ReinforcingMaterials?.Material != null)
+                reinforcementMaterialsMap = model.ReinforcingMaterials.Material.ToDictionary(m => m.Guid);
+
             // Prepare elements with library references
-            model.GetBars(materialMap, sectionsMap);
+            model.GetBars(materialMap, sectionsMap, reinforcementMaterialsMap);
             model.GetFictitiousShells();
             model.GetLineSupports();
             model.GetPanels(materialMap, sectionsMap);
             model.GetPointSupports();
-            model.GetSlabs();
+            model.GetSlabs(materialMap, reinforcementMaterialsMap);
             model.GetSurfaceSupports();
             model.GetPointConnections();
             model.GetLineConnections();
@@ -2531,7 +2535,7 @@ namespace FemDesign
         /// Get Bars from Model. 
         /// Bars will be reconstructed from Model incorporating all references: ComplexSection, Section, Material.
         /// </summary>
-        internal void GetBars(Dictionary<Guid, Materials.Material> materialMap, Dictionary<Guid, Sections.Section> sectionsMap)
+        internal void GetBars(Dictionary<Guid, Materials.Material> materialMap, Dictionary<Guid, Sections.Section> sectionsMap, Dictionary<Guid, Materials.Material> reinforcementMaterialsMap)
         {
             Dictionary<Guid, Sections.ComplexSection> complexSectionsMap = this.Sections.ComplexSection.ToDictionary(s => s.Guid, s => s.DeepClone());
 
@@ -2596,33 +2600,31 @@ namespace FemDesign
             }
 
             // Get bar reinforcement
-            if (!(this.ReinforcingMaterials is null))
-            {
-                Dictionary<Guid, Materials.Material> reinforcementMaterialsMap = this.ReinforcingMaterials.Material.ToDictionary(m => m.Guid);
-                foreach (Reinforcement.BarReinforcement barReinf in this.Entities.BarReinforcements)
-                {
-                    // Get wire material
-                    try
-                    {
-                        barReinf.Wire.ReinforcingMaterial = reinforcementMaterialsMap[barReinf.Wire.ReinforcingMaterialGuid];
-                    }
-                    catch (KeyNotFoundException)
-                    {
-                        throw new ArgumentException("No matching reinforcement material found. Model.GetBars() failed.");
-                    }
 
-                    // Add bar reinforcement to bar
-                    try
-                    {
-                        var bar = barsMap[barReinf.BaseBar.Guid];
-                        bar.Reinforcement.Add(barReinf);
-                    }
-                    catch (KeyNotFoundException)
-                    {
-                        throw new ArgumentException($"No matching bar found for the bar reinforcement. Model.GetBars() failed. BaseBar {barReinf.BaseBar.Guid}");
-                    }
+            foreach (Reinforcement.BarReinforcement barReinf in this.Entities.BarReinforcements)
+            {
+                // Get wire material
+                try
+                {
+                    barReinf.Wire.ReinforcingMaterial = reinforcementMaterialsMap[barReinf.Wire.ReinforcingMaterialGuid];
+                }
+                catch (KeyNotFoundException)
+                {
+                    throw new ArgumentException("No matching reinforcement material found. Model.GetBars() failed.");
+                }
+
+                // Add bar reinforcement to bar
+                try
+                {
+                    var bar = barsMap[barReinf.BaseBar.Guid];
+                    bar.Reinforcement.Add(barReinf);
+                }
+                catch (KeyNotFoundException)
+                {
+                    throw new ArgumentException($"No matching bar found for the bar reinforcement. Model.GetBars() failed. BaseBar {barReinf.BaseBar.Guid}");
                 }
             }
+
 
             // Get ptc
             if (!(this.PtcStrandTypes is null))
@@ -2678,17 +2680,27 @@ namespace FemDesign
         /// Slabs will be reconstruted from Model incorporating all references: Material, Predefined EdgeConnections, SurfaceReinforcementParameters, SurfaceReinforcement.
         /// </summary>
         /// <returns></returns>
-        internal void GetSlabs()
+        internal void GetSlabs(Dictionary<Guid, Materials.Material> materialMap, Dictionary<Guid, Materials.Material> reinforcementMaterialsMap)
         {
-            foreach (Shells.Slab item in this.Entities.Slabs)
+            Dictionary<Guid, Reinforcement.SurfaceReinforcementParameters> reinfParamMap = this.Entities.SurfaceReinforcementParameters.ToDictionary(p => p.BaseShell.Guid);
+            Dictionary<Guid, Reinforcement.SurfaceReinforcement> reinfMap = this.Entities.SurfaceReinforcements.ToDictionary(r => r.Guid);
+            Dictionary<Guid, Shells.Slab> slabsMap = this.Entities.Slabs.ToDictionary(s => s.SlabPart.Guid);
+
+            // Get material and line connections
+            foreach (Shells.Slab slab in this.Entities.Slabs)
             {
-                // get material
-                foreach (Materials.Material _material in this.Materials.Material)
+                // Get material
+                try
                 {
-                    if (_material.Guid == item.SlabPart.ComplexMaterial)
-                    {
-                        item.Material = _material;
-                    }
+                    slab.Material = materialMap[slab.SlabPart.ComplexMaterial];
+                }
+                catch (KeyNotFoundException)
+                {
+                    throw new ArgumentException("No matching material found. Model.GetSlabs() failed.");
+                }
+                catch (ArgumentNullException)
+                {
+                    throw new ArgumentNullException($"SlabPart {slab.SlabPart.Name} BarPart.ComplexMaterialRef is null");
                 }
 
                 // set line_connection_types (i.e predefined edge connections) on edge
@@ -2696,44 +2708,23 @@ namespace FemDesign
                 {
                     if (this.LineConnectionTypes.PredefinedTypes != null)
                     {
-                        item.SlabPart.Region.SetPredefinedRigidities(this.LineConnectionTypes.PredefinedTypes);
+                        slab.SlabPart.Region.SetPredefinedRigidities(this.LineConnectionTypes.PredefinedTypes);
                     }
                 }
 
-                // get surface reinforcement parameters
-                foreach (Reinforcement.SurfaceReinforcementParameters surfaceReinforcementParameter in this.Entities.SurfaceReinforcementParameters)
-                {
-                    if (surfaceReinforcementParameter.BaseShell.Guid == item.SlabPart.Guid)
-                    {
-                        item.SurfaceReinforcementParameters = surfaceReinforcementParameter;
-                    }
-                }
+                // Get surface reinforcement parameters
+                if (reinfParamMap.ContainsKey(slab.SlabPart.Guid))
+                    slab.SurfaceReinforcementParameters = reinfParamMap[slab.SlabPart.Guid];
+            }
 
-                // get surface reinforcement
-                foreach (Reinforcement.SurfaceReinforcement surfaceReinforcement in this.Entities.SurfaceReinforcements)
-                {
-                    if (surfaceReinforcement.BaseShell.Guid == item.SlabPart.Guid)
-                    {
+            // Get surface reinforcement
+            foreach (Reinforcement.SurfaceReinforcement surfaceReinforcement in this.Entities.SurfaceReinforcements)
+            {
+                // Get wire material
+                surfaceReinforcement.Wire.ReinforcingMaterial = reinforcementMaterialsMap[surfaceReinforcement.Wire.ReinforcingMaterialGuid];
 
-                        // get wire material
-                        foreach (Materials.Material material in this.ReinforcingMaterials.Material)
-                        {
-                            if (surfaceReinforcement.Wire.ReinforcingMaterialGuid == material.Guid)
-                            {
-                                surfaceReinforcement.Wire.ReinforcingMaterial = material;
-                            }
-                        }
-
-                        // add surface reinforcement to slab
-                        item.SurfaceReinforcement.Add(surfaceReinforcement);
-                    }
-                }
-
-                // check if material found
-                if (item.Material == null)
-                {
-                    throw new System.ArgumentException("No matching material found. Model.GeSlabs() failed.");
-                }
+                var slab = slabsMap[surfaceReinforcement.BaseShell.Guid];
+                slab.SurfaceReinforcement.Add(surfaceReinforcement);
             }
         }
 
