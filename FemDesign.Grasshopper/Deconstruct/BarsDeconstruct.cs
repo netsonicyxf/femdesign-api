@@ -53,7 +53,7 @@ namespace FemDesign.Grasshopper
 
             var guidList = new List<object>() { bar.Guid };
 
-            var curveList = new List<object>() { bar.GetRhinoCurve() };
+            var curveList = new List<object>() { bar.ToRhino() };
 
             var typeList = new List<object>() { bar.Type };
 
@@ -64,7 +64,7 @@ namespace FemDesign.Grasshopper
 
             // return
             DA.SetData(0, bar.Guid);
-            DA.SetData(1, bar.GetRhinoCurve());
+            DA.SetData(1, bar.ToRhino());
             DA.SetData(2, bar.Type);
             DA.SetDataList(3, materialList);
 

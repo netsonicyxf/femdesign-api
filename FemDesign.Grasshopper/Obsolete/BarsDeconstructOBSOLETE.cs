@@ -42,7 +42,7 @@ namespace FemDesign.Grasshopper
 
             // return
             DA.SetData(0, bar.Guid);
-            DA.SetData(1, bar.GetRhinoCurve());
+            DA.SetData(1, bar.ToRhino());
             DA.SetData(2, bar.BarPart.ComplexMaterialObj);
             DA.SetDataList(3, bar.BarPart.ComplexSectionObj.Sections);
             DA.SetDataList(4, bar.BarPart.Connectivity);

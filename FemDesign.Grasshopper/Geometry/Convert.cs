@@ -8,32 +8,45 @@ using FemDesign.Supports;
 
 namespace FemDesign.Grasshopper
 {
-    internal static class Convert
+    public static class Convert
     {
+        #region Interface
+        /// IFromRhino is intended to be possible to use on any rhino geometry for conversion to FemDesign geometry
+        public static object IFromRhino(this Rhino.Geometry.GeometryBase geometry)
+        {
+            return (geometry is null) ? null : FromRhino(geometry as dynamic);
+        }
+
+        /// IToRhino is intended to be uses on any FemDesign geometry for conversion to rhino geometry
+        //public static Rhino.Geometry.GeometryBase IToRhino(this FemDesign.Geometry.IGeometry geometry)
+        //{
+        //    return (geometry == null) ? null : ToRhino(geometry as dynamic);
+        //}
+        #endregion
 
         #region Vector
-        internal static FemDesign.Geometry.FdPoint2d FromRhino(this Rhino.Geometry.Point2d point)
+        public static FemDesign.Geometry.FdPoint2d FromRhino(this Rhino.Geometry.Point2d point)
         {
             return new FemDesign.Geometry.FdPoint2d(point.X, point.Y);
         }
-        internal static Rhino.Geometry.Point2d ToRhino(this FemDesign.Geometry.FdPoint2d point)
+        public static Rhino.Geometry.Point2d ToRhino(this FemDesign.Geometry.FdPoint2d point)
         {
             return new Rhino.Geometry.Point2d(point.X, point.Y);
         }
-        internal static FemDesign.Geometry.FdPoint3d FromRhino(this Rhino.Geometry.Point3d point)
+        public static FemDesign.Geometry.FdPoint3d FromRhino(this Rhino.Geometry.Point3d point)
         {
             return new FemDesign.Geometry.FdPoint3d(point.X, point.Y, point.Z);
         }
-        internal static Rhino.Geometry.Point3d ToRhino(this FemDesign.Geometry.FdPoint3d point)
+        public static Rhino.Geometry.Point3d ToRhino(this FemDesign.Geometry.FdPoint3d point)
         {
             return new Rhino.Geometry.Point3d(point.X, point.Y, point.Z);
-        } 
-        internal static FemDesign.Geometry.FdVector3d FromRhino(this Rhino.Geometry.Vector3d vector)
+        }
+        public static FemDesign.Geometry.FdVector3d FromRhino(this Rhino.Geometry.Vector3d vector)
         {
             return new FemDesign.Geometry.FdVector3d(vector.X, vector.Y, vector.Z);
         }
 
-        internal static Rhino.Geometry.Vector3d ToRhino(this FemDesign.Geometry.FdVector3d vector)
+        public static Rhino.Geometry.Vector3d ToRhino(this FemDesign.Geometry.FdVector3d vector)
         {
             return new Rhino.Geometry.Vector3d(vector.X, vector.Y, vector.Z);
         }
@@ -44,7 +57,7 @@ namespace FemDesign.Grasshopper
         /// <summary>
         /// Create Rhino curve from underlying Edge (Line or Arc) of Bar.
         /// </summary>
-        internal static Rhino.Geometry.Curve GetRhinoCurve(this Bars.Bar bar)
+        public static Rhino.Geometry.Curve ToRhino(this Bars.Bar bar)
         {
             return bar.BarPart._edge.ToRhino();
         }
@@ -54,7 +67,7 @@ namespace FemDesign.Grasshopper
         /// <summary>
         /// Create Rhino brep from underlying Region of Cover.
         /// </summary>
-        internal static Rhino.Geometry.Brep GetRhinoSurface(this Cover cover)
+        public static Rhino.Geometry.Brep GetRhinoSurface(this Cover cover)
         {
             return cover.Region.ToRhinoBrep();
         }
@@ -62,7 +75,7 @@ namespace FemDesign.Grasshopper
         /// <summary>
         /// Create Rhino curves from underlying Edges in Region of Cover.
         /// </summary>
-        internal static List<Rhino.Geometry.Curve> GetRhinoCurves(this Cover cover)
+        public static List<Rhino.Geometry.Curve> GetRhinoCurves(this Cover cover)
         {
             return cover.Region.ToRhinoCurves();
         }
@@ -137,7 +150,7 @@ namespace FemDesign.Grasshopper
                 // if Arc
                 if (!obj.IsClosed)
                 {
-                    return arcCurve.FromRhinoArc1();
+                    return arcCurve.FromRhino();
                 }
 
                 // if Circle
@@ -150,13 +163,13 @@ namespace FemDesign.Grasshopper
             // if LineCurve
             else if (obj.GetType() == typeof(Rhino.Geometry.LineCurve))
             {
-                return ((Rhino.Geometry.LineCurve) obj).FromRhinoLineCurve();
+                return ((Rhino.Geometry.LineCurve)obj).FromRhinoLineCurve();
             }
 
             // if NurbsCurve
             else if (obj.GetType() == typeof(Rhino.Geometry.NurbsCurve))
             {
-                return ((Rhino.Geometry.NurbsCurve) obj).FromRhinoNurbsCurve();
+                return ((Rhino.Geometry.NurbsCurve)obj).FromRhinoNurbsCurve();
             }
 
             // else
@@ -185,7 +198,7 @@ namespace FemDesign.Grasshopper
                 // if Arc
                 if (!obj.IsClosed)
                 {
-                    return arcCurve.FromRhinoArc1();
+                    return arcCurve.FromRhino();
                 }
 
                 else
@@ -197,7 +210,7 @@ namespace FemDesign.Grasshopper
             // if LineCurve
             else if (obj.GetType() == typeof(Rhino.Geometry.LineCurve))
             {
-                return ((Rhino.Geometry.LineCurve) obj).FromRhinoLineCurve();
+                return ((Rhino.Geometry.LineCurve)obj).FromRhinoLineCurve();
             }
 
             // if PolylineCurve
@@ -252,7 +265,7 @@ namespace FemDesign.Grasshopper
             // if LineCurve
             else if (obj.GetType() == typeof(Rhino.Geometry.LineCurve))
             {
-                return ((Rhino.Geometry.LineCurve) obj).FromRhinoLineCurve();
+                return ((Rhino.Geometry.LineCurve)obj).FromRhinoLineCurve();
             }
 
             // if PolylineCurve
@@ -278,16 +291,16 @@ namespace FemDesign.Grasshopper
         /// <summary>
         /// Create Edge (Arc1) from Rhino open ArcCurve.
         /// </summary>
-        public static Geometry.Edge FromRhinoArc1(this Rhino.Geometry.ArcCurve obj)
+        public static Geometry.Edge FromRhino(this Rhino.Geometry.ArcCurve curve)
         {
-            double radius = obj.Arc.Radius;
+            double radius = curve.Arc.Radius;
             double startAngle = 0;
-            double endAngle = obj.Arc.EndAngle - obj.Arc.StartAngle;
-            FdPoint3d centerPoint = obj.Arc.Center.FromRhino();
-            FdVector3d xAxis = new FdVector3d(centerPoint, obj.Arc.StartPoint.FromRhino());
+            double endAngle = curve.Arc.EndAngle - curve.Arc.StartAngle;
+            FdPoint3d centerPoint = curve.Arc.Center.FromRhino();
+            FdVector3d xAxis = new FdVector3d(centerPoint, curve.Arc.StartPoint.FromRhino());
 
             // lcs
-            FdCoordinateSystem cs = obj.FromRhinoCurve();
+            FdCoordinateSystem cs = curve.FromRhinoCurve();
 
             // return
             return new Geometry.Edge(radius, startAngle, endAngle, centerPoint, xAxis, cs);
@@ -377,7 +390,7 @@ namespace FemDesign.Grasshopper
             else if ((obj.IsArc() || obj.Degree == 2) && !obj.IsClosed)
             {
                 obj.TryGetArc(out Rhino.Geometry.Arc _obj);
-                return FromRhinoArc1(new Rhino.Geometry.ArcCurve(_obj));
+                return FromRhino(new Rhino.Geometry.ArcCurve(_obj));
             }
 
             else
@@ -450,12 +463,12 @@ namespace FemDesign.Grasshopper
 
         #endregion
 
-        #region CoorinateSystem
+        #region CoordinateSystem
 
         /// <summary>
         /// Create FdCoordinateSystem from Rhino plane.
         /// </summary>
-        internal static FdCoordinateSystem FromRhinoPlane(this Rhino.Geometry.Plane obj)
+        public static FdCoordinateSystem FromRhino(this Rhino.Geometry.Plane obj)
         {
             FdPoint3d origin = obj.Origin.FromRhino();
             FdVector3d localX = obj.XAxis.FromRhino();
@@ -467,7 +480,7 @@ namespace FemDesign.Grasshopper
         /// <summary>
         /// Create FdCoordinateSystem from Rhino plane on curve mid u-point.
         /// </summary>
-        internal static FdCoordinateSystem FromRhinoCurve(this Rhino.Geometry.Curve obj)
+        public static FdCoordinateSystem FromRhinoCurve(this Rhino.Geometry.Curve obj)
         {
             // reparameterize if neccessary
             if (obj.Domain.T0 == 0 && obj.Domain.T1 == 1)
@@ -480,15 +493,14 @@ namespace FemDesign.Grasshopper
             }
 
             // get frame @ mid-point
-            Rhino.Geometry.Plane plane;
-            obj.FrameAt(0.5, out plane);
-            return plane.FromRhinoPlane();
+            obj.FrameAt(0.5, out Rhino.Geometry.Plane plane);
+            return plane.FromRhino();
         }
 
         /// <summary>
         /// Create FdCoordinateSystem from Rhino plane on surface mid u/v-point.
         /// </summary>
-        internal static FdCoordinateSystem FromRhinoSurface(this Rhino.Geometry.Surface obj)
+        public static FdCoordinateSystem FromRhinoSurface(this Rhino.Geometry.Surface obj)
         {
             // reparameterize if necessary
             if (obj.Domain(0).T0 == 0 && obj.Domain(1).T0 == 0 && obj.Domain(0).T1 == 1 && obj.Domain(1).T1 == 1)
@@ -503,7 +515,7 @@ namespace FemDesign.Grasshopper
 
             Rhino.Geometry.Plane plane;
             obj.FrameAt(0.5, 0.5, out plane);
-            return plane.FromRhinoPlane();
+            return plane.FromRhino();
         }
         #endregion
 
@@ -672,7 +684,7 @@ namespace FemDesign.Grasshopper
         /// <summary>
         /// Convert Region to Rhino brep.
         /// </summary>
-        internal static Rhino.Geometry.Brep ToRhinoBrep(this Region region)
+        public static Rhino.Geometry.Brep ToRhinoBrep(this Region region)
         {
             List<Rhino.Geometry.Curve> curves = new List<Rhino.Geometry.Curve>();
             foreach (Geometry.Contour contour in region.Contours)
@@ -698,7 +710,7 @@ namespace FemDesign.Grasshopper
         /// <summary>
         /// Convert Edges in Region to Rhino curves.
         /// </summary>
-        internal static List<Rhino.Geometry.Curve> ToRhinoCurves(this Region region)
+        public static List<Rhino.Geometry.Curve> ToRhinoCurves(this Region region)
         {
             List<Rhino.Geometry.Curve> curves = new List<Rhino.Geometry.Curve>();
             foreach (Geometry.Contour contour in region.Contours)
@@ -717,7 +729,7 @@ namespace FemDesign.Grasshopper
         /// <summary>
         /// Get rhino breps of underlying regions
         /// </summary>
-        internal static List<Rhino.Geometry.Brep> ToRhino(this RegionGroup regionGroup)
+        public static List<Rhino.Geometry.Brep> ToRhino(this RegionGroup regionGroup)
         {
             List<Rhino.Geometry.Brep> breps = new List<Rhino.Geometry.Brep>();
             foreach (Region region in regionGroup.Regions)
@@ -732,7 +744,7 @@ namespace FemDesign.Grasshopper
         /// <summary>
         /// Convert LineLoad edge to Rhino curve.
         /// </summary>
-        internal static Rhino.Geometry.Curve GetRhinoGeometry(this Loads.LineLoad lineLoad)
+        public static Rhino.Geometry.Curve GetRhinoGeometry(this Loads.LineLoad lineLoad)
         {
             return lineLoad.Edge.ToRhino();
         }
@@ -744,7 +756,7 @@ namespace FemDesign.Grasshopper
         /// <summary>
         /// Convert PointLoad point to Rhino point.
         /// </summary>
-        internal static Rhino.Geometry.Point3d GetRhinoGeometry(this PointLoad pointLoad)
+        public static Rhino.Geometry.Point3d GetRhinoGeometry(this PointLoad pointLoad)
         {
             return pointLoad.Load.GetFdPoint().ToRhino();
         }
@@ -755,7 +767,7 @@ namespace FemDesign.Grasshopper
         /// <summary>
         /// Convert surface of PressureLoad to a Rhino brep.
         /// </summary>
-        internal static Rhino.Geometry.Brep GetRhinoGeometry(this PressureLoad pressureLoad)
+        public static Rhino.Geometry.Brep GetRhinoGeometry(this PressureLoad pressureLoad)
         {
             return pressureLoad.Region.ToRhinoBrep();
         }
@@ -766,7 +778,7 @@ namespace FemDesign.Grasshopper
         /// <summary>
         /// Convert surface of SurfaceLoad to a Rhino brep.
         /// </summary>
-        internal static Rhino.Geometry.Brep GetRhinoGeometry(this SurfaceLoad surfaceLoad)
+        public static Rhino.Geometry.Brep GetRhinoGeometry(this SurfaceLoad surfaceLoad)
         {
             return surfaceLoad.Region.ToRhinoBrep();
         }
@@ -777,7 +789,7 @@ namespace FemDesign.Grasshopper
         /// <summary>
         /// Get Rhino Surface from SlabPart Contours (Region).
         /// </summary>
-        internal static Rhino.Geometry.Brep GetRhinoSurface(this Shells.SlabPart slabPart)
+        public static Rhino.Geometry.Brep GetRhinoSurface(this Shells.SlabPart slabPart)
         {
             return slabPart.Region.ToRhinoBrep();
         }
@@ -785,7 +797,7 @@ namespace FemDesign.Grasshopper
         /// <summary>
         /// Get Rhino Curves from SlabPart Contours (Region).
         /// </summary>
-        internal static List<Rhino.Geometry.Curve> GetRhinoCurves(this Shells.SlabPart slabPart)
+        public static List<Rhino.Geometry.Curve> GetRhinoCurves(this Shells.SlabPart slabPart)
         {
             return slabPart.Region.ToRhinoCurves();
         }
@@ -793,11 +805,11 @@ namespace FemDesign.Grasshopper
         #endregion
 
         #region LineSupport
-        
+
         /// <summary>
         /// Get Rhino Curve from LineSupport.
         /// </summary>
-        internal static Rhino.Geometry.Curve GetRhinoGeometry(this Supports.LineSupport lineSupport)
+        public static Rhino.Geometry.Curve ToRhino(this Supports.LineSupport lineSupport)
         {
             return lineSupport.Edge.ToRhino();
         }
@@ -805,11 +817,11 @@ namespace FemDesign.Grasshopper
         #endregion
 
         #region PointSupport
-        
+
         /// <summary>
         /// Get Rhino Point from PointSupport.
         /// </summary>
-        internal static Rhino.Geometry.Point3d GetRhinoGeometry(this Supports.PointSupport pointSupport)
+        public static Rhino.Geometry.Point3d ToRhino(this Supports.PointSupport pointSupport)
         {
             return pointSupport.Position.ToRhino();
         }
