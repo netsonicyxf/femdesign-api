@@ -127,7 +127,6 @@ namespace FemDesign.Grasshopper
             }
         }
 
-
         /// <summary>
         /// Convert a Rhino Curve to Edge
         /// </summary>
@@ -164,6 +163,11 @@ namespace FemDesign.Grasshopper
             else if (obj.GetType() == typeof(Rhino.Geometry.LineCurve))
             {
                 return ((Rhino.Geometry.LineCurve)obj).FromRhinoLineCurve();
+            }
+
+            else if (obj.GetType() == typeof(Rhino.Geometry.PolylineCurve))
+            {
+                return ((Rhino.Geometry.PolylineCurve)obj).FromRhinoLineOrArc1();
             }
 
             // if NurbsCurve
