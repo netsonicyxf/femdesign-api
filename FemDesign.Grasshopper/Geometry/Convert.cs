@@ -10,20 +10,6 @@ namespace FemDesign.Grasshopper
 {
     public static class Convert
     {
-        #region Interface
-        /// IFromRhino is intended to be possible to use on any rhino geometry for conversion to FemDesign geometry
-        public static object IFromRhino(this Rhino.Geometry.GeometryBase geometry)
-        {
-            return (geometry is null) ? null : FromRhino(geometry as dynamic);
-        }
-
-        /// IToRhino is intended to be uses on any FemDesign geometry for conversion to rhino geometry
-        //public static Rhino.Geometry.GeometryBase IToRhino(this FemDesign.Geometry.IGeometry geometry)
-        //{
-        //    return (geometry == null) ? null : ToRhino(geometry as dynamic);
-        //}
-        #endregion
-
         #region Vector
         public static FemDesign.Geometry.FdPoint2d FromRhino(this Rhino.Geometry.Point2d point)
         {
