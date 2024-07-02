@@ -1,5 +1,7 @@
 // https://strusoft.com/
 using System;
+using System.Collections.Generic;
+using FemDesign.Shells;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
 
@@ -20,7 +22,7 @@ namespace FemDesign.Grasshopper
             pManager[pManager.ParamCount - 1].Optional = true;
             pManager.AddNumberParameter("OrthoRatio", "OrthoRatio", "Transversal flexural stiffness factor.", GH_ParamAccess.item, 1);
             pManager[pManager.ParamCount - 1].Optional = true;
-            pManager.AddGenericParameter("BorderEdgeConnection", "BorderEdgeConnection", "EdgeConnection of the external border of the panel. Optional. If not defined hinged will be used.", GH_ParamAccess.item);
+            pManager.AddGenericParameter("BorderEdgeConnection", "BorderEdgeConnection", "EdgeConnection of the external border of the panel. Optional. If not defined hinged will be used.", GH_ParamAccess.list);
             pManager[pManager.ParamCount - 1].Optional = true;
             pManager.AddVectorParameter("LocalX", "LocalX", "Set local x-axis. Vector must be perpendicular to surface local z-axis. Local y-axis will be adjusted accordingly. Optional, local x-axis from surface coordinate system used if undefined.", GH_ParamAccess.item);
             pManager[pManager.ParamCount - 1].Optional = true;
@@ -39,75 +41,47 @@ namespace FemDesign.Grasshopper
         {
             // get input
             Brep surface = null;
-            if (!DA.GetData(0, ref surface))
-            {
-                return;
-            }
+            if (!DA.GetData(0, ref surface)) { return; }
 
             FemDesign.Materials.Material material = null;
-            if (!DA.GetData(1, ref material))
-            {
-                return;
-            }
+            if (!DA.GetData(1, ref material)) { return; }
 
             FemDesign.Sections.Section section = null;
-            if (!DA.GetData(2, ref section))
-            {
-                return;
-            }
+            if (!DA.GetData(2, ref section)) { return; }
 
             FemDesign.Shells.ShellEccentricity eccentricity = FemDesign.Shells.ShellEccentricity.Default;
-            if(!DA.GetData(3, ref eccentricity))
-            {
-                // pass
-            }
+            DA.GetData(3, ref eccentricity);
             
             double orthoRatio = 1;
-            if(!DA.GetData(4, ref orthoRatio))
-            {
-                // pass
-            }
-            
-            FemDesign.Shells.EdgeConnection edgeConnection = FemDesign.Shells.EdgeConnection.Hinged;
-            if(!DA.GetData(5, ref edgeConnection))
-            {
-                // pass
-            }
+            DA.GetData(4, ref orthoRatio);
+
+            List<FemDesign.Shells.EdgeConnection> edgeConnections = new List<FemDesign.Shells.EdgeConnection> { Shells.EdgeConnection.Hinged };
+            DA.GetDataList(5, edgeConnections);
 
             Rhino.Geometry.Vector3d x = Vector3d.Zero;
-            if (!DA.GetData(6, ref x))
-            {
-                // pass
-            }
+            DA.GetData(6, ref x);
 
             Rhino.Geometry.Vector3d z = Vector3d.Zero;
-            if (!DA.GetData(7, ref z))
-            {
-                // pass
-            }
+            DA.GetData(7, ref z);
 
             double meshSize = 0;
-            if (!DA.GetData(8, ref meshSize))
-            {
-                // pass
-            }
+            DA.GetData(8, ref meshSize);
             
             string identifier = "PP";
-            if (!DA.GetData(9, ref identifier))
-            {
-                // pass
-            }
+            DA.GetData(9, ref identifier);
 
-            if (surface == null || material == null || section == null || eccentricity == null || edgeConnection == null || identifier == null)
+            if (surface == null || material == null || section == null || eccentricity == null || edgeConnections == null || identifier == null) { return; }
+            if (edgeConnections.Count == 0)
             {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, $"No edge connection added!");
                 return;
             }
 
-            
+            // convert geometry
             FemDesign.Geometry.Region region = surface.FromRhino();
 
-            //
-            FemDesign.Shells.Panel obj = FemDesign.Shells.Panel.DefaultContreteContinuous(region, edgeConnection, material, section, identifier, orthoRatio, eccentricity);
+            // create panel
+            FemDesign.Shells.Panel obj = FemDesign.Shells.Panel.DefaultContreteContinuous(region, edgeConnections, material, section, identifier, orthoRatio, eccentricity);
 
             // set local x-axis
             if (!x.Equals(Vector3d.Zero))
@@ -136,7 +110,7 @@ namespace FemDesign.Grasshopper
         }
         public override Guid ComponentGuid
         {
-            get { return new Guid("f2cc84f9-9831-414f-916d-65b1163ac1ce"); }
+            get { return new Guid("{08931C40-C956-42A5-A007-E0C754D84848}"); }
         }
         public override GH_Exposure Exposure => GH_Exposure.primary;
 

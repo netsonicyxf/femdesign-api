@@ -1,5 +1,6 @@
 // https://strusoft.com/
 using System;
+using System.Collections.Generic;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
 
@@ -20,7 +21,7 @@ namespace FemDesign.Grasshopper
             pManager[pManager.ParamCount - 1].Optional = true;
             pManager.AddGenericParameter("ShellEccentricity", "Eccentricity", "ShellEccentricity. Optional.", GH_ParamAccess.item);
             pManager[pManager.ParamCount - 1].Optional = true;
-            pManager.AddGenericParameter("BorderEdgeConnection", "BorderEdgeConnection", "EdgeConnection of the external border of the panel. Optional. If not defined hinged will be used.", GH_ParamAccess.item);
+            pManager.AddGenericParameter("BorderEdgeConnection", "BorderEdgeConnection", "EdgeConnection of the external border of the panel. Optional. If not defined hinged will be used.", GH_ParamAccess.list);
             pManager[pManager.ParamCount - 1].Optional = true;
             pManager.AddVectorParameter("LocalX", "LocalX", "Set local x-axis. Vector must be perpendicular to surface local z-axis. Local y-axis will be adjusted accordingly. Optional, local x-axis from surface coordinate system used if undefined.", GH_ParamAccess.item);
             pManager[pManager.ParamCount - 1].Optional = true;
@@ -52,9 +53,9 @@ namespace FemDesign.Grasshopper
 
             Shells.ShellEccentricity eccentricity = Shells.ShellEccentricity.Default;
             DA.GetData("ShellEccentricity", ref eccentricity);
-            
-            Shells.EdgeConnection edgeConnection = Shells.EdgeConnection.Hinged;
-            DA.GetData("BorderEdgeConnection", ref edgeConnection);
+
+            List<FemDesign.Shells.EdgeConnection> edgeConnections = new List<FemDesign.Shells.EdgeConnection>();
+            DA.GetDataList("BorderEdgeConnection", edgeConnections);
 
             Rhino.Geometry.Vector3d x = Vector3d.Zero;
             DA.GetData("LocalX", ref x);
@@ -68,13 +69,20 @@ namespace FemDesign.Grasshopper
             string identifier = "PP";
             DA.GetData("Identifier", ref identifier);
 
-            if (surface == null || timberPlateMaterialData == null || eccentricity == null || edgeConnection == null || identifier == null)
+            // check input
+            if (surface == null || timberPlateMaterialData == null || eccentricity == null || identifier == null)
                 return;
+            if (edgeConnections?.Count == 0 || edgeConnections == null)
+            {
+                edgeConnections = new List<FemDesign.Shells.EdgeConnection> { Shells.EdgeConnection.Hinged };
+            }
 
-            
+            // convert geometry
             Geometry.Region region = surface.FromRhino();
             Geometry.Vector3d dir = spanDirection.FromRhino();
-            Shells.Panel obj = Shells.Panel.DefaultTimberContinuous(region, timberPlateMaterialData, dir, edgeConnection, identifier, eccentricity,  panelWidth);
+
+            // create panel
+            Shells.Panel obj = Shells.Panel.DefaultTimberContinuous(region, timberPlateMaterialData, dir, edgeConnections, identifier, eccentricity,  panelWidth);
 
             // set local x-axis
             if (!x.Equals(Vector3d.Zero))
@@ -99,7 +107,7 @@ namespace FemDesign.Grasshopper
         }
         public override Guid ComponentGuid
         {
-            get { return new Guid("22baacb3-0b76-41f4-a5bc-cd9e60d13be7"); }
+            get { return new Guid("{9EE359E4-C32D-4DD7-9947-1A1FCE9CDB60}"); }
         }
         public override GH_Exposure Exposure => GH_Exposure.primary;
 

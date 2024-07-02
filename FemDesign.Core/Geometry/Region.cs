@@ -226,6 +226,7 @@ namespace FemDesign.Geometry
 
                                 Shells.EdgeConnection ec = Shells.EdgeConnection.CopyExisting(edgeConnection, name);
                                 edge.EdgeConnection = ec;
+                                edge.EdgeConnection.Normal = this.LocalZ;
                             }
                             return;
                         }
@@ -260,8 +261,7 @@ namespace FemDesign.Geometry
                             string name = "CE." + cInstance.ToString();
                             Shells.EdgeConnection ec = Shells.EdgeConnection.CopyExisting(edgeConnection, name);
                             edge.EdgeConnection = ec;
-                            // edge connection Normal are opposite to the normal of the contour
-                            edge.EdgeConnection.Normal = this.LocalZ.Reverse();
+                            edge.EdgeConnection.Normal = this.LocalZ;
                         }
                     }
                     else
@@ -273,6 +273,27 @@ namespace FemDesign.Geometry
             else
             {
                 // don't modify edges if no releases on edgeConnection.
+            }
+        }
+
+        public void SetEdgeConnections(List<Shells.EdgeConnection> edgeConnections)
+        {
+            if (edgeConnections?.Count == 0)
+            {
+                // pass; keep edges as before
+            }
+            else if (edgeConnections.Count == 1)
+            {
+                this.SetEdgeConnections(edgeConnections[0]);
+            }
+            else if (edgeConnections.Count == this.GetEdgeConnections().Count)
+            {
+                for (int i = 0; i < edgeConnections.Count; i++)
+                    this.SetEdgeConnection(edgeConnections[i], i);
+            }
+            else
+            {
+                throw new ArgumentException($"The number of edge connections must be 1 or equal to the number of surface edges!");
             }
         }
 
@@ -290,7 +311,7 @@ namespace FemDesign.Geometry
                     if(edgeConnection != null)
                     {
                         edgeConnection.Edge = edge;
-                        edgeConnection.Normal = this.LocalZ.Reverse();
+                        edgeConnection.Normal = this.LocalZ;
                     }
                     edgeConnections.Add(edgeConnection);
                 }

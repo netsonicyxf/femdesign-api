@@ -67,8 +67,12 @@ namespace FemDesign.Grasshopper
             pManager.AddGenericParameter("DesignGroups", "DesignGroups", "DesignGroups.", GH_ParamAccess.list);
             pManager[pManager.ParamCount - 1].Optional = true;
 
-            pManager.AddTextParameter("ResultTypes", "ResultTypes", "Results to be extracted from model. This might require the model to have been analysed. Item or list.", GH_ParamAccess.list);
+            pManager.AddTextParameter("ResultTypes", "ResultTypes", "Results to be extracted from model. This might require the model to have been analysed.", GH_ParamAccess.list);
             pManager[pManager.ParamCount - 1].Optional = true;
+
+            pManager.AddTextParameter("Bsc", "Bsc", "Bsc file path. This might require the model to have been analysed.", GH_ParamAccess.list);
+            pManager[pManager.ParamCount - 1].Optional = true;
+
 
             pManager.AddGenericParameter("Options", "Options", "Settings for output location. Default is 'ByStep' and 'Vertices'", GH_ParamAccess.item);
             pManager[pManager.ParamCount - 1].Optional = true;
@@ -157,6 +161,9 @@ namespace FemDesign.Grasshopper
 
             List<string> _resultType = new List<string>();
             DA.GetDataList("ResultTypes", _resultType);
+
+            List<string> bscFilePath = new List<string>();
+            DA.GetDataList("Bsc", bscFilePath);
 
             FemDesign.Calculate.Options options = null;
             DA.GetData("Options", ref options);
@@ -254,15 +261,26 @@ namespace FemDesign.Grasshopper
 
                 finiteElement = connection.GetFeaModel(units.Length);
 
+                int i = 0;
                 if (types.Count != 0)
                 {
-                    int i = 0;
                     foreach (var type in types)
                     {
                         var res = _getResults(connection, type, units, options);
-                        resultsTree.AddRange(res, new GH_Path(iteration,i));
+                        resultsTree.AddRange(res, new GH_Path(iteration, i));
                         i++;
                     }
+                }
+
+                if(bscFilePath.Count != 0)
+                {
+                    foreach(var bsc in bscFilePath)
+                    {
+                        var res = connection.GetResultsFromBsc(bsc);
+                        resultsTree.AddRange(res, new GH_Path(iteration, i));
+                        i++;
+                    }
+
                 }
 
                 if (dscTemplate != null)
@@ -312,7 +330,7 @@ namespace FemDesign.Grasshopper
         }
         public override Guid ComponentGuid
         {
-            get { return new Guid("{FDECFC6E-4E0C-41A5-8414-207C77FCB503}"); }
+            get { return new Guid("{1D5D200B-2F6F-4D81-A295-2924773782B3}"); }
         }
 
         public override GH_Exposure Exposure => GH_Exposure.primary;

@@ -165,7 +165,7 @@ namespace FemDesign.ModellingTools
             }
             set
             {
-                this._t1 = RestrictedDouble.NonNegMax_1e20(value);
+                this._t1 = RestrictedDouble.NonZeroMax_1e20(value);
             }
         }
 
@@ -183,7 +183,7 @@ namespace FemDesign.ModellingTools
             }
             set
             {
-                this._t2 = RestrictedDouble.NonNegMax_1e20(value);
+                this._t2 = RestrictedDouble.NonZeroMax_1e20(value);
             }
         }
 
@@ -319,7 +319,28 @@ namespace FemDesign.ModellingTools
 
             //
             return clone;
-        } 
+        }
+
+        /// <summary>
+        /// Set EdgeConnections by indices.
+        /// </summary>
+        /// <param name="fictShell">FictitiousShell.</param>
+        /// <param name="edgeConnection">EdgeConnection.</param>
+        /// <param name="index">Index of edge to set.</param>
+        /// <returns></returns>
+        public static FictitiousShell UpdateEdgeConnection(FictitiousShell fictShell, Shells.EdgeConnection edgeConnection, int index)
+        {
+            // deep clone. downstreams objs will contain changes made in this method, upstream objs will not.
+            // downstream and uppstream objs will share guid.
+            FictitiousShell fictShellClone = fictShell.DeepClone();
+
+            if (index < 0 & index >= fictShellClone.Region.GetEdgeConnections().Count)
+                throw new System.ArgumentException("Index is out of bounds.");
+
+            fictShellClone.Region.SetEdgeConnection(edgeConnection, index);
+
+            return fictShellClone;
+        }
 
     }
 }

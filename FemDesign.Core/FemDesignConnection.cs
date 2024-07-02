@@ -332,7 +332,10 @@ namespace FemDesign
 
             if (analysis.Comb != null)
             {
-                analysis.SetCombAnalysis(this);
+                if(analysis.Comb.CombItem.Any(CombItem => CombItem.CombName != null) || analysis.Comb.CombItem.Count() == 0)
+                {
+                    analysis.SetCombAnalysis(this);
+                }
                 script = new FdScript(
                     logfile,
                     new CmdUser(CmdUserModule.RESMODE),
@@ -739,9 +742,8 @@ namespace FemDesign
         /// <param name="outputCsvPath"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public string GetResultsFromBsc(string inputBscPath, string outputCsvPath = null)
+        public List<string> GetResultsFromBsc(string inputBscPath, string outputCsvPath = null)
         {
-
             // Check input
             if (outputCsvPath == null)
             {
@@ -754,7 +756,7 @@ namespace FemDesign
             _listResultsByFdScript("GetResultsFromBsc", new List<string> { inputBscPath }, new List<string> { outputCsvPath });
 
             // Read results
-            var results = System.IO.File.ReadAllText(outputCsvPath, System.Text.Encoding.UTF8).Replace("\t", ",");
+            var results = System.IO.File.ReadAllLines(outputCsvPath, System.Text.Encoding.UTF8).Select(x => x.Replace("\t", ",")).ToList();
 
             return results;
         }
