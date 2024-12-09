@@ -131,10 +131,11 @@
     <Compile Include="Components\UIWidgets\WidgetServer.cs" />
     <Compile Include="Deconstruct\Drawing\TextAnnotationDeconstruct.cs" />
     <Compile Include="Deconstruct\Drawing\DimensionLinearDeconstruct.cs" />
-    <Compile Include="Deconstruct\ModellingTools\OBSOLETE\FictitiousBarDeconstruct_OBSOLETE2306.cs" />
     <Compile Include="Deconstruct\ModellingTools\LineConnectionDeconstruct.cs" />
-    <Compile Include="Deconstruct\ModellingTools\PointConnectionDeconstruct.cs" />
+    <Compile Include="Deconstruct\ModellingTools\OBSOLETE\FictitiousBarDeconstruct_OBSOLETE2306.cs" />
     <Compile Include="Deconstruct\ModellingTools\OBSOLETE\LineConnectionDeconstruct_OBSOLETE.cs" />
+    <Compile Include="Deconstruct\ModellingTools\PointConnectionDeconstruct.cs" />
+    <Compile Include="Deconstruct\ModellingTools\OBSOLETE\LineConnectionDeconstruct_OBSOLETE2.cs" />
     <Compile Include="Deconstruct\ModellingTools\SurfaceConnectionDeconstruct.cs" />
     <Compile Include="Deconstruct\SectionDeconstruct _OBSOLETE2307.cs" />
     <Compile Include="Deconstruct\StructureGrid\AxisDeconstruct.cs" />
