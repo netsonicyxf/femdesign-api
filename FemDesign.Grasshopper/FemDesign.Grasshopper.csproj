@@ -295,6 +295,7 @@
     <Compile Include="Results\LabelledSection\LabelledSectionResultant.cs" />
     <Compile Include="Results\ModellingTools\LineConnectionForces.cs" />
     <Compile Include="Results\ModellingTools\LineConnectionResultant.cs" />
+    <Compile Include="Results\RC\BarRCUtilisation.cs" />
     <Compile Include="Results\Support\LineSupportReaction.cs" />
     <Compile Include="Results\FiniteElements\FeaNode.cs" />
     <Compile Include="Results\EigenFrequencies\NodalVibration.cs" />
