@@ -17,7 +17,7 @@ namespace FemDesign.Loads
         [XmlElement("load_case")]
         public List<ModelLoadCaseInGroup> ModelLoadCase = new List<ModelLoadCaseInGroup>();// sequence: ModelLoadCaseInGroup
         [XmlAttribute("relationship")]
-        public ELoadGroupRelationship Relationship { get; set; }
+        public ELoadGroupRelationship Relationship { get; set; } = ELoadGroupRelationship.Alternative;
         [XmlIgnore]
         public List<LoadCase> LoadCase = new List<LoadCase>(); // List of complete load cases
 
