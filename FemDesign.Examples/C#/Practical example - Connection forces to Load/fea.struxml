@@ -1,0 +1,298 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!-- (c) StruSoft 2012-2023, http://www.strusoft.com -->
+<database struxml_version="01.00.000" source_software="FEM-Design 24.00.001" start_time="1970-01-01T00:00:00.000" end_time="2025-01-09T11:56:28.000" guid="c4b5cb2f-8788-4233-9c38-dc564b629a85" convertid="00000000-0000-0000-0000-000000000000" standard="EC" country="common" xmlns="urn:strusoft">
+	<entities>
+		<slab name="P.1" guid="57dd3524-d376-44b9-9801-fa168ca64901" last_change="2025-01-09T11:56:28.000" action="added" type="plate">
+			<slab_part guid="f78889dc-1c0a-4344-8c6b-77fba272df8b" last_change="2025-01-09T11:56:28.000" action="added" name="P.1.1" complex_material="e375a74e-dade-416d-9700-c231f865d6d5" alignment="center" align_offset="0" ortho_alfa="0" ortho_ratio="1">
+				<contour>
+					<edge type="line">
+						<point x="17.0227805659545" y="24.4835025568823" z="0"></point>
+						<point x="24.951906119617" y="25.0525130838829" z="0"></point>
+						<normal x="-7.15780086786119E-02" y="0.997435004736451" z="0"></normal>
+					</edge>
+					<edge type="line">
+						<point x="24.951906119617" y="25.0525130838829" z="0"></point>
+						<point x="24.1597276848696" y="36.0914692577305" z="0"></point>
+						<normal x="-0.997435004736451" y="-7.15780086786114E-02" z="0"></normal>
+						<edge_connection guid="fff1943b-8c45-426b-8b05-40d91ac25284" last_change="2025-01-09T11:56:28.000" action="added" name="CE.1" joined_start_point="true" joined_end_point="true">
+							<!--edge description: "P.1.CE.1" -->
+							<rigidity>
+								<motions x_neg="10000000" x_pos="10000000" y_neg="10000000" y_pos="10000000" z_neg="10000000" z_pos="10000000"></motions>
+								<rotations x_neg="0" x_pos="0" y_neg="0" y_pos="0" z_neg="0" z_pos="0"></rotations>
+							</rigidity>
+						</edge_connection>
+					</edge>
+					<edge type="line">
+						<point x="24.1597276848696" y="36.0914692577305" z="0"></point>
+						<point x="16.230602131207" y="35.5224587307299" z="0"></point>
+						<normal x="7.15780086786127E-02" y="-0.997435004736451" z="0"></normal>
+						<edge_connection guid="976e6827-bd4e-416a-b994-dd0614978b8a" last_change="2025-01-09T11:56:28.000" action="added" name="CE.2" joined_start_point="true" joined_end_point="true">
+							<!--edge description: "P.1.CE.2" -->
+							<rigidity>
+								<motions x_neg="10000000" x_pos="10000000" y_neg="10000000" y_pos="10000000" z_neg="10000000" z_pos="10000000"></motions>
+								<rotations x_neg="0" x_pos="0" y_neg="0" y_pos="0" z_neg="0" z_pos="0"></rotations>
+							</rigidity>
+						</edge_connection>
+					</edge>
+					<edge type="line">
+						<point x="16.230602131207" y="35.5224587307299" z="0"></point>
+						<point x="17.0227805659545" y="24.4835025568823" z="0"></point>
+						<normal x="0.997435004736451" y="7.15780086786124E-02" z="0"></normal>
+						<edge_connection guid="016bb3f0-c4e8-4bf2-ad14-d099f7d43d88" last_change="2025-01-09T11:56:28.000" action="added" name="CE.3" joined_start_point="true" joined_end_point="true">
+							<!--edge description: "P.1.CE.3" -->
+							<rigidity>
+								<motions x_neg="10000000" x_pos="10000000" y_neg="10000000" y_pos="10000000" z_neg="10000000" z_pos="10000000"></motions>
+								<rotations x_neg="0" x_pos="0" y_neg="0" y_pos="0" z_neg="0" z_pos="0"></rotations>
+							</rigidity>
+						</edge_connection>
+					</edge>
+				</contour>
+				<thickness x="17.0227805659545" y="24.4835025568823" z="0" val="0.2"></thickness>
+				<local_pos x="20.591254125412" y="30.2874859073064" z="0"></local_pos>
+				<local_x x="0.99743500473645" y="7.15780086786245E-02" z="0"></local_x>
+				<local_y x="-7.15780086786245E-02" y="0.99743500473645" z="0"></local_y>
+				<end></end>
+			</slab_part>
+			<end></end>
+		</slab>
+		<slab name="P.2" guid="d3566366-d69a-45a8-a621-82eeb057edd7" last_change="2025-01-09T11:56:28.000" action="added" type="plate">
+			<slab_part guid="cd0c15f6-8cfe-472b-bf62-81ddf34c4fdd" last_change="2025-01-09T11:56:28.000" action="added" name="P.2.1" complex_material="e375a74e-dade-416d-9700-c231f865d6d5" alignment="center" align_offset="0" ortho_alfa="0" ortho_ratio="1">
+				<contour>
+					<edge type="line">
+						<point x="24.951906119617" y="25.0525130838829" z="0"></point>
+						<point x="29.8137875371504" y="25.4014117977299" z="0"></point>
+						<normal x="-7.15780086786118E-02" y="0.997435004736451" z="0"></normal>
+					</edge>
+					<edge type="line">
+						<point x="29.8137875371504" y="25.4014117977299" z="0"></point>
+						<point x="29.3849943029034" y="31.3766182826233" z="0"></point>
+						<normal x="-0.997435004736451" y="-0.071578008678611" z="0"></normal>
+					</edge>
+					<edge type="line">
+						<point x="29.3849943029034" y="31.3766182826233" z="0"></point>
+						<point x="24.52311288537" y="31.0277195687762" z="0"></point>
+						<normal x="7.15780086786133E-02" y="-0.997435004736451" z="0"></normal>
+					</edge>
+					<edge type="line">
+						<point x="24.52311288537" y="31.0277195687762" z="0"></point>
+						<point x="24.951906119617" y="25.0525130838829" z="0"></point>
+						<normal x="0.997435004736451" y="7.15780086786111E-02" z="0"></normal>
+					</edge>
+				</contour>
+				<thickness x="24.951906119617" y="25.0525130838829" z="0" val="0.2"></thickness>
+				<local_pos x="27.1684502112602" y="28.2145656832531" z="0"></local_pos>
+				<local_x x="0.997435004736451" y="7.15780086786172E-02" z="0"></local_x>
+				<local_y x="-7.15780086786172E-02" y="0.997435004736451" z="0"></local_y>
+				<end></end>
+			</slab_part>
+			<end></end>
+		</slab>
+		<shell_buckling base_shell="f78889dc-1c0a-4344-8c6b-77fba272df8b" guid="d2c66d76-75cb-46be-9971-3fe0bb443f48" last_change="2025-01-09T11:56:28.000" action="added">
+			<direction x="0.997435004736451" y="7.15780086786122E-02" z="0"></direction>
+			<contour>
+				<edge type="line">
+					<point x="17.0227805659545" y="24.4835025568823" z="0"></point>
+					<point x="24.951906119617" y="25.0525130838829" z="0"></point>
+					<normal x="-7.15780086786119E-02" y="0.997435004736451" z="0"></normal>
+				</edge>
+				<edge type="line">
+					<point x="24.951906119617" y="25.0525130838829" z="0"></point>
+					<point x="24.1597276848696" y="36.0914692577305" z="0"></point>
+					<normal x="-0.997435004736451" y="-7.15780086786114E-02" z="0"></normal>
+				</edge>
+				<edge type="line">
+					<point x="24.1597276848696" y="36.0914692577305" z="0"></point>
+					<point x="16.230602131207" y="35.5224587307299" z="0"></point>
+					<normal x="7.15780086786127E-02" y="-0.997435004736451" z="0"></normal>
+				</edge>
+				<edge type="line">
+					<point x="16.230602131207" y="35.5224587307299" z="0"></point>
+					<point x="17.0227805659545" y="24.4835025568823" z="0"></point>
+					<normal x="0.997435004736451" y="7.15780086786124E-02" z="0"></normal>
+				</edge>
+			</contour>
+		</shell_buckling>
+		<shell_buckling base_shell="cd0c15f6-8cfe-472b-bf62-81ddf34c4fdd" guid="4241745a-0050-4927-91af-6205731afb23" last_change="2025-01-09T11:56:28.000" action="added">
+			<direction x="0.997435004736451" y="7.15780086786122E-02" z="0"></direction>
+			<contour>
+				<edge type="line">
+					<point x="24.951906119617" y="25.0525130838829" z="0"></point>
+					<point x="29.8137875371504" y="25.4014117977299" z="0"></point>
+					<normal x="-7.15780086786118E-02" y="0.997435004736451" z="0"></normal>
+				</edge>
+				<edge type="line">
+					<point x="29.8137875371504" y="25.4014117977299" z="0"></point>
+					<point x="29.3849943029034" y="31.3766182826233" z="0"></point>
+					<normal x="-0.997435004736451" y="-0.071578008678611" z="0"></normal>
+				</edge>
+				<edge type="line">
+					<point x="29.3849943029034" y="31.3766182826233" z="0"></point>
+					<point x="24.52311288537" y="31.0277195687762" z="0"></point>
+					<normal x="7.15780086786133E-02" y="-0.997435004736451" z="0"></normal>
+				</edge>
+				<edge type="line">
+					<point x="24.52311288537" y="31.0277195687762" z="0"></point>
+					<point x="24.951906119617" y="25.0525130838829" z="0"></point>
+					<normal x="0.997435004736451" y="7.15780086786111E-02" z="0"></normal>
+				</edge>
+			</contour>
+		</shell_buckling>
+		<loads>
+			<surface_load load_case="237772a6-1ddd-4700-acdf-91a508fa5006" guid="449190d2-b617-47e7-950a-12569f0e73d0" last_change="2025-01-09T11:56:28.000" action="added" assigned_structure="f78889dc-1c0a-4344-8c6b-77fba272df8b" load_projection="false" load_type="force" apply_on_ecc="true">
+				<region>
+					<contour>
+						<edge type="line">
+							<point x="24.52311288537" y="31.0277195687763" z="0"></point>
+							<point x="20.6674143329519" y="30.7510266282472" z="0"></point>
+							<normal x="7.15780086786151E-02" y="-0.997435004736451" z="0"></normal>
+						</edge>
+						<edge type="line">
+							<point x="20.6674143329519" y="30.7510266282472" z="0"></point>
+							<point x="20.8789025624445" y="27.803951582714" z="0"></point>
+							<normal x="0.997435004736451" y="7.15780086786124E-02" z="0"></normal>
+						</edge>
+						<edge type="line">
+							<point x="20.8789025624445" y="27.803951582714" z="0"></point>
+							<point x="24.7346011148626" y="28.080644523243" z="0"></point>
+							<normal x="-7.15780086786123E-02" y="0.997435004736451" z="0"></normal>
+						</edge>
+						<edge type="line">
+							<point x="24.7346011148626" y="28.080644523243" z="0"></point>
+							<point x="24.52311288537" y="31.0277195687763" z="0"></point>
+							<normal x="-0.997435004736451" y="-7.15780086786098E-02" z="0"></normal>
+						</edge>
+					</contour>
+				</region>
+				<direction x="0" y="0" z="-1"></direction>
+				<load x="24.52311288537" y="31.0277195687762" z="0" val="100"></load>
+			</surface_load>
+			<surface_load load_case="237772a6-1ddd-4700-acdf-91a508fa5006" guid="09599cd3-7d27-4a0e-9f8f-2e6ecdb90259" last_change="2025-01-09T11:56:28.000" action="added" assigned_structure="f78889dc-1c0a-4344-8c6b-77fba272df8b" load_projection="false" load_type="force" apply_on_ecc="true">
+				<region>
+					<contour>
+						<edge type="line">
+							<point x="24.626883127165" y="25.6698199805407" z="0"></point>
+							<point x="21.244714858663" y="25.4271085572141" z="0"></point>
+							<normal x="7.15780086786127E-02" y="-0.997435004736451" z="0"></normal>
+						</edge>
+						<edge type="line">
+							<point x="21.244714858663" y="25.4271085572141" z="0"></point>
+							<point x="21.1314956689111" y="27.0048107754129" z="0"></point>
+							<normal x="-0.997435004736451" y="-0.071578008678609" z="0"></normal>
+						</edge>
+						<edge type="line">
+							<point x="21.1314956689111" y="27.0048107754129" z="0"></point>
+							<point x="24.513663937413" y="27.2475221987395" z="0"></point>
+							<normal x="-7.15780086786127E-02" y="0.997435004736451" z="0"></normal>
+						</edge>
+						<edge type="line">
+							<point x="24.513663937413" y="27.2475221987395" z="0"></point>
+							<point x="24.626883127165" y="25.6698199805407" z="0"></point>
+							<normal x="0.997435004736451" y="0.071578008678609" z="0"></normal>
+						</edge>
+					</contour>
+				</region>
+				<direction x="0" y="0" z="-1"></direction>
+				<load x="24.626883127165" y="25.6698199805407" z="0" val="100"></load>
+			</surface_load>
+			<surface_load load_case="237772a6-1ddd-4700-acdf-91a508fa5006" guid="c8f0856a-b92a-4488-a944-e5b877ba7c42" last_change="2025-01-09T11:56:28.000" action="added" assigned_structure="cd0c15f6-8cfe-472b-bf62-81ddf34c4fdd" load_projection="false" load_type="force" apply_on_ecc="true">
+				<region>
+					<contour>
+						<edge type="line">
+							<point x="27.6519559246544" y="29.5214352549077" z="0"></point>
+							<point x="26.200278906253" y="29.4172598953823" z="0"></point>
+							<normal x="7.15780086786055E-02" y="-0.997435004736452" z="0"></normal>
+						</edge>
+						<edge type="line">
+							<point x="26.200278906253" y="29.4172598953823" z="0"></point>
+							<point x="26.3807159218477" y="26.902881543333" z="0"></point>
+							<normal x="0.997435004736451" y="7.15780086786098E-02" z="0"></normal>
+						</edge>
+						<edge type="line">
+							<point x="26.3807159218477" y="26.902881543333" z="0"></point>
+							<point x="27.8323929402491" y="27.0070569028585" z="0"></point>
+							<normal x="-7.15780086786122E-02" y="0.997435004736451" z="0"></normal>
+						</edge>
+						<edge type="line">
+							<point x="27.8323929402491" y="27.0070569028585" z="0"></point>
+							<point x="27.6519559246544" y="29.5214352549077" z="0"></point>
+							<normal x="-0.997435004736451" y="-7.15780086786143E-02" z="0"></normal>
+						</edge>
+					</contour>
+				</region>
+				<direction x="0" y="0" z="-1"></direction>
+				<load x="27.6519559246544" y="29.5214352549077" z="0" val="100"></load>
+			</surface_load>
+			<load_case type="dead_load" duration_class="permanent" guid="d4343f1d-a20e-46c0-9637-499fd5997367" last_change="2025-01-08T08:53:34.000" action="added" name="DL"></load_case>
+			<load_case type="static" duration_class="permanent" guid="237772a6-1ddd-4700-acdf-91a508fa5006" last_change="2025-01-08T08:53:34.000" action="added" name="LL"></load_case>
+			<load_combination guid="aa296e03-63b8-441c-8619-8b88375b34a7" last_change="2025-01-08T08:54:28.000" action="added" name="ULS" type="ultimate_ordinary">
+				<load_case guid="d4343f1d-a20e-46c0-9637-499fd5997367" gamma="1"></load_case>
+				<load_case guid="237772a6-1ddd-4700-acdf-91a508fa5006" gamma="1"></load_case>
+			</load_combination>
+		</loads>
+		<supports>
+			<point_support guid="a8e60e08-88f9-41ba-9579-464b1384a7fb" last_change="2025-01-09T11:56:28.000" action="added" name="S.2">
+				<group>
+					<local_x x="0.997435004736451" y="7.15780086786122E-02" z="0"></local_x>
+					<local_y x="-7.15780086786122E-02" y="0.997435004736451" z="0"></local_y>
+					<rigidity>
+						<motions x_neg="10000000000" x_pos="10000000000" y_neg="10000000000" y_pos="10000000000" z_neg="10000000000" z_pos="10000000000"></motions>
+						<rotations x_neg="10000000000" x_pos="10000000000" y_neg="10000000000" y_pos="10000000000" z_neg="10000000000" z_pos="10000000000"></rotations>
+					</rigidity>
+				</group>
+				<position x="24.1597276848696" y="36.0914692577305" z="0"></position>
+			</point_support>
+			<line_support guid="62dbd32f-beb0-4d50-910d-c4681e4b0b49" last_change="2025-01-09T11:56:28.000" action="added" name="S.1">
+				<group>
+					<local_x x="-0.071578008678611" y="0.997435004736451" z="0"></local_x>
+					<local_y x="-0.997435004736451" y="-7.15780086786122E-02" z="0"></local_y>
+					<rigidity>
+						<motions x_neg="10000000" x_pos="10000000" y_neg="10000000" y_pos="10000000" z_neg="10000000" z_pos="10000000"></motions>
+						<rotations x_neg="10000000" x_pos="10000000" y_neg="10000000" y_pos="10000000" z_neg="10000000" z_pos="10000000"></rotations>
+					</rigidity>
+				</group>
+				<edge type="line">
+					<point x="29.8137875371504" y="25.4014117977299" z="0"></point>
+					<point x="29.3849943029034" y="31.3766182826233" z="0"></point>
+					<normal x="-0.997435004736451" y="-0.071578008678611" z="0"></normal>
+				</edge>
+				<normal x="0" y="0" z="1"></normal>
+			</line_support>
+		</supports>
+		<advanced-fem>
+			<connected_lines guid="83d43604-c8ec-452a-ac3f-18ea6742a78e" last_change="2025-01-09T11:56:28.000" action="added" name="CL.1" moving_local="true" interface_start="0.5" interface_end="0.5">
+				<edge type="line">
+					<point x="24.52311288537" y="31.0277195687762" z="0"></point>
+					<point x="24.951906119617" y="25.0525130838829" z="0"></point>
+					<normal x="0.997435004736451" y="7.15780086786111E-02" z="0"></normal>
+				</edge>
+				<edge type="line">
+					<point x="24.52311288537" y="31.0277195687762" z="0"></point>
+					<point x="24.951906119617" y="25.0525130838829" z="0"></point>
+					<normal x="0.997435004736451" y="7.15780086786111E-02" z="0"></normal>
+				</edge>
+				<point x="24.52311288537" y="31.0277195687762" z="0"></point>
+				<local_x x="0.997435004736451" y="7.15780086786122E-02" z="0"></local_x>
+				<local_y x="-7.15780086786122E-02" y="0.997435004736451" z="0"></local_y>
+				<rigidity>
+					<motions x_neg="10000000" x_pos="10000000" y_neg="10000000" y_pos="10000000" z_neg="10000000" z_pos="10000000"></motions>
+					<rotations x_neg="10000000" x_pos="10000000" y_neg="10000000" y_pos="10000000" z_neg="10000000" z_pos="10000000"></rotations>
+				</rigidity>
+				<ref guid="f78889dc-1c0a-4344-8c6b-77fba272df8b"></ref>
+				<ref guid="cd0c15f6-8cfe-472b-bf62-81ddf34c4fdd"></ref>
+			</connected_lines>
+		</advanced-fem>
+	</entities>
+	<materials>
+		<material guid="e375a74e-dade-416d-9700-c231f865d6d5" last_change="2025-01-08T08:52:49.000" action="added" standard="EC" country="common" name="C30/37">
+			<concrete mass="2.54842" E_0="33000000" E_1="33000000" E_2="33000000" nu_0="0.2" nu_1="0.2" nu_2="0.2" alfa_0="0.00001" alfa_1="0.00001" alfa_2="0.00001" G_0="13750000" G_1="13750000" G_2="13750000" Fck="30" Fck_cube="37" Fctk="2" Fctm="2.9" Ecm="33000" gammaC_0="1.5" gammaC_1="1.2" gammaCE="1.2" gammaS_0="1.15" gammaS_1="1" alfaCc="1" alfaCt="1" Fcd_0="20" Fcd_1="25" Fctd_0="1.33333333333333" Fctd_1="1.66666666666667" Ecd_0="22000" Ecd_1="27500" Epsc2="0.002" Epscu2="0.0035" Epsc3="0.00175" Epscu3="0.0035" environment="0" creep="0" shrinkage="0" nu="0.2" alfa="0.00001">
+				<plastic_analysis_data>
+					<U elasto_plastic_behaviour="false" plastic_hardening="true" concrete_crushing="true" concrete_crushing_option="Prager" tension_strength="true" tension_stiffening="true" tension_stiffening_option="Hinton" tension_stiffening_param="0.5" reduced_compression_strength="true" reduced_compression_strength_option="Vecchio 1" reduced_compression_strength_param="0.55" reduced_transverse_shear_stiffnes="false" ultimate_strain="true"></U>
+					<Sq elasto_plastic_behaviour="false" plastic_hardening="true" concrete_crushing="true" concrete_crushing_option="Prager" tension_strength="true" tension_stiffening="true" tension_stiffening_option="Hinton" tension_stiffening_param="0.5" reduced_compression_strength="true" reduced_compression_strength_option="Vecchio 1" reduced_compression_strength_param="0.55" reduced_transverse_shear_stiffnes="false" ultimate_strain="true"></Sq>
+					<Sf elasto_plastic_behaviour="false" plastic_hardening="true" concrete_crushing="true" concrete_crushing_option="Prager" tension_strength="true" tension_stiffening="true" tension_stiffening_option="Hinton" tension_stiffening_param="0.5" reduced_compression_strength="true" reduced_compression_strength_option="Vecchio 1" reduced_compression_strength_param="0.55" reduced_transverse_shear_stiffnes="false" ultimate_strain="true"></Sf>
+					<Sc elasto_plastic_behaviour="false" plastic_hardening="true" concrete_crushing="true" concrete_crushing_option="Prager" tension_strength="true" tension_stiffening="true" tension_stiffening_option="Hinton" tension_stiffening_param="0.5" reduced_compression_strength="true" reduced_compression_strength_option="Vecchio 1" reduced_compression_strength_param="0.55" reduced_transverse_shear_stiffnes="false" ultimate_strain="true"></Sc>
+				</plastic_analysis_data>
+			</concrete>
+		</material>
+	</materials>
+	<end></end>
+</database>
