@@ -153,7 +153,7 @@ namespace FemDesign.Results
         /// <summary>
         /// Parameterless constructor for serialization.
         /// </summary>
-        private UnitResults()
+        public UnitResults()
         {
 
         }

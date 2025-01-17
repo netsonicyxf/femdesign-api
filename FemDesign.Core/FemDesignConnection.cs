@@ -662,7 +662,43 @@ namespace FemDesign
         }
 
         /// <summary>
-        /// Retrieve finite element mesh data.
+        /// Retrieve the line connection element data from the finite element model.
+        /// </summary>
+        /// <returns></returns>
+        public List<Results.LineConnectionElement> GetFeaLineConnections()
+        {
+            return _readResults<LineConnectionElement>(p => true, null, null, false, null);
+        }
+
+        /// <summary>
+        /// Retrieve the point connection element data from the finite element model.
+        /// </summary>
+        /// <returns></returns>
+        public List<Results.PointConnectionElement> GetFeaPointConnections()
+        {
+            return _readResults<PointConnectionElement>(p => true, null, null, false, null);
+        }
+
+        /// <summary>
+        /// Retrieve the line support element data from the finite element model.
+        /// </summary>
+        /// <returns></returns>
+        public List<Results.LineSupportElement> GetFeaLineSupports()
+        {
+            return _readResults<LineSupportElement>(p => true, null, null, false, null);
+        }
+
+        /// <summary>
+        /// Retrieve the point support element data from the finite element model.
+        /// </summary>
+        /// <returns></returns>
+        public List<Results.PointSupportElement> GetFeaPointSupports()
+        {
+            return _readResults<PointSupportElement>(p => true, null, null, false, null);
+        }
+
+        /// <summary>
+        /// Retrieve finite element data.
         /// </summary>
         /// <param name="units">Unit of length measurement. Default is meter.</param>
         /// <returns></returns>
@@ -671,8 +707,21 @@ namespace FemDesign
             var feaNode = GetFeaNodes(units);
             var feaBar = GetFeaBars(units);
             var feaShell = GetFeaShells(units);
+            var pointConnections = GetFeaPointConnections();
+            var lineConnections = GetFeaLineConnections();
+            var pointSupports = GetFeaPointSupports();
+            var lineSupports = GetFeaLineSupports();
 
-            var fdFea = new Results.FiniteElement(feaNode, feaBar, feaShell);
+            var fdFea = new Results.FiniteElement
+            {
+                FemNode = feaNode,
+                FemBar = feaBar,
+                FemShell = feaShell,
+                FemPointConnection = pointConnections,
+                FemLineConnection = lineConnections,
+                FemPointSupport = pointSupports,
+                FemLineSupport = lineSupports
+            };
 
             return fdFea;
         }

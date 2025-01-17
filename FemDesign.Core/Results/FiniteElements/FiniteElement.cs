@@ -27,6 +27,27 @@ namespace FemDesign.Results
         /// </summary>
         public List<FemShell> FemShell { get; set; }
 
+        /// <summary>
+        /// Point connection elements
+        /// </summary>
+        public List<PointConnectionElement> FemPointConnection { get; set; }
+
+        /// <summary>
+        /// Line connection elements
+        /// </summary>
+        public List<LineConnectionElement> FemLineConnection { get; set; }
+
+        /// <summary>
+        /// Point connection elements
+        /// </summary>
+        public List<PointSupportElement> FemPointSupport { get; set; }
+
+        /// <summary>
+        /// Line connection elements
+        /// </summary>
+        public List<LineSupportElement> FemLineSupport { get; set; }
+
+        internal FiniteElement() { }
 
         public FiniteElement(List<FemNode> femNode, List<FemBar> femBar, List<FemShell> femShell)
         {

@@ -19,8 +19,9 @@ FemDesign.Samples/**/Local/**
 FemDesign.Examples/Grasshopper/Example 1 - A simple beam.struxml
 FemDesign.Examples/Grasshopper/FEM-Design API
 
-!FemDesign.Examples/C#/Practical example - ResultsToJSON/*.str
-!FemDesign.Examples/C#/Practical example - ResultsToJSON/*.strFEM
+!FemDesign.Examples/C#/**/*.str
+!FemDesign.Examples/C#/**/*.strFEM
+
 Icon
 
 FemDesign.GhTest/GhScript/results/

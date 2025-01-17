@@ -45,6 +45,33 @@ namespace FemDesign.Calculate
         /// </summary>
         [XmlEnum("stShellElem_ListProc")]
         FemShell,
+
+        /// <summary>
+        /// Point Connection Element
+        /// </summary>
+        [XmlEnum("stConnPtElem_ListProc")]
+        FemPointConnection,
+
+        /// <summary>
+        /// Line Connection Element
+        /// </summary>
+        [XmlEnum("stConnLnElem_ListProc")]
+        FemLineConnection,
+
+        /// <summary>
+        /// Point support Element
+        /// </summary>
+        [XmlEnum("stSuppPtElem_ListProc")]
+        FemPointSupport,
+
+        /// <summary>
+        /// Line support Element
+        /// </summary>
+        [XmlEnum("stSuppLnElem_ListProc")]
+        FemLineSupport,
+
+
+
         #endregion
 
         #region QUANTITY ESTIMATION

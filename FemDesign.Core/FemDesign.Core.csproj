@@ -118,6 +118,10 @@
     <Compile Include="Loads\Loads\SurfaceSupportMotion.cs" />
     <Compile Include="Reinforcement\LongitudinalBarReinforcement.cs" />
     <Compile Include="Reinforcement\StirrupsReinforcement.cs" />
+    <Compile Include="Results\FiniteElements\LineConnectionElement.cs" />
+    <Compile Include="Results\FiniteElements\LineSupportElement.cs" />
+    <Compile Include="Results\FiniteElements\PointConnectionElement.cs" />
+    <Compile Include="Results\FiniteElements\PointSupportElement.cs" />
     <Compile Include="Soil\BoreHole.cs" />
     <Compile Include="Soil\SoilElements.cs" />
     <Compile Include="Soil\Strata.cs" />
