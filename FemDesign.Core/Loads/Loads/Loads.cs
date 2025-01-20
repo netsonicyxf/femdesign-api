@@ -41,7 +41,7 @@ namespace FemDesign.Loads
         public List<LineStressLoad> LineStressLoads = new List<LineStressLoad>(); // line_stress_load
 
         [XmlElement("surface_stress_load", Order = 8)]
-        public List<DummyXmlObject> SurfaceStressLoads { get { return null; } set { value = null; } } // surface_stress_load
+        public List<StruSoft.Interop.StruXml.Data.Surface_stress_load_type> SurfaceStressLoads { get; set; } // surface_stress_load_type
 
         [XmlElement("point_support_motion_load", Order = 9)]
         public List<PointSupportMotion> PointSupportMotionLoads = new List<PointSupportMotion>(); // point_support_motion_load_type
