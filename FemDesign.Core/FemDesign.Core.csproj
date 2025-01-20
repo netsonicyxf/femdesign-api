@@ -139,8 +139,6 @@
     <Compile Include="StruSoft\Interop\StruXml\Data\CaselessLoads.cs" />
     <Compile Include="StruSoft\Interop\StruXml\Data\FD 23.00.001 Strusoft.cs" />
     <Compile Include="StruSoft\Interop\StruXml\Data\Vehicle_lib_type.cs" />
-    <Compile Include="Utils\LoadCombinationTable.cs" />
-    <Compile Include="Utils\NationalAnnexEnum.cs" />
     <Compile Include="Releases\RigidityDataType0.cs" />
     <Compile Include="Geometry\ArcEdge.cs" />
     <Compile Include="Geometry\CircleEdge.cs" />
@@ -238,7 +236,6 @@
     <Compile Include="Loads\Load cases\LoadCase.cs" />
     <Compile Include="Loads\Load combinations\LoadCombinationCaseBase.cs" />
     <Compile Include="Loads\Load combinations\LoadCombination.cs" />
-    <Compile Include="Utils\LoadCombinationType.cs" />
     <Compile Include="Loads\Load groups\LoadGroupBase.cs" />
     <Compile Include="Loads\Load groups\LoadGroupRelationship.cs" />
     <Compile Include="Loads\Load groups\LoadGroupTable.cs" />

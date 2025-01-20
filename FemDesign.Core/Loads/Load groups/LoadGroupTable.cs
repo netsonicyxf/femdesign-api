@@ -30,6 +30,10 @@ namespace FemDesign.Loads
         public string Action { get; set; }
         [XmlAttribute("simple_combination_method")]
         public LoadCombinationMethod SimpleCombinationMethod { get; set; } = LoadCombinationMethod.False;
+
+        [XmlElement("custom_table")]
+        public StruSoft.Interop.StruXml.Data.Ldgrp_ct_type CustomTable { get; set; }
+
         [XmlElement("group")]
         public List<ModelGeneralLoadGroup> GeneralLoadGroups { get; set; } = new List<ModelGeneralLoadGroup>(); // sequence: ModelGeneralLoadGroup
 

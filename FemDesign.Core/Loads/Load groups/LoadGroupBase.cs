@@ -3,6 +3,7 @@ using System;
 using System.Xml.Serialization;
 using FemDesign.GenericClasses;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 
 namespace FemDesign.Loads
 {
@@ -14,16 +15,20 @@ namespace FemDesign.Loads
     {
         [XmlIgnore]
         public string Name { get; set; }
-        [XmlElement("load_case")]
-        public List<ModelLoadCaseInGroup> ModelLoadCase = new List<ModelLoadCaseInGroup>();// sequence: ModelLoadCaseInGroup
+
+        [XmlElement("load_case", Order = 2)]
+        public List<ModelLoadCaseInGroup> ModelLoadCase { get; set; } = new List<ModelLoadCaseInGroup>();
+
         [XmlAttribute("relationship")]
         public ELoadGroupRelationship Relationship { get; set; } = ELoadGroupRelationship.Alternative;
+
         [XmlIgnore]
         public List<LoadCase> LoadCase = new List<LoadCase>(); // List of complete load cases
 
-        [XmlElement("subgroup")]
+        [XmlElement("subgroup", Order = 3)]
         public List<StruSoft.Interop.StruXml.Data.Load_subgroup> Subgroups { get; set; }
-        [XmlElement("relations")]
+
+        [XmlElement("relations", Order = 4)]
         public RelationTable RelationTable { get; set; }
 
         /// <summary>

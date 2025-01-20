@@ -76,8 +76,21 @@ namespace FemDesign.Loads
         [XmlAttribute("simultaneous")]
         public bool Simultaneous { get; set; } = false;
 
+        [XmlElement(ElementName = "custom_table", Order = 1)]
+        public TemporaryGroupRecord CustomTable { get; set; }
+
+        [XmlElement("load_case", Order = 2)]
+        public List<ModelLoadCaseInGroup> ModelLoadCase { get; set; }
+
+        /// <summary>
+        /// ONLY FOR DESERIALIZATION
+        /// NEEDS TO BE FIXED
+        /// </summary>
+        [XmlElement("load_case", Order = 2)]
+        public List<Reference_type> Load_case { get; set; }
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("load_cases_of_moving_load")]
+        [System.Xml.Serialization.XmlElementAttribute("load_cases_of_moving_load" ,Order = 7)]
         public System.Collections.Generic.List<Temporary_load_groupLoad_cases_of_moving_load> Load_cases_of_moving_load { get; set; }
 
         /// parameterless constructor for serialization///
@@ -102,4 +115,16 @@ namespace FemDesign.Loads
                 AddLoadCase(loadCases[i]);
         }
     }
+
+    [System.Serializable]
+    public class TemporaryGroupRecord
+    {
+        [XmlElement("record")]
+        public List<StruSoft.Interop.StruXml.Data.Temporary_load_groupRecord> Record { get; set; }
+
+        public TemporaryGroupRecord()
+        {
+        }
+    }
+
 }

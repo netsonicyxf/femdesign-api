@@ -3126,6 +3126,12 @@ namespace FemDesign
         /// </summary>
         private bool MaterialInModel(Materials.Material obj)
         {
+            if (this.Materials == null)
+            {
+                this.Materials = new Materials.Materials();
+                return false;
+            }
+
             foreach (Materials.Material elem in this.Materials.Material)
             {
                 if (obj != null && elem != null)
@@ -3350,6 +3356,12 @@ namespace FemDesign
         /// </summary>
         private bool SectionInModel(FemDesign.Sections.Section obj)
         {
+            if(this.Sections == null)
+            {
+                this.Sections = new FemDesign.Sections.ModelSections();
+                return false;
+            }
+
             foreach (FemDesign.Sections.Section elem in this.Sections.Section)
             {
                 if (obj != null && elem != null)

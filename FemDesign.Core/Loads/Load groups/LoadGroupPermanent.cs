@@ -3,6 +3,7 @@
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using FemDesign.GenericClasses;
+using StruSoft.Interop.StruXml.Data;
 
 namespace FemDesign.Loads
 {
@@ -34,6 +35,19 @@ namespace FemDesign.Loads
         public double AccidentalFavourable { get; set; }
         [XmlAttribute("accidental_unfavourable")]
         public double AccidentalUnfavourable { get; set; }
+
+        [XmlElement(ElementName = "custom_table", Order = 1)]
+        public PermanentGroupRecord CustomTable { get; set; }
+        /// <summary>
+        /// ONLY FOR DESERIALIZATION
+        /// NEEDS TO BE FIXED
+        /// </summary>
+        [XmlElement("load_case", Order = 2)]
+        public List<Reference_type> Load_case { get; set; }
+
+        [XmlElement("load_case", Order = 3)]
+        public new List<ModelLoadCaseInGroup> ModelLoadCase { get; set; }
+
 
         /// <summary>
         /// parameterless constructor for serialization
@@ -71,4 +85,16 @@ namespace FemDesign.Loads
             }
         }
     }
+
+    [System.Serializable]
+    public class PermanentGroupRecord
+    {
+        [XmlElement("record")]
+        public List<StruSoft.Interop.StruXml.Data.Permanent_load_groupRecord> Record { get; set; }
+
+        public PermanentGroupRecord()
+        {
+        }
+    }
+
 }
