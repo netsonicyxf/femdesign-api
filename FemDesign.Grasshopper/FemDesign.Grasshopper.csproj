@@ -363,7 +363,6 @@
     <Compile Include="Supports\StiffnessPoints.cs" />
     <Compile Include="Extension\HtmlWriter.cs" />
     <Compile Include="Supports\SurfaceSupport.cs" />
-    <Compile Include="Utils\LoadGroupCombineGeneral.cs" />
     <Compile Include="Loads\Load groups\LoadGroupConstruct.cs" />
     <Compile Include="Loads\Load categories\LoadCategoryDatabaseDefault.cs" />
     <Compile Include="Loads\Load categories\LoadCategoryDatabaseListLoadCategoryNames.cs" />
@@ -1078,6 +1077,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Obsolete\" />
+    <Folder Include="Utils\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSHARP.Targets" />
   <ProjectExtensions>

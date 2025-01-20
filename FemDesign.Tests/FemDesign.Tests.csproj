@@ -93,6 +93,7 @@
     <Compile Include="GenericClasses\EntityColorTests.cs" />
     <Compile Include="Geometry\PlaneTests.cs" />
     <Compile Include="Geometry\Points.cs" />
+    <Compile Include="Loads\LoadGroup.cs" />
     <Compile Include="ModellingTools\ModellingToolsTest.cs" />
     <Compile Include="Results\Bar\BarEndForceTest.cs" />
     <Compile Include="Results\FiniteElement\NodalDisplacementsTests.cs" />
@@ -129,7 +130,6 @@
     <Compile Include="Geometry\ProximityTests.cs" />
     <Compile Include="Loads\LoadCaseTests.cs" />
     <Compile Include="Loads\LoadCombinationTests.cs" />
-    <Compile Include="Loads\LoadGroupsCombineTests.cs" />
     <Compile Include="Materials\MaterialDatabaseTests.cs" />
     <Compile Include="Loads\LoadsTests.cs" />
     <Compile Include="Loads\ModelLoadCaseTests.cs" />
@@ -186,6 +186,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Bars\sections.struxml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Loads\Assets\load-group.struxml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Loads\Assets\support-motion.struxml">

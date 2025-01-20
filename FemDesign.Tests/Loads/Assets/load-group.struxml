@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!-- (c) StruSoft 2012-2023, http://www.strusoft.com -->
+<database struxml_version="01.00.000" source_software="FEM-Design 23.00.006" start_time="1970-01-01T00:00:00.000" end_time="2025-01-17T10:54:48.000" guid="3f9aff0b-8516-4355-a7a7-fbee07006cb0" convertid="00000000-0000-0000-0000-000000000000" standard="EC" country="common" xmlns="urn:strusoft">
+	<entities>
+		<loads>
+			<load_case type="static" duration_class="permanent" guid="0f2f4606-29ed-4140-9d7a-980ebb6486f5" last_change="2025-01-17T10:50:57.000" action="added" name="LL"></load_case>
+			<load_case type="dead_load" duration_class="permanent" guid="3b427f9b-11f4-4383-915c-b0c4a9d6eecd" last_change="2025-01-17T10:50:57.000" action="added" name="DL"></load_case>
+			<load_case type="static" duration_class="permanent" guid="3888a527-2ff8-4e2d-91bf-a6e17678b806" last_change="2025-01-17T10:50:57.000" action="added" name="IL"></load_case>
+			<load_case type="static" duration_class="permanent" guid="2ebb5560-e015-49cb-b9df-6ec7b7f93da6" last_change="2025-01-17T10:53:10.000" action="added" name="WIND"></load_case>
+			<load_case type="static" duration_class="permanent" guid="3bcd0938-b823-4ff1-a03a-751dd161d0ca" last_change="2025-01-17T10:54:48.000" action="added" name="Prestress"></load_case>
+			<load_group_table last_change="2025-01-17T10:54:48.000" action="added" simple_combination_method="custom">
+				<custom_table>
+					<record name="Finnish NA 6.10.a Sup 1" limit_state="ultimate"></record>
+					<record name="Finnish NA 6.10.b Sup 1" limit_state="ultimate"></record>
+					<record name="Finnish NA 6.10.b Inf 1" limit_state="ultimate"></record>
+					<record name="EC 6.15. 1" limit_state="frequent"></record>
+					<record name="EC 6.10.a Sup 1" limit_state="ultimate"></record>
+					<record name="EC 6.10.a Inf 1" limit_state="ultimate"></record>
+					<record name="EC 6.10.b Sup 1" limit_state="ultimate"></record>
+					<record name="EC 6.10.b Inf 1" limit_state="ultimate"></record>
+				</custom_table>
+				<group name="LG-1" guid="83a79daa-473c-4c59-abcf-e300e4df77b5">
+					<permanent standard_favourable="1" standard_unfavourable="1.35" xi="0.85" accidental_favourable="1" accidental_unfavourable="1">
+						<custom_table>
+							<record s="deactivated" data="factorless"></record>
+							<record s="deactivated" data="factorless"></record>
+							<record s="deactivated" data="factorless"></record>
+							<record s="mandatory" data="factorless"></record>
+							<record s="mandatory" data="Gamma_G_Sup"></record>
+							<record s="mandatory" data="Gamma_G_Inf"></record>
+							<record s="mandatory" data="Ksi_*_Gamma_G_Sup"></record>
+							<record s="mandatory" data="Gamma_G_Inf"></record>
+						</custom_table>
+						<load_case guid="0f2f4606-29ed-4140-9d7a-980ebb6486f5"></load_case>
+						<load_case guid="3b427f9b-11f4-4383-915c-b0c4a9d6eecd"></load_case>
+					</permanent>
+				</group>
+				<group name="LG-2" guid="1dd5efce-ab57-482b-9c65-fd317f004c37">
+					<temporary relationship="simultaneous" safety_factor="1.5" psi_0="0.7" psi_1="0.5" psi_2="0.2" leading_cases="true">
+						<custom_table>
+							<record s="deactivated" data="factorless" i="general"></record>
+							<record s="deactivated" data="factorless" i="general"></record>
+							<record s="deactivated" data="factorless" i="general"></record>
+							<record s="optional" data="Psi1" i="highlighted"></record>
+							<record s="optional" data="Gamma_Q_*_Psi0" i="general"></record>
+							<record s="optional" data="Gamma_Q_*_Psi0" i="general"></record>
+							<record s="mandatory" data="Gamma_Q" i="highlighted"></record>
+							<record s="mandatory" data="Gamma_Q" i="highlighted"></record>
+						</custom_table>
+						<load_case guid="3888a527-2ff8-4e2d-91bf-a6e17678b806"></load_case>
+					</temporary>
+				</group>
+				<group name="LG-3" guid="cffe5390-d390-48d5-bcc8-386d826dcbd0">
+					<accidental relationship="entire" safety_factor="1">
+						<custom_table>
+							<record s="deactivated" data="factorless"></record>
+							<record s="deactivated" data="factorless"></record>
+							<record s="deactivated" data="factorless"></record>
+							<record s="deactivated" data="factorless"></record>
+							<record s="deactivated" data="factorless"></record>
+							<record s="deactivated" data="factorless"></record>
+							<record s="deactivated" data="factorless"></record>
+							<record s="deactivated" data="factorless"></record>
+						</custom_table>
+						<load_case guid="2ebb5560-e015-49cb-b9df-6ec7b7f93da6"></load_case>
+					</accidental>
+				</group>
+				<group name="LG-4" guid="3aab7a88-1dff-456c-a75b-335f01f35474">
+					<stress relationship="entire" standard="1" accidental="1.3">
+						<custom_table>
+							<record s="deactivated" data="factorless"></record>
+							<record s="deactivated" data="factorless"></record>
+							<record s="deactivated" data="factorless"></record>
+							<record s="mandatory" data="factorless"></record>
+							<record s="mandatory" data="Gamma_P"></record>
+							<record s="mandatory" data="Gamma_P"></record>
+							<record s="mandatory" data="Gamma_P"></record>
+							<record s="mandatory" data="Gamma_P"></record>
+						</custom_table>
+						<load_case guid="3bcd0938-b823-4ff1-a03a-751dd161d0ca"></load_case>
+					</stress>
+				</group>
+			</load_group_table>
+		</loads>
+	</entities>
+	<end></end>
+</database>
