@@ -17,7 +17,7 @@ namespace FemDesign.Loads
         public string Name { get; set; }
 
         [XmlElement("load_case", Order = 2)]
-        public List<ModelLoadCaseInGroup> ModelLoadCase { get; set; } = new List<ModelLoadCaseInGroup>();
+        public List<ModelLoadCaseInGroup> ModelLoadCase { get; set; }
 
         [XmlAttribute("relationship")]
         public ELoadGroupRelationship Relationship { get; set; } = ELoadGroupRelationship.Alternative;
@@ -30,22 +30,6 @@ namespace FemDesign.Loads
 
         [XmlElement("relations", Order = 4)]
         public RelationTable RelationTable { get; set; }
-
-        /// <summary>
-        /// Add LoadCase to group.
-        /// </summary>
-        public void AddLoadCase(LoadCase loadCase)
-        {
-            if (LoadCaseInLoadGroup(loadCase))
-            {
-                // pass
-            }
-            else
-            {
-                ModelLoadCase.Add(new ModelLoadCaseInGroup(loadCase.Guid, this));
-                LoadCase.Add(loadCase);
-            }
-        }
 
         /// <summary>
         /// Find the corresponding LoadCase instance stored in the load group based on the guid of the modelLoadCaseInGroup instance
@@ -63,6 +47,9 @@ namespace FemDesign.Loads
         /// </summary>
         public bool LoadCaseInLoadGroup(LoadCase loadCase)
         {
+            if (ModelLoadCase == null)
+                return false;
+
             foreach (ModelLoadCaseInGroup elem in this.ModelLoadCase)
             {
                 if (elem.Guid == loadCase.Guid)

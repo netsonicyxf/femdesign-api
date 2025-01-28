@@ -84,6 +84,26 @@ namespace FemDesign.Loads
                 AddLoadCase(loadCases[i]);
             }
         }
+
+        /// <summary>
+        /// Add LoadCase to group.
+        /// </summary>
+        public new void AddLoadCase(LoadCase loadCase)
+        {
+            if (LoadCaseInLoadGroup(loadCase))
+            {
+                // pass
+            }
+            else
+            {
+                if (ModelLoadCase == null)
+                    ModelLoadCase = new List<ModelLoadCaseInGroup>();
+
+                ModelLoadCase.Add(new ModelLoadCaseInGroup(loadCase.Guid, this));
+                LoadCase.Add(loadCase);
+            }
+        }
+
     }
 
     [System.Serializable]

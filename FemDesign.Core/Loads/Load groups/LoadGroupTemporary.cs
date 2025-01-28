@@ -11,7 +11,7 @@ namespace FemDesign.Loads
     /// temporary_load_group (child of general_load_group)
     /// </summary>
     [System.Serializable]
-    public partial class LoadGroupTemporary: LoadGroupBase
+    public partial class LoadGroupTemporary : LoadGroupBase
     {
         [XmlAttribute("safety_factor")]
         public double _safetyFactor;
@@ -73,14 +73,15 @@ namespace FemDesign.Loads
         public bool LeadingCases { get; set; }
         [XmlAttribute("ignore_sls")]
         public bool IgnoreSls { get; set; } = false;
-        [XmlAttribute("simultaneous")]
-        public bool Simultaneous { get; set; } = false;
 
         [XmlElement(ElementName = "custom_table", Order = 1)]
         public TemporaryGroupRecord CustomTable { get; set; }
 
         [XmlElement("load_case", Order = 2)]
         public List<ModelLoadCaseInGroup> ModelLoadCase { get; set; }
+
+        [XmlAttribute("temporary_effect")]
+        public TemporaryEffect TemporaryEffect { get; set; } = TemporaryEffect.General;
 
         /// <summary>
         /// ONLY FOR DESERIALIZATION
@@ -90,7 +91,7 @@ namespace FemDesign.Loads
         public List<Reference_type> Load_case { get; set; }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("load_cases_of_moving_load" ,Order = 7)]
+        [System.Xml.Serialization.XmlElementAttribute("load_cases_of_moving_load", Order = 7)]
         public System.Collections.Generic.List<Temporary_load_groupLoad_cases_of_moving_load> Load_cases_of_moving_load { get; set; }
 
         /// parameterless constructor for serialization///
@@ -100,7 +101,7 @@ namespace FemDesign.Loads
         /// Public constructor.
         /// </summary>
         public LoadGroupTemporary(double safetyFactor,
-                                       double psi0, double psi1,double psi2, 
+                                       double psi0, double psi1, double psi2,
                                        bool potentiallyLeadingAction, List<LoadCase> loadCases,
                                        ELoadGroupRelationship relationsship, string name)
         {
@@ -110,9 +111,28 @@ namespace FemDesign.Loads
             this.Psi1 = psi1;
             this.Psi2 = psi2;
             this.LeadingCases = potentiallyLeadingAction;
-            this.Relationship = relationsship;          
+            this.Relationship = relationsship;
             for (int i = 0; i < loadCases.Count; i++)
                 AddLoadCase(loadCases[i]);
+        }
+
+        /// <summary>
+        /// Add LoadCase to group.
+        /// </summary>
+        public void AddLoadCase(LoadCase loadCase)
+        {
+            if (LoadCaseInLoadGroup(loadCase))
+            {
+                // pass
+            }
+            else
+            {
+                if (ModelLoadCase == null)
+                    ModelLoadCase = new List<ModelLoadCaseInGroup>();
+
+                ModelLoadCase.Add(new ModelLoadCaseInGroup(loadCase.Guid, this));
+                LoadCase.Add(loadCase);
+            }
         }
     }
 
@@ -127,4 +147,16 @@ namespace FemDesign.Loads
         }
     }
 
+    public enum TemporaryEffect
+    {
+        [Parseable("General", "general", "0")]
+        [XmlEnum("general")]
+        General,
+        [Parseable("Snow", "snow", "1")]
+        [XmlEnum("snow")]
+        Snow,
+        [Parseable("Wind", "wind", "2")]
+        [XmlEnum("wind")]
+        Wind,
+    }
 }

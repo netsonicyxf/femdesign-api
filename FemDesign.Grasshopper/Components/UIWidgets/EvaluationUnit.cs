@@ -134,9 +134,8 @@ namespace FemDesign.Grasshopper.Components.UIWidgets
             param.Access = access;
             try
             {
-                if (defaultValue != null && typeof(IGH_Goo).IsAssignableFrom(param.GetType()))
+                if (defaultValue != null)
                 {
-                    //Type genericType = GetGenericType(typeof(GH_PersistentParam), ((object)param).GetType());
                     Type genericType = GetGenericType(typeof(GH_PersistentParam<>), ((object)param).GetType());
                     if (genericType != null)
                     {

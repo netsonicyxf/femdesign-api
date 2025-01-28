@@ -140,7 +140,12 @@
     <Compile Include="Deconstruct\SectionDeconstruct _OBSOLETE2307.cs" />
     <Compile Include="Deconstruct\StructureGrid\AxisDeconstruct.cs" />
     <Compile Include="Foundations\SlabFoundation.cs" />
+    <Compile Include="Loads\Load groups\AccidentalLoadGroup.cs" />
+    <Compile Include="Loads\Load groups\LoadGroupConstruct.cs" />
     <Compile Include="Loads\Load groups\LoadGroupToLoadComb.cs" />
+    <Compile Include="Loads\Load groups\PermanentLoadGroup.cs" />
+    <Compile Include="Loads\Load groups\StressLoadGroup.cs" />
+    <Compile Include="Loads\Load groups\TemporaryLoadGroup.cs" />
     <Compile Include="Loads\Loads\Dynamics\ExcitationDiagram.cs" />
     <Compile Include="Loads\Loads\Dynamics\ExcitationForceCombination.cs" />
     <Compile Include="Loads\Loads\Dynamics\ExcitationLoad.cs" />
@@ -363,7 +368,7 @@
     <Compile Include="Supports\StiffnessPoints.cs" />
     <Compile Include="Extension\HtmlWriter.cs" />
     <Compile Include="Supports\SurfaceSupport.cs" />
-    <Compile Include="Loads\Load groups\LoadGroupConstruct.cs" />
+    <Compile Include="Loads\Load groups\OBSOLETE\LoadGroupConstruct_OBSOLETE.cs" />
     <Compile Include="Loads\Load categories\LoadCategoryDatabaseDefault.cs" />
     <Compile Include="Loads\Load categories\LoadCategoryDatabaseListLoadCategoryNames.cs" />
     <Compile Include="Loads\Load categories\LoadCategoryGetLoadCatergoryByName.cs" />

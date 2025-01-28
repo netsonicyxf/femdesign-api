@@ -16,7 +16,7 @@ namespace FemDesign.Loads
         [XmlAttribute("name")]
         public string Name { get; set; }
         [XmlAttribute("guid")]
-        public System.Guid Guid { get; set; }
+        public System.Guid Guid { get; set; } = Guid.NewGuid();
         [XmlAttribute("consider_in_gmax")]
         [DefaultValue(true)]
         public bool ConsiderInGmax { get; set; } = true;
@@ -45,7 +45,6 @@ namespace FemDesign.Loads
         /// <param name="LoadGroup">Specific load group object</param>
         public ModelGeneralLoadGroup(LoadGroupBase LoadGroup)
         {
-            Guid = Guid.NewGuid();
             AddSpecificLoadGroup(LoadGroup, false);
             Name = LoadGroup.Name;
         }
