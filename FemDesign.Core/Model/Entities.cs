@@ -113,13 +113,16 @@ namespace FemDesign
         [XmlElement("result_points", Order = 33)]
         public AuxiliaryResults.ResultPointsGeometry ResultPoints { get; set; }
 
-        [XmlElement("tsolids", Order = 34)]
+        [XmlElement("result_lines", Order = 34)]
+        public AuxiliaryResults.VirtualBarContainer VirtualBarContainer { get; set; }
+
+        [XmlElement("tsolids", Order = 35)]
         public List<StruSoft.Interop.StruXml.Data.Polyhedron_type> TSolids { get; set; }
 
-        [XmlElement("peak_smoothing_region", Order = 35)]
+        [XmlElement("peak_smoothing_region", Order = 36)]
         public List<FiniteElements.PeakSmoothingRegion> PeakSmoothingRegions { get; set; }
 
-        [XmlElement("regions", Order = 36)]
+        [XmlElement("regions", Order = 37)]
         public Geometry.Regions Regions { get; set; }
 
         // ref planes

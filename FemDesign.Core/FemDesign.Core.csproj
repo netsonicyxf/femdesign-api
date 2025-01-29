@@ -55,6 +55,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuxiliaryResults\VirtualBarContainer.cs" />
     <Compile Include="AuxiliaryResults\ResultPointsGeometry.cs" />
     <Compile Include="Bars\BarStiffnessFactors.cs" />
     <Compile Include="Bars\Beam.cs" />

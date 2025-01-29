@@ -60,6 +60,7 @@ namespace FemDesign.AuxiliaryResults
             _checkValidDistance(element);
 
             Guid refGuid;
+
             if (element is Shells.Slab slab)
             {
                 refGuid = new Guid( slab.SlabPart.Guid.ToString() );

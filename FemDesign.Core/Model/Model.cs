@@ -3426,7 +3426,7 @@ namespace FemDesign
 
 
         /// <summary>
-        /// Add LabelledSection to Model
+        /// Add ResultPoint to Model
         /// </summary>
         private void AddResultPoint(AuxiliaryResults.ResultPoint obj, bool overwrite)
         {
@@ -3459,7 +3459,7 @@ namespace FemDesign
         }
 
         /// <summary>
-        /// Check if LabelledSection in Model
+        /// Check if ResultPoint in Model
         /// </summary>
         private bool ResultPointInModel(AuxiliaryResults.ResultPoint obj)
         {
@@ -3472,6 +3472,56 @@ namespace FemDesign
             }
             return false;
         }
+
+
+        /// <summary>
+        /// Add VirtualBar to Model
+        /// </summary>
+        private void AddVirtualBar(AuxiliaryResults.VirtualBar obj, bool overwrite)
+        {
+            if (this.Entities.VirtualBarContainer == null)
+            {
+                this.Entities.VirtualBarContainer = new AuxiliaryResults.VirtualBarContainer();
+            }
+
+            // in model?
+            bool inModel = this.VirtualBarInModel(obj);
+
+            // in model, don't overwrite
+            if (inModel && !overwrite)
+            {
+                // pass - note that this should not throw an exception.
+            }
+
+            // in model, overwrite
+            else if (inModel && overwrite)
+            {
+                this.Entities.VirtualBarContainer.VirtualBars.RemoveAll(x => x.Guid == obj.Guid);
+                this.Entities.VirtualBarContainer.VirtualBars.Add(obj);
+            }
+
+            // not in model
+            else if (!inModel)
+            {
+                this.Entities.VirtualBarContainer.VirtualBars.Add(obj);
+            }
+        }
+
+        /// <summary>
+        /// Check if LabelledSection in Model
+        /// </summary>
+        private bool VirtualBarInModel(AuxiliaryResults.VirtualBar obj)
+        {
+            foreach (AuxiliaryResults.VirtualBar elem in this.Entities.VirtualBarContainer.VirtualBars)
+            {
+                if (elem.Guid == obj.Guid)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
 
         /// <summary>
         /// Add PeakSmoothingRegion to Model
@@ -3812,6 +3862,7 @@ namespace FemDesign
 
         private void AddEntity(AuxiliaryResults.LabelledSection obj, bool overwrite) => AddLabelledSection(obj, overwrite);
         private void AddEntity(AuxiliaryResults.ResultPoint obj, bool overwrite) => AddResultPoint(obj, overwrite);
+        private void AddEntity(AuxiliaryResults.VirtualBar obj, bool overwrite) => AddVirtualBar(obj, overwrite);
         private void AddEntity(FiniteElements.PeakSmoothingRegion obj, bool overwrite) => AddPeakSmoothingRegion(obj, overwrite);
 
         #region FOUNDATIONS

@@ -2923,6 +2923,16 @@ namespace FemDesign.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap VirtualBar {
+            get {
+                object obj = ResourceManager.GetObject("VirtualBar", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Wall {
             get {
                 object obj = ResourceManager.GetObject("Wall", resourceCulture);

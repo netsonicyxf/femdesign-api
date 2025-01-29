@@ -302,6 +302,7 @@
     <Compile Include="Results\ModellingTools\LineConnectionResultant.cs" />
     <Compile Include="Results\ParseCSVResults.cs" />
     <Compile Include="Results\RC\BarRCUtilisation.cs" />
+    <Compile Include="Results\VirtualBar.cs" />
     <Compile Include="Results\Support\LineSupportReaction.cs" />
     <Compile Include="Results\FiniteElements\FeaNode.cs" />
     <Compile Include="Results\EigenFrequencies\NodalVibration.cs" />
@@ -952,6 +953,7 @@
     <Content Include="images\logo.png" />
     <Content Include="Resources\icons\CombDefine2.png" />
     <Content Include="Resources\icons\CombDefine3.png" />
+    <None Include="Resources\icons\VirtualBar.png" />
     <None Include="Resources\icons\Config.png" />
     <None Include="Resources\icons\DeltaBeamProfile.png" />
     <Content Include="Resources\icons\Diaphragm.bmp" />
