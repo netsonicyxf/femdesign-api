@@ -19,7 +19,7 @@ namespace FemDesign.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddTextParameter("FEM-Design dir", "FEM-Design dir",
-                "Path to directory of FEM-Design installation.", GH_ParamAccess.item);
+                "Path to directory of FEM-Design installation.", GH_ParamAccess.item, @"C:\Program Files\StruSoft\FEM-Design 24\");
             pManager[pManager.ParamCount - 1].Optional = true;
 
             pManager.AddBooleanParameter("Minimized", "Minimized",
@@ -53,7 +53,7 @@ namespace FemDesign.Grasshopper
         {
             // TODO: Set version as global variable in FemDesign.Core
 
-            string fd_installation_folder = $@"C:\Program Files\StruSoft\FEM-Design 23\";
+            string fd_installation_folder = @"C:\Program Files\StruSoft\FEM-Design 24\";
             DA.GetData("FEM-Design dir", ref fd_installation_folder);
 
             bool minimized = false;
