@@ -99,6 +99,7 @@ namespace FemDesign.Grasshopper
 
             ReportProgress("", "");
 
+            _connection.GenerateFeaModel();
             _fdFea = _connection.GetFeaModel(_units.Length);
             _success = true;
             Done();
