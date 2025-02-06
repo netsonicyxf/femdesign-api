@@ -77,7 +77,7 @@ namespace FemDesign.Results
         {
             get
             {
-                return new Regex(@"^(?'type'Nodal displacements), ((?'loadcasetype'[\w\s\-]+)? - )?Load (?'casecomb'case|comb\.+): (?'casename'[\w\ ]+?)(?: - selected objects)?$");
+                return new Regex(@"^(?'type'Nodal displacements), ((?'loadcasetype'[\w\s\-]+)? - )?Load (?'casecomb'case|comb\.+): (?'casename'[ -#%'-;=?A-\ufffd]{1,79}?)(?: - selected objects)?$");
             }
         }
 
@@ -85,7 +85,7 @@ namespace FemDesign.Results
         {
             get
             {
-                return new Regex(@"^(?'type'Nodal displacements), ((?'loadcasetype'[\w\s\-]+)? - )?Load (?'casecomb'case|comb\.+): (?'casename'[\w\ ]+?)(?: - selected objects)?$|^ID\tNode\tex\tey\tez\t\u03c6 x\t\u03c6 y\t\u03c6 z\t(Case|Comb\.)|^\[.*\]");
+                return new Regex(@"^(?'type'Nodal displacements), ((?'loadcasetype'[\w\s\-]+)? - )?Load (?'casecomb'case|comb\.+): (?'casename'[ -#%'-;=?A-\ufffd]{1,79}?)(?: - selected objects)?$|^ID\tNode\tex\tey\tez\t\u03c6 x\t\u03c6 y\t\u03c6 z\t(Case|Comb\.)|^\[.*\]");
             }
         }
 

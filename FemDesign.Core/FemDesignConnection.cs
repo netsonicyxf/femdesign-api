@@ -761,17 +761,17 @@ namespace FemDesign
             this.RunScript(script, "CreateResultPoints");
         }
 
-        /// <summary>
-        /// Retrieve results for a single result point.
-        /// </summary>
-        /// <typeparam name="T">Result type to retrieve. Must be a type that implements the <see cref="Results.IResult"/> interface</typeparam>
-        /// <param name="resultPoint">Result point .fdscript command.</param>
-        /// <param name="units">Optional. Unit setting for the results.</param>
-        /// <returns></returns>
-        public List<T> GetResultsOnPoints<T>(CmdResultPoint resultPoint, Results.UnitResults units = null) where T : Results.IResult
+        public List<T> GetResultsOnPoints<T>(AuxiliaryResults.ResultPoint resultPoint, Results.UnitResults units = null) where T : Results.IResult
         {
             return GetResultsOnPoints<T>(new List<CmdResultPoint> { resultPoint }, units);
         }
+
+        public List<T> GetResultsOnPoints<T>(List<AuxiliaryResults.ResultPoint> resultPoints, Results.UnitResults units = null) where T : Results.IResult
+        {
+            var cmdResultPoints = resultPoints.Select(x => (CmdResultPoint)x).ToList();
+            return GetResultsOnPoints<T>(cmdResultPoints, units);
+        }
+
 
         /// <summary>
         /// Retrieve results for multiple result points.
@@ -781,7 +781,7 @@ namespace FemDesign
         /// <param name="units">Optional. Unit setting for the results.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public List<T> GetResultsOnPoints<T>(List<CmdResultPoint> resultPoints, Results.UnitResults units = null) where T : Results.IResult
+        private List<T> GetResultsOnPoints<T>(List<CmdResultPoint> resultPoints, Results.UnitResults units = null) where T : Results.IResult
         {
             var options = new Options(BarResultPosition.ResultPoints, ShellResultPosition.ResultPoints);
             var listProcs = (typeof(T).GetCustomAttribute<Results.ResultAttribute>()?.ListProcs ?? Enumerable.Empty<ListProc>()).ToList();
