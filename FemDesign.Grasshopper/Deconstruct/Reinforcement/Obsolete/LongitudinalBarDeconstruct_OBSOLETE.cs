@@ -1,22 +1,22 @@
-﻿// https://strusoft.com/
+// https://strusoft.com/
 using System;
 using System.Linq;
 using Grasshopper.Kernel;
 
 namespace FemDesign.Grasshopper
 {
-    public class LongitudinalBarDeconstruct : FEM_Design_API_Component
+    public class LongitudinalBarDeconstruct_OBSOLETE: FEM_Design_API_Component
     {
-        public LongitudinalBarDeconstruct() : base("LongitudinalBar.Deconstruct", "Deconstruct", "Deconstruct a longitudinal bar.", "FEM-Design", "Deconstruct")
-        {
+       public LongitudinalBarDeconstruct_OBSOLETE(): base("LongitudinalBar.Deconstruct", "Deconstruct", "Deconstruct a longitudinal bar.", "FEM-Design", "Deconstruct")
+       {
 
-        }
-        protected override void RegisterInputParams(GH_InputParamManager pManager)
-        {
-            pManager.AddGenericParameter("LongitudinalBar", "LongitudinalBar", "LongitudinalBar of a bar element.", GH_ParamAccess.item);
-        }
-        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
-        {
+       }
+       protected override void RegisterInputParams(GH_InputParamManager pManager)
+       {
+           pManager.AddGenericParameter("LongitudinalBar", "LongitudinalBar", "LongitudinalBar of a bar element.", GH_ParamAccess.item);
+       } 
+       protected override void RegisterOutputParams(GH_OutputParamManager pManager)
+       {
             pManager.AddGenericParameter("Guid", "Guid", "Guid of LongitudinalBars", GH_ParamAccess.item);
             pManager.AddGenericParameter("BaseBar", "BaseBar", "Guid of bar part of bar on which these LongitudinalBars are distributed.", GH_ParamAccess.item);
             pManager.AddGenericParameter("Wire", "Wire", "Wire of LongitudinalBars.", GH_ParamAccess.item);
@@ -26,18 +26,16 @@ namespace FemDesign.Grasshopper
             pManager.AddNumberParameter("EndAnchorage", "EndAnchorage", "Anchorage mesaure at end. [m]", GH_ParamAccess.item);
             pManager.AddNumberParameter("StartMeasurement", "StartMeasurement", "Start of LongitudinalBar distribution expressed as distance along the reference bar from start of bar.  [m]", GH_ParamAccess.item);
             pManager.AddNumberParameter("EndMeasurement", "EndMeasurement", "End of LongitudinalBar distribution expressed as a distance along the reference bar from start of bar. [m]", GH_ParamAccess.item);
-            pManager.AddNumberParameter("StartPrescribedLengthening", "StartPrescribedLengthening", " [m]", GH_ParamAccess.item);
-            pManager.AddNumberParameter("EndPrescribedLengthening", "EndPrescribedLengthening", " [m]", GH_ParamAccess.item);
             pManager.AddBooleanParameter("AuxBar", "AuxBar", "Is bar auxiliary?", GH_ParamAccess.item);
-        }
-        protected override void SolveInstance(IGH_DataAccess DA)
-        {
+       }
+       protected override void SolveInstance(IGH_DataAccess DA)
+       {
             FemDesign.Reinforcement.BarReinforcement barReinf = null;
             if (!DA.GetData("LongitudinalBar", ref barReinf))
             {
                 return;
             }
-
+            
             if (barReinf.IsStirrups)
             {
                 throw new System.ArgumentException($"Passed object {barReinf.Guid} is not a longitudinal bar reinforcement object. Did you pass a stirrups bar?");
@@ -53,24 +51,22 @@ namespace FemDesign.Grasshopper
                 DA.SetData("EndAnchorage", barReinf.LongitudinalBar.Anchorage.End);
                 DA.SetData("StartMeasurement", barReinf.LongitudinalBar.Start);
                 DA.SetData("EndMeasurement", barReinf.LongitudinalBar.End);
-                DA.SetData("StartPrescribedLengthening", barReinf.LongitudinalBar.PrescribedLengthening?.Start);
-                DA.SetData("EndPrescribedLengthening", barReinf.LongitudinalBar.PrescribedLengthening?.End);
                 DA.SetData("AuxBar", barReinf.LongitudinalBar.Auxiliary);
             }
-        }
-        protected override System.Drawing.Bitmap Icon
-        {
-            get
-            {
+       }
+       protected override System.Drawing.Bitmap Icon
+       {
+           get
+           {
                 return FemDesign.Properties.Resources.LongitudinalBarDeconstruct;
-            }
-        }
-        public override Guid ComponentGuid
-        {
-            get { return new Guid("{07584245-7565-4799-92DD-532A1B37EA2A}"); }
-        }
+           }
+       }
+       public override Guid ComponentGuid
+       {
+           get { return new Guid("cb74cb52-fe8f-4525-a3cd-5a042e5e3738"); }
+       }
 
-        public override GH_Exposure Exposure => GH_Exposure.quinary;
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
 
     }
 }

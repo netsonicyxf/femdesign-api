@@ -137,6 +137,7 @@
     <Compile Include="Deconstruct\ModellingTools\PointConnectionDeconstruct.cs" />
     <Compile Include="Deconstruct\ModellingTools\OBSOLETE\LineConnectionDeconstruct_OBSOLETE2.cs" />
     <Compile Include="Deconstruct\ModellingTools\SurfaceConnectionDeconstruct.cs" />
+    <Compile Include="Deconstruct\Reinforcement\LongitudinalBarDeconstruct.cs" />
     <Compile Include="Deconstruct\SectionDeconstruct _OBSOLETE2307.cs" />
     <Compile Include="Deconstruct\StructureGrid\AxisDeconstruct.cs" />
     <Compile Include="Foundations\SlabFoundation.cs" />
@@ -388,7 +389,7 @@
     <Compile Include="Deconstruct\Loads\LineTemperatureLoadDeconstruct.cs" />
     <Compile Include="Deconstruct\Loads\LoadCaseDeconstruct.cs" />
     <Compile Include="Deconstruct\Loads\LoadCombinationDeconstruct.cs" />
-    <Compile Include="Deconstruct\Reinforcement\LongitudinalBarDeconstruct.cs" />
+    <Compile Include="Deconstruct\Reinforcement\OBSOLETE\LongitudinalBarDeconstruct_OBSOLETE.cs" />
     <Compile Include="Deconstruct\MaterialDeconstruct.cs" />
     <Compile Include="Deconstruct\Supports\MotionsDeconstruct.cs" />
     <Compile Include="Deconstruct\Loads\PointLoadDeconstruct.cs" />
@@ -1083,7 +1084,6 @@
     <EmbeddedResource Include="Resources\fdlogo.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Obsolete\" />
     <Folder Include="Utils\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSHARP.Targets" />
