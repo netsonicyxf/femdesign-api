@@ -6,7 +6,9 @@
     elementFormDefault="qualified"
     version="01.00.000"
 >
-  <!--
+  <!--    From FD 24.00.001
+
+
   Main concepts:
 
   This schema object is the common base schema object of StruSoft XML file format. In StruSoft XML
@@ -5584,7 +5586,7 @@
      <xs:attribute      name="ignore_sls"       type="xs:boolean"        default="false" />
      <xs:attribute      name="simultaneous"     type="xs:boolean"        default="false" />       <!-- From FD19 and ONLY FOR FD19 models' import! -->
      <xs:attribute      name="relationship"     type="ldgroup_relation"  default="alternative" /> <!-- From FD20 -->
-     <xs:attribute      name="temporary_effect" type="ldgroup_tmpeffect" default="general" />     <!-- From FD24 -->
+     <xs:attribute      name="temporary_effect" type="ldgroup_tmpeffect" default="general" />     <!-- From FD23.00.005 -->
      <xs:anyAttribute   processContents="skip"/>
   </xs:complexType>
 
