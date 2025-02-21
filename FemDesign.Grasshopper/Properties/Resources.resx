@@ -7425,4 +7425,13 @@
   <data name="VirtualBar" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons\VirtualBar.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="CurveDrawing" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icons\PointDrawing.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="PointDrawing" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icons\CurveDrawing.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="LayerDrawing" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icons\LayerDrawing.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

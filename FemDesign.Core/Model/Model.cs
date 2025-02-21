@@ -281,6 +281,8 @@ namespace FemDesign
                 model.GetLoads();
             if (model.Entities?.Loads?.LoadGroupTable != null)
                 model.GetLoadGroups();
+            if (model.Geometry != null)
+                model.GetGeometries();
             return model;
         }
 
@@ -3681,6 +3683,42 @@ namespace FemDesign
         }
 
 
+        public void AddPoint3d(Drawing.Point3d obj)
+        {
+            if (this.Geometry == null)
+            {
+                this.Geometry = new StruSoft.Interop.StruXml.Data.DatabaseGeometry();
+            }
+
+            if(this.Geometry.Point == null)
+            {
+                this.Geometry.Point = new List<StruSoft.Interop.StruXml.Data.Point_type>();
+            }
+
+            this.Geometry.Point.Add(obj);
+
+            this.AddLayer(obj.Style.LayerObj, overwrite: false);
+        }
+
+        public void AddCurve3d(Drawing.Curve obj)
+        {
+            if (this.Geometry == null)
+            {
+                this.Geometry = new StruSoft.Interop.StruXml.Data.DatabaseGeometry();
+            }
+
+            if(this.Geometry.Curve == null)
+            {
+                this.Geometry.Curve = new List<StruSoft.Interop.StruXml.Data.Curve_type>();
+            }
+
+            this.Geometry.Curve.Add(obj);
+
+            // is layer in model?
+            this.AddLayer(obj.Style.LayerObj, overwrite: false);
+        }
+
+
         public void SetConstructionStages(List<Stage> stages, bool assignModifedElement = false, bool assignNewElement = false)
         {
             var obj = new ConstructionStages(stages, assignModifedElement, assignNewElement);
@@ -3844,6 +3882,32 @@ namespace FemDesign
         }
 
 
+        public Model AddDrawings<T>(IEnumerable<T> elements, bool overwrite) where T : IDrawing
+        {
+            // check if model contains entities, sections and materials
+            if (this.Geometry == null)
+            {
+                this.Geometry = new StruSoft.Interop.StruXml.Data.DatabaseGeometry();
+            }
+
+            foreach (var item in elements)
+            {
+                try
+                {
+                    AddEntity(item as dynamic, overwrite);
+                }
+                catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException exeption)
+                {
+                    if (item == null)
+                        throw new ArgumentNullException("Can not add null geometry to model.", exeption);
+                    throw new System.NotImplementedException($"Class Model don't have a method AddEntity that accepts {item.GetType()}. ", exeption);
+                }
+            }
+
+            return this;
+        }
+
+
         private void AddEntity(Bars.Bar obj, bool overwrite) => AddBar(obj, overwrite);
         private void AddEntity(Shells.Slab obj, bool overwrite) => AddSlab(obj, overwrite);
         private void AddEntity(Shells.Panel obj, bool overwrite) => AddPanel(obj, overwrite);
@@ -3906,12 +3970,16 @@ namespace FemDesign
 
         private void AddEntity(Loads.LoadCase obj, bool overwrite) => AddLoadCase(obj, overwrite);
         private void AddEntity(Loads.LoadCombination obj, bool overwrite) => AddLoadCombination(obj, overwrite);
+
         #endregion
 
         #region geometry
         // geometry (drawing) objects are actually not entities but will be put here for now. (:
         private void AddEntity(Drawing.TextAnnotation obj, bool overwrite) => AddTextAnnotation(obj, overwrite);
         private void AddEntity(Drawing.DimensionLinear obj, bool overwrite) => AddLinearDimension(obj, overwrite);
+        public void AddEntity(Drawing.Point3d obj, bool overwrite) => AddPoint3d(obj);
+        public void AddEntity(Drawing.Curve obj, bool overwrite) => AddCurve3d(obj);
+        public void AddEntity(StruSoft.Interop.StruXml.Data.Layer_type obj, bool overwrite) => AddLayer(obj, overwrite);
         #endregion
 
         #region deconstruct
@@ -4508,6 +4576,24 @@ namespace FemDesign
             {
                 load.LoadCase = mapCase[load.LoadCaseGuid].DeepClone();
             }
+        }
+
+        internal void GetGeometries()
+        {
+            var geometries = this.Geometry;
+
+            foreach(var curve in geometries.Curve)
+            {
+                var layerName = curve.Style.Layer;
+                curve.Style.LayerObj = this.Geometry.Layer.Where(x =>x.Name == layerName).First();
+            }
+
+            foreach (var point in geometries.Point)
+            {
+                var layerName = point.Style.Layer;
+                point.Style.LayerObj = this.Geometry.Layer.Where(x => x.Name == layerName).First();
+            }
+
         }
 
         #endregion

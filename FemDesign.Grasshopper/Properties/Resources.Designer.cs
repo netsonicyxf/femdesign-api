@@ -363,6 +363,16 @@ namespace FemDesign.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap CurveDrawing {
+            get {
+                object obj = ResourceManager.GetObject("CurveDrawing", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Deconstruct_icon {
             get {
                 object obj = ResourceManager.GetObject("Deconstruct_icon", resourceCulture);
@@ -1036,6 +1046,16 @@ namespace FemDesign.Properties {
         internal static System.Drawing.Bitmap Layer {
             get {
                 object obj = ResourceManager.GetObject("Layer", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap LayerDrawing {
+            get {
+                object obj = ResourceManager.GetObject("LayerDrawing", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1866,6 +1886,16 @@ namespace FemDesign.Properties {
         internal static System.Drawing.Bitmap PointConnectionDeconstruct {
             get {
                 object obj = ResourceManager.GetObject("PointConnectionDeconstruct", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PointDrawing {
+            get {
+                object obj = ResourceManager.GetObject("PointDrawing", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -140,6 +140,9 @@
     <Compile Include="Deconstruct\Reinforcement\LongitudinalBarDeconstruct.cs" />
     <Compile Include="Deconstruct\SectionDeconstruct _OBSOLETE2307.cs" />
     <Compile Include="Deconstruct\StructureGrid\AxisDeconstruct.cs" />
+    <Compile Include="Drawing\Curve.cs" />
+    <Compile Include="Drawing\Layer.cs" />
+    <Compile Include="Drawing\Point.cs" />
     <Compile Include="Foundations\SlabFoundation.cs" />
     <Compile Include="Loads\Load groups\AccidentalLoadGroup.cs" />
     <Compile Include="Loads\Load groups\LoadGroupConstruct.cs" />
@@ -212,7 +215,9 @@
     <Compile Include="ModellingTools\PointConnection.cs" />
     <Compile Include="ModellingTools\SurfaceConnection.cs" />
     <Compile Include="Model\ModelAddElements.cs" />
+    <Compile Include="Model\OBSOLETE\ModelAddElements_OBSOLETE.cs" />
     <Compile Include="Model\ModelConstruct.cs" />
+    <Compile Include="Model\OBSOLETE\ModelConstruct_OBSOLETE.cs" />
     <Compile Include="Pipe\FemDesignConnection.cs" />
     <Compile Include="Pipe\OBSOLETE\PipeRunDesign_OBSOLETE.cs" />
     <Compile Include="Pipe\OBSOLETE\PipeCfg_OBSOLETE.cs" />
@@ -957,6 +962,7 @@
     <None Include="Resources\icons\VirtualBar.png" />
     <None Include="Resources\icons\Config.png" />
     <None Include="Resources\icons\DeltaBeamProfile.png" />
+    <None Include="Resources\icons\CurveDrawing.png" />
     <Content Include="Resources\icons\Diaphragm.bmp" />
     <Content Include="Resources\icons\DiaphragmDeconstruct.bmp" />
     <None Include="Resources\icons\EffectiveCompositeSlab.png" />
@@ -975,6 +981,7 @@
     <Content Include="Resources\icons\ImperfectionDefine2.png" />
     <Content Include="Resources\icons\ImperfectionDefine3.png" />
     <Content Include="Resources\icons\LabelledSection.png" />
+    <None Include="Resources\icons\LayerDrawing.png" />
     <Content Include="Resources\icons\LineConnection.bmp" />
     <None Include="Resources\icons\PeriodicCase.png" />
     <None Include="Resources\icons\parseAll.png" />
@@ -983,6 +990,7 @@
     <None Include="Resources\icons\PeriodicExcitationLoad.png" />
     <None Include="Resources\icons\RHSProfile.png" />
     <None Include="Resources\icons\SlabFoundation.png" />
+    <None Include="Resources\icons\PointDrawing.png" />
     <Content Include="Resources\icons\StabilityDefine2.png" />
     <Content Include="Resources\icons\StabilityDefine3.png" />
     <Content Include="Resources\icons\StageDefine2.png" />

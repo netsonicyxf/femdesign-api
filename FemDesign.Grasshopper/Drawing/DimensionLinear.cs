@@ -106,7 +106,7 @@ namespace FemDesign.Grasshopper
             int decimals = 0;
             if (DA.GetData(4, ref decimals))
             {
-                dim.Decimals = decimals;    
+                dim.Decimals = decimals;
             }
 
             string lengthUnit = null;

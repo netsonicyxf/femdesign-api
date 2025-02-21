@@ -12,7 +12,7 @@ namespace FemDesign.Drawing
         /// <value>
         /// Points to measure. Will measure between the points projection in the plane of the dimension line.
         /// </value>
-        public List<Point3d> ReferencePoints;
+        public List<FemDesign.Geometry.Point3d> ReferencePoints;
 
         /// <value>
         /// Plane of dimension. Dimension line will be placed at origin of plane.
@@ -57,8 +57,8 @@ namespace FemDesign.Drawing
                 {
                     if (idx != 0)
                     {
-                        Point3d p1 = ReferencePoints[idx - 1];
-                        Point3d p2 = ReferencePoints[idx];
+                        FemDesign.Geometry.Point3d p1 = ReferencePoints[idx - 1];
+                        FemDesign.Geometry.Point3d p2 = ReferencePoints[idx];
                         Vector3d v = p2 - p1;
                         dims.Add(v.Dot(Plane.LocalX));
                     }
@@ -117,7 +117,7 @@ namespace FemDesign.Drawing
         /// <summary>
         /// Construct a new linear dimension from reference points and the plane of the dimension.
         /// </summary>   
-        public DimensionLinear(List<Point3d> referencePoints, Plane dimPlane)
+        public DimensionLinear(List<FemDesign.Geometry.Point3d> referencePoints, Plane dimPlane)
         {
             Initialise();
             ReferencePoints = referencePoints;

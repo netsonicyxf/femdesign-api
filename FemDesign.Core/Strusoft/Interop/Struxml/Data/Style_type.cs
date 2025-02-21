@@ -10,8 +10,8 @@ namespace StruSoft.Interop.StruXml.Data
         /// Store custom layers
         /// </value>
         [XmlIgnore]
-        public Layer_type LayerObj;
-        
+        public Layer_type LayerObj { get; set; }
+
         /// <value>
         /// Set colour from System.Drawing.Color
         /// </value>

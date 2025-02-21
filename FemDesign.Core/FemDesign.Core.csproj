@@ -89,7 +89,9 @@
     <Compile Include="Composites\CompositeSectionParameter.cs" />
     <Compile Include="Composites\CompositeSectionPart.cs" />
     <Compile Include="Composites\CompositeTypeEnum.cs" />
+    <Compile Include="Drawing\Curve.cs" />
     <Compile Include="Drawing\DimensionLinear.cs" />
+    <Compile Include="Drawing\Point.cs" />
     <Compile Include="ErrorHandling\ErrorHandling.cs" />
     <Compile Include="FiniteElements\PeakSmoothingRegion.cs" />
     <Compile Include="Foundations\CuboidPlinth.cs" />
@@ -102,6 +104,7 @@
     <Compile Include="Foundations\SlabFoundation.cs" />
     <Compile Include="GenericClasses\EntityColor.cs" />
     <Compile Include="GenericClasses\IBar.cs" />
+    <Compile Include="GenericClasses\IDrawing.cs" />
     <Compile Include="Geometry\Line3d.cs" />
     <Compile Include="Geometry\HorizontalPolygon2d.cs" />
     <Compile Include="Drawing\TextAnnotation.cs" />
@@ -139,6 +142,7 @@
     <Compile Include="Stage\SFactorType.cs" />
     <Compile Include="StruSoft\Interop\StruXml\Data\CaselessLoads.cs" />
     <Compile Include="StruSoft\Interop\StruXml\Data\FD 23.00.001 Strusoft.cs" />
+    <Compile Include="StruSoft\Interop\StruXml\Data\Layer_type.cs" />
     <Compile Include="StruSoft\Interop\StruXml\Data\Vehicle_lib_type.cs" />
     <Compile Include="Releases\RigidityDataType0.cs" />
     <Compile Include="Geometry\ArcEdge.cs" />

@@ -7546,40 +7546,6 @@
           </xs:complexType>
         </xs:element>
 
-        <!--=== Remote automation types. NOT IMPLEMENTED YET! - ->
-        <!- -request for server solver- ->
-        <xs:element name="request" type="request_type" minOccurs="0" maxOccurs="unbounded" />
-        <xs:element name="answer"  type="answer_type"  minOccurs="0" maxOccurs="unbounded" />
-
-        <!- -commands for scripting the solvers- ->
-        <xs:element name="commands" type="command_type" minOccurs="0" />
-
-        <!- -result of the solutions- ->
-        <xs:element name="result" type="result_type" minOccurs="0" />
-
-        <!- -log system: "debug" and "message" for the developer, internal use. Debug works only in DEBUG mode.
-        "warning" will appear on a message box, "error" is fatal error, so the database cannot be loaded. - ->
-        <xs:element name="log" minOccurs="0">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="error"   type="log_type"  minOccurs="0" maxOccurs="unbounded" />
-              <xs:element name="warning" type="log_type"  minOccurs="0" maxOccurs="unbounded" />
-              <xs:element name="message" type="log_type"  minOccurs="0" maxOccurs="unbounded" />
-              <xs:element name="debug"   type="log_type"  minOccurs="0" maxOccurs="unbounded" />
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-
-        <!- -file names of the modell. It is not necessary to fill - ->
-        <xs:element name="filenames" minOccurs="0">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="file" type="filename_type" minOccurs="0" maxOccurs="unbounded" />
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        -->
-
         <xs:element name="end" type="empty_type" />
 
         <xs:any minOccurs="0" maxOccurs="unbounded" />

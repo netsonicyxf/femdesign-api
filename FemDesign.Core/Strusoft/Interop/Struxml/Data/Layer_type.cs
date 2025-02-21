@@ -1,14 +1,13 @@
-﻿using FemDesign.Geometry;
+﻿using FemDesign.GenericClasses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FemDesign.GenericClasses
+namespace StruSoft.Interop.StruXml.Data
 {
-    public interface IBar
+    public partial class Layer_type : IDrawing
     {
-        Edge Edge { get; }
     }
 }

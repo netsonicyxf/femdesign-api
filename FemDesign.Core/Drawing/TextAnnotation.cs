@@ -10,7 +10,7 @@ namespace FemDesign.Drawing
     public class TextAnnotation: GenericClasses.IStructureElement
     {
         [XmlElement("position")]
-        public Point3d Position { get; set; }
+        public FemDesign.Geometry.Point3d Position { get; set; }
         [XmlElement("local_x")]
         public Vector3d LocalX { get; set; }
         [XmlElement("local_y")]
@@ -50,7 +50,7 @@ namespace FemDesign.Drawing
         }
         public void Initialize()
         {
-            Position = Point3d.Origin;
+            Position = FemDesign.Geometry.Point3d.Origin;
             LocalX = Vector3d.UnitX;
             LocalY = Vector3d.UnitY;
             StyleType = new Style_type
@@ -64,7 +64,7 @@ namespace FemDesign.Drawing
             Guid = System.Guid.NewGuid();
         }
 
-        public TextAnnotation(Point3d position, Vector3d localX, Vector3d localY, string text)
+        public TextAnnotation(FemDesign.Geometry.Point3d position, Vector3d localX, Vector3d localY, string text)
         {
             this.Initialize();
             Position = position;
@@ -72,7 +72,7 @@ namespace FemDesign.Drawing
             LocalY = localY;
             Text = text;
         }
-        public TextAnnotation(Point3d position, Vector3d localX, Vector3d localY, Style_type styleType, string text)
+        public TextAnnotation(FemDesign.Geometry.Point3d position, Vector3d localX, Vector3d localY, Style_type styleType, string text)
         {
             this.Initialize();
             Position = position;

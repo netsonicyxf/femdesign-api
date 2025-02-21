@@ -11,9 +11,9 @@ using FemDesign.Geometry;
 
 namespace FemDesign.Grasshopper
 {
-    public class ModelConstruct : FEM_Design_API_Component
+    public class ModelConstruct_OBSOLETE : FEM_Design_API_Component
     {
-        public ModelConstruct() : base("Model.Construct", "Construct", "Construct new model. Add entities to model. Nested lists are not supported.", CategoryName.Name(), SubCategoryName.Cat6())
+        public ModelConstruct_OBSOLETE() : base("Model.Construct", "Construct", "Construct new model. Add entities to model. Nested lists are not supported.", CategoryName.Name(), SubCategoryName.Cat6())
         {
 
         }
@@ -34,8 +34,6 @@ namespace FemDesign.Grasshopper
             pManager.AddGenericParameter("Soil", "Soil", "Single Soil element. FEM-Design can only have one soil element in a model.", GH_ParamAccess.list);
             pManager[pManager.ParamCount - 1].Optional = true;
             pManager.AddGenericParameter("Stages", "Stages", "List of Stages to add. Minimum number of stages is two. Nested lists are not supported.", GH_ParamAccess.list);
-            pManager[pManager.ParamCount - 1].Optional = true;
-            pManager.AddGenericParameter("Drawings", "Drawings", "List of drawings elements to add such as points, curves and layers.", GH_ParamAccess.list);
             pManager[pManager.ParamCount - 1].Optional = true;
         }
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
@@ -66,9 +64,6 @@ namespace FemDesign.Grasshopper
             var stages = new List<FemDesign.Stage>();
             DA.GetDataList("Stages", stages);
 
-            var geometries = new List<FemDesign.GenericClasses.IDrawing>();
-            DA.GetDataList("Drawings", geometries);
-
             ConstructionStages constructionStage = null;
 
             if (stages.Count != 0)
@@ -83,7 +78,7 @@ namespace FemDesign.Grasshopper
             List<FemDesign.Soil.SoilElements> _soil = new List<FemDesign.Soil.SoilElements>();
             DA.GetDataList("Soil", _soil);
 
-            if (_soil.Count > 1)
+            if(_soil.Count > 1)
                 this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "FEM-Design can only have one soil element in a model.");
 
             Soil.SoilElements soil = null;
@@ -91,15 +86,15 @@ namespace FemDesign.Grasshopper
             if (_soil.Count != 0)
                 soil = _soil[0];
 
-            if (loadCases == null || loadCases.Count == 0)
+            if(loadCases == null || loadCases.Count == 0)
             {
                 string message = "LoadCase must be connected to get loads, load combinations or load groups in FEM-Design.";
-                if (loads.Count != 0)
+                if(loads.Count != 0)
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, message);
                     return;
                 }
-                else if (loadCombinations.Count != 0)
+                else if(loadCombinations.Count != 0)
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, message);
                     return;
@@ -114,7 +109,6 @@ namespace FemDesign.Grasshopper
             // Create model
             Model model = new Model(EnumParser.Parse<Country>(countryCode), elements, loads, loadCases, loadCombinations, loadGroups, constructionStage, soil);
 
-            model.AddDrawings(geometries, false);
 
             // check bounding box
             if (GeomUtility.GetBoundingBox(elements).Diagonal.Length >= 500)
@@ -125,7 +119,7 @@ namespace FemDesign.Grasshopper
 
         protected override void BeforeSolveInstance()
         {
-            ValueListUtils.UpdateValueLists(this, 0, Enum.GetNames(typeof(Country)).ToList(), null, GH_ValueListMode.DropDown);
+            ValueListUtils.UpdateValueLists(this, 0, Enum.GetNames(typeof(Country)).ToList() , null, GH_ValueListMode.DropDown);
         }
 
         protected override System.Drawing.Bitmap Icon
@@ -137,10 +131,10 @@ namespace FemDesign.Grasshopper
         }
         public override Guid ComponentGuid
         {
-            get { return new Guid("{89DDB79B-5B4C-45E7-9E53-FA8893B6D528}"); }
+            get { return new Guid("{A0E6EA1A-1A75-4C16-B5D8-831E2ECA4E35}"); }
         }
 
-        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
 
     }
 }
