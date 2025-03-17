@@ -63,7 +63,9 @@ namespace FemDesign.Grasshopper
                 }
             }
             // check ovarlap
-            this.CheckOverlap(slab, surfaceReinforcement);
+            // it is breaking any plate with some circle edge. i.e. circle slab can not be created
+            // TODO
+            //this.CheckOverlap(slab, surfaceReinforcement);
 
 
             var _surfaceReinforcement = surfaceReinforcement.DeepClone();
@@ -104,9 +106,10 @@ namespace FemDesign.Grasshopper
         {
             //Transfer FemDesign API Regions into Rhino Plane objects
             var slabPlane = slab.SlabPart.Region.Plane.ToRhino();
-            var reinfSurfacesPlanes = surfaceReinforcement.Select(r => r.Region.Plane.ToRhino()).ToList();          
+            var reinfSurfacesPlanes = surfaceReinforcement.Select(r => r.Region.Plane.ToRhino()).ToList();
 
             //Transfer FemDesign API Contour points into Rhino Point3d objects
+
             var slabPts = slab.SlabPart.Region.Contours.Select(c => c.Points.Select(p => p.ToRhino()).ToList()).ToList();
             var reinfSurfacesPts = surfaceReinforcement.Select(r => r.Region.Contours.Select(c => c.Points.Select(p => p.ToRhino()).ToList()).ToList()).ToList();
 
