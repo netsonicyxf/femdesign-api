@@ -41,7 +41,7 @@ namespace FemDesign.Grasshopper
             evaluationUnit.RegisterInputParam(new Param_GenericObject(), "Layer", "Layer", "", GH_ParamAccess.item);
             evaluationUnit.Inputs[evaluationUnit.Inputs.Count - 1].Parameter.Optional = true;
 
-            evaluationUnit.RegisterInputParam(new Param_Colour(), "Colour", "Colour", "", GH_ParamAccess.item, new GH_Colour(System.Drawing.Color.Black));
+            evaluationUnit.RegisterInputParam(new Param_Colour(), "Colour", "Colour", "", GH_ParamAccess.item, new GH_Colour(System.Drawing.Color.FromArgb(0, 0, 0)));
             evaluationUnit.Inputs[evaluationUnit.Inputs.Count - 1].Parameter.Optional = true;
 
             evaluationUnit.RegisterInputParam(new Param_String(), "PointStyle", "PointStyle", "", GH_ParamAccess.item, new GH_String("cross"));
@@ -67,7 +67,7 @@ namespace FemDesign.Grasshopper
             StruSoft.Interop.StruXml.Data.Layer_type layer = new StruSoft.Interop.StruXml.Data.Layer_type();
             DA.GetData(1, ref layer);
 
-            System.Drawing.Color colour = System.Drawing.Color.Black;
+            System.Drawing.Color colour = System.Drawing.Color.FromArgb(0, 0, 0);
             DA.GetData(2, ref colour);
 
             string _pointStyle = "cross";

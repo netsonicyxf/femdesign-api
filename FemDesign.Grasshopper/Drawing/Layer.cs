@@ -38,7 +38,7 @@ namespace FemDesign.Grasshopper
             string name = "";
             DA.GetData(0, ref name);
 
-            System.Drawing.Color colour = System.Drawing.Color.Black;
+            System.Drawing.Color colour = System.Drawing.Color.FromArgb(0, 0, 0);
             DA.GetData(1, ref colour);
 
             bool hidden = false;
