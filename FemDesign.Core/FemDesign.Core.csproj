@@ -61,6 +61,7 @@
     <Compile Include="Bars\Beam.cs" />
     <Compile Include="Bars\Column.cs" />
     <Compile Include="Bars\Truss.cs" />
+    <Compile Include="Calculate\Bedding.cs" />
     <Compile Include="Calculate\CmdApplyDesignChanges.cs" />
     <Compile Include="Calculate\CmdChild.cs" />
     <Compile Include="Calculate\CmdConfig.cs" />

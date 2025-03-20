@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 using System.Linq;
+using FemDesign.Shells;
 
 
 namespace FemDesign.Calculate
@@ -30,6 +31,9 @@ namespace FemDesign.Calculate
 
         [XmlElement("footfall")]
         public Footfall Footfall { get; set; }
+
+        [XmlElement("bedding")]
+        public Bedding Bedding { get; set; }
 
         [XmlElement("thgroundacc")]
         public GroundAcc GroundAcc { get; set; }
@@ -187,6 +191,30 @@ namespace FemDesign.Calculate
             }
         }
 
+
+
+        [XmlAttribute("calcBedding")]
+        public int _calcBedding;
+        [XmlIgnore]
+        public bool CalcBedding
+        {
+            get
+            {
+                return Convert.ToBoolean(this._calcBedding);
+            }
+            set
+            {
+                this._calcBedding = Convert.ToInt32(value);
+                if (value == true && this.Bedding == null)
+                    this.Bedding = Bedding.Default();
+            }
+        }
+
+
+
+
+
+
         [XmlAttribute("calcThGroundAcc")]
         public int _calcGroundAcc;
         [XmlIgnore]
@@ -309,7 +337,7 @@ namespace FemDesign.Calculate
         {
         }
 
-        public Analysis(Calculate.Stage stage = null, Stability stability = null, Imperfection imperfection = null, Comb comb = null, Freq freq = null, Footfall footfall = null, GroundAcc groundAcc = null, ExcitationForce exForce = null, PeriodicExcitation periodicEx = null, bool calcCase = false, bool calcCStage = false, bool calcImpf = false, bool calcComb = false, bool calcGMax = false, bool calcStab = false, bool calcFreq = false, bool calcSeis = false, bool calcFootfall = false, bool calcGroundAcc = false, bool calcExForce = false, bool calcPeriodicEx = false, bool calcDesign = false, bool elemFine = true, int diaphragm = 0, bool peakSmoothing = false)
+        public Analysis(Calculate.Stage stage = null, Stability stability = null, Imperfection imperfection = null, Comb comb = null, Freq freq = null, Footfall footfall = null, Bedding bedding = null, GroundAcc groundAcc = null, ExcitationForce exForce = null, PeriodicExcitation periodicEx = null, bool calcCase = false, bool calcCStage = false, bool calcImpf = false, bool calcComb = false, bool calcGMax = false, bool calcStab = false, bool calcFreq = false, bool calcSeis = false, bool calcFootfall = false, bool calcBedding = false, bool calcGroundAcc = false, bool calcExForce = false, bool calcPeriodicEx = false, bool calcDesign = false, bool elemFine = true, int diaphragm = 0, bool peakSmoothing = false)
         {
             this.Stage = stage;
             this.Comb = comb;
@@ -317,6 +345,7 @@ namespace FemDesign.Calculate
             this.Imperfection = imperfection;
             this.Freq = freq;
             this.Footfall = footfall;
+            this.Bedding = bedding;
             this.GroundAcc = groundAcc;
             this.ExForce = exForce;
             this.PeriodicEx = periodicEx;
@@ -330,6 +359,7 @@ namespace FemDesign.Calculate
             this.CalcFreq = calcFreq;
             this.CalcSeis = calcSeis;
             this.CalcFootfall = calcFootfall;
+            this.CalcBedding = calcBedding;
             this.CalcGroundAcc = calcGroundAcc;
             this.CalcExcitationForce = calcExForce;
             this.CalcPeriodicExcitation = calcPeriodicEx;
@@ -357,6 +387,9 @@ namespace FemDesign.Calculate
 
             if (this.CalcFootfall == true && this.Footfall == null)
                 throw new Exception("calcFootfall == True. Footfall must be defined!");
+
+            if (this.CalcBedding == true && this.Bedding == null)
+                throw new Exception("CalcBedding == True. Bedding must be defined!");
 
             if (this.CalcGroundAcc == true && this.GroundAcc == null)
                 throw new Exception("calcGroundAcc == True. GroundAcc must be defined!");

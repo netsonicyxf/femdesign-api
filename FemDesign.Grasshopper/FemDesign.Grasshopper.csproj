@@ -74,6 +74,8 @@
     <Compile Include="Bars\TrussBehaviour_OBSOLETE2305.cs" />
     <Compile Include="Bars\TrussBehaviour.cs" />
     <Compile Include="Calculate\ApplicationRun.cs" />
+    <Compile Include="Calculate\Bedding.cs" />
+    <Compile Include="Calculate\CalculationParametersAnalysisDefine.cs" />
     <Compile Include="Calculate\OBSOLETE\GlobalConfigs_OBSOLETE2307.cs" />
     <Compile Include="Calculate\OBSOLETE\ApplicationRun_OBSOLETE2307.cs" />
     <Compile Include="Calculate\OBSOLETE\ApplicationRun_OBSOLETE_2308.cs" />
@@ -92,7 +94,7 @@
     <Compile Include="Calculate\Configurations\Configs\ConcreteDesignConfig.cs" />
     <Compile Include="Calculate\OBSOLETE\ApplicationRun_OBSOLETE_2.cs" />
     <Compile Include="Calculate\OBSOLETE\CalculationParametersAnalysisDefine_OBSOLETE2303.cs" />
-    <Compile Include="Calculate\CalculationParametersAnalysisDefine.cs" />
+    <Compile Include="Calculate\OBSOLETE\CalculationParametersAnalysisDefine_OBSOLETE2400.cs" />
     <Compile Include="Calculate\CombDefine.cs" />
     <Compile Include="Calculate\OBSOLETE\CombSettings_OBSOLETE2303.cs" />
     <Compile Include="Calculate\CombSettings.cs" />
