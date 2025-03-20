@@ -58,7 +58,7 @@ namespace FemDesign.Grasshopper
         {
             get
             {
-                return Properties.Resources.FreqDefine2;
+                return Properties.Resources.Bedding;
             }
         }
         public override Guid ComponentGuid

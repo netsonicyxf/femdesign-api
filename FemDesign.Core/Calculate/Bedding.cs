@@ -14,12 +14,24 @@ namespace FemDesign.Calculate
         public string LdCombChar { get; set; }
 
         [XmlAttribute("Meshprep")]
-        public MeshPrep meshPrep { get; set; } = MeshPrep.FactoryDefault;
+        public int _meshPrep = 0;
+        [XmlIgnore]
+        public MeshPrep MeshPrep
+        {
+            get
+            {
+                return (MeshPrep)_meshPrep;
+            }
+            set
+            {
+                this._meshPrep = (int)value;
+            }
+        }
 
-        [XmlAttribute("Stiff_x")]
+        [XmlAttribute("Stiff_X")]
         public double StiffX { get; set; } = 0.5;
 
-        [XmlAttribute("Stiff_y")]
+        [XmlAttribute("Stiff_Y")]
         public double StiffY { get; set; } = 0.5;
 
         private Bedding()
@@ -29,7 +41,7 @@ namespace FemDesign.Calculate
         public Bedding(string ldCombChar, MeshPrep meshPrep, double stiffX, double stiffY)
         {
             this.LdCombChar = ldCombChar;
-            this.meshPrep = meshPrep;
+            this.MeshPrep = meshPrep;
             this.StiffX = stiffX;
             this.StiffY = stiffY;
         }
@@ -40,16 +52,16 @@ namespace FemDesign.Calculate
             {
                 StiffX = 0.5,
                 StiffY = 0.5,
-                meshPrep = MeshPrep.FactoryDefault,
+                MeshPrep = MeshPrep.ActualMesh,
             };
         }
     }
 
     public enum MeshPrep
     {
-        [Parseable("FactoryDefault")]
-        FactoryDefault = 0,
         [Parseable("ActualMesh")]
-        ActualMesh = 1,
+        ActualMesh = 0,
+        [Parseable("FactoryDefault")]
+        FactoryDefault = 1,
     }
 }

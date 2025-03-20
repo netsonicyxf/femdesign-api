@@ -959,6 +959,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="images\logo.png" />
+    <None Include="Resources\icons\bedding.png" />
     <Content Include="Resources\icons\CombDefine2.png" />
     <Content Include="Resources\icons\CombDefine3.png" />
     <None Include="Resources\icons\VirtualBar.png" />

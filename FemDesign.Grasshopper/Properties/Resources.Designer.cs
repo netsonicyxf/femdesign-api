@@ -163,6 +163,16 @@ namespace FemDesign.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Bedding {
+            get {
+                object obj = ResourceManager.GetObject("Bedding", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Boreholes {
             get {
                 object obj = ResourceManager.GetObject("Boreholes", resourceCulture);
