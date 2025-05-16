@@ -20,7 +20,7 @@ namespace FemDesign.Grasshopper
         }
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("LdCombChar", "LdCombChar", "Characteristic Load Combination", GH_ParamAccess.item);
+            pManager.AddTextParameter("LdCombChar", "LdCombChar", "Characteristic Load Combination name", GH_ParamAccess.item);
             pManager.AddTextParameter("MeshPrep", "MeshPrep", "Connect 'ValueList' to get the options.\nMeshPrep type:\nFactoryDefault\nActualMesh.", GH_ParamAccess.item, "FactoryDefault");
             pManager[pManager.ParamCount - 1].Optional = true;
             pManager.AddNumberParameter("StiffX", "StiffX", "", GH_ParamAccess.item, 0);
