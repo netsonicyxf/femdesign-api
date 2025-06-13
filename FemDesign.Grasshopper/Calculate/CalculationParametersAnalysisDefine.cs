@@ -66,7 +66,7 @@ namespace FemDesign.Grasshopper
             pManager[pManager.ParamCount - 1].Optional = true;
             pManager.AddBooleanParameter("elemfine", "elemfine", "Fine or standard elements", GH_ParamAccess.item, true);
             pManager[pManager.ParamCount - 1].Optional = true;
-            pManager.AddIntegerParameter("diaphragm", "diaphragm", "Diaphragm calculation. Connect 'ValueList' to get the options.\n\n'0'= None\n'1'= Rigid membrane\n'2'= Fully rigid", GH_ParamAccess.item, 0);
+            pManager.AddIntegerParameter("diaphragm", "diaphragm", "Diaphragm calculation.\n\n'0'= None\n'1'= Rigid membrane\n'2'= Fully rigid", GH_ParamAccess.item, 0);
             pManager[pManager.ParamCount - 1].Optional = true;
             pManager.AddBooleanParameter("peakSmoothing", "peakSmoothing", "Peak smoothing of internal forces", GH_ParamAccess.item, false);
             pManager[pManager.ParamCount - 1].Optional = true;
