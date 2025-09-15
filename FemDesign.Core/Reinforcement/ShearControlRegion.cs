@@ -52,5 +52,26 @@ namespace FemDesign.Reinforcement
 
         [XmlAttribute("reduce_shear_forces")]
         public bool ReduceShearForces { get; set; }
+
+        private ShearControlRegionType() { }
+
+        public ShearControlRegionType(Geometry.Region region, bool ignoreShearCheck, bool reduceShearForces)
+        {
+            if(region.Contours.Count != 1)
+            {
+                throw new ArgumentException("ShearControlRegionType must be initialized with a Region with exactly one Contour.");
+            }
+
+            // One of ignoreShearCheck or ReduceShearForces must be true.
+            if (ignoreShearCheck == reduceShearForces)
+            {
+                throw new ArgumentException("ShearControlRegionType must be initialized with either ignoreShearCheck or reduceShearForces set to true, not both.");
+            }
+
+            this.EntityCreated();
+            this.Contour = region.Contours[0];
+            this.IgnoreShearCheck = ignoreShearCheck;
+            this.ReduceShearForces = reduceShearForces;
+        }
     }
 }

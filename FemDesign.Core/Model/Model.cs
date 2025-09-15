@@ -2201,6 +2201,9 @@ namespace FemDesign
             // add SurfaceReinforcement
             this.AddSurfaceReinforcements(obj, overwrite);
 
+            // add ShearControlRegion
+            this.AddShearControlRegions(obj, overwrite);
+
             // add line connection types (predefined rigidity)
             foreach (Releases.RigidityDataLibType3 predef in obj.SlabPart.Region.GetPredefinedRigidities())
             {
@@ -2643,6 +2646,50 @@ namespace FemDesign
             return false;
         }
 
+
+        private void AddShearControlRegions(Shells.Slab obj, bool overwrite)
+        {
+            foreach (Reinforcement.ShearControlRegionType surfaceReinforcement in obj.ShearControlRegions)
+            {
+                this.AddShearControlRegion(surfaceReinforcement, overwrite);
+            }
+        }
+
+        private void AddShearControlRegion(Reinforcement.ShearControlRegionType obj, bool overwrite)
+        {
+            // in model?
+            bool inModel = this.ShearControlRegionInModel(obj);
+
+            // in model, don't overwrite
+            if (inModel && !overwrite)
+            {
+                throw new System.ArgumentException($"{obj.GetType().FullName} with guid: {obj.Guid} has already been added to model. Did you add the same {obj.GetType().FullName} to different Slabs?");
+            }
+
+            // in model, overwrite
+            else if (inModel && overwrite)
+            {
+                this.Entities.NoShearControlRegions.RemoveAll(x => x.Guid == obj.Guid);
+            }
+
+            // add obj
+            this.Entities.NoShearControlRegions.Add(obj);
+        }
+
+        /// <summary>
+        /// Check if ShearControlRegion in Model.
+        /// </summary>
+        private bool ShearControlRegionInModel(Reinforcement.ShearControlRegionType obj)
+        {
+            foreach (Reinforcement.ShearControlRegionType elem in this.Entities.NoShearControlRegions)
+            {
+                if (elem.Guid == obj.Guid)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
 
         /// <summary>

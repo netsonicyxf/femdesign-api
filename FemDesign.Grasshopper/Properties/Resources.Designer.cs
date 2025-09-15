@@ -2353,6 +2353,16 @@ namespace FemDesign.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap shearRegion {
+            get {
+                object obj = ResourceManager.GetObject("shearRegion", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ShellEccentricityDefault {
             get {
                 object obj = ResourceManager.GetObject("ShellEccentricityDefault", resourceCulture);

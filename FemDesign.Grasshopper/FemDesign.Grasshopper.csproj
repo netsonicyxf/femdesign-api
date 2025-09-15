@@ -295,6 +295,8 @@
     <Compile Include="Reinforcement\InteractionSurface\InteractionSurface_OnSection.cs" />
     <Compile Include="Pipe\PipeSetGlobalCfg.cs" />
     <Compile Include="Reinforcement\PostTensionCable\Reinforcement.Ptc.cs" />
+    <Compile Include="Reinforcement\ShearControlRegion.cs" />
+    <Compile Include="Reinforcement\ShearControlRegionAddToSlab.cs" />
     <Compile Include="Releases\RotationsPredefined.cs" />
     <Compile Include="Releases\MotionsPredefined.cs" />
     <Compile Include="Results\Bar\BarInternalForce.cs" />
@@ -994,6 +996,7 @@
     <None Include="Resources\icons\RHSProfile.png" />
     <None Include="Resources\icons\SlabFoundation.png" />
     <None Include="Resources\icons\PointDrawing.png" />
+    <None Include="Resources\icons\shearRegion.png" />
     <Content Include="Resources\icons\StabilityDefine2.png" />
     <Content Include="Resources\icons\StabilityDefine3.png" />
     <Content Include="Resources\icons\StageDefine2.png" />

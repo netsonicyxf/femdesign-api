@@ -39,6 +39,9 @@ namespace FemDesign.Shells
         [XmlIgnore]
         public List<Reinforcement.SurfaceReinforcement> SurfaceReinforcement = new List<Reinforcement.SurfaceReinforcement>();
 
+        [XmlIgnore]
+        public List<Reinforcement.ShearControlRegionType> ShearControlRegions = new List<Reinforcement.ShearControlRegionType>();
+
 
         [XmlAttribute("type")]
         public SlabType Type { get; set; }

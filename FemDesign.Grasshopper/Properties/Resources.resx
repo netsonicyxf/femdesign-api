@@ -7417,4 +7417,7 @@
   <data name="Bedding" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons\Bedding.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="shearRegion" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icons\shearRegion.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

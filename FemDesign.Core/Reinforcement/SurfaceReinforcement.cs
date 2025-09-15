@@ -189,6 +189,32 @@ namespace FemDesign.Reinforcement
             }
         }
 
+        public static Shells.Slab AddShearControlRegionToSlab(Shells.Slab slab, List<ShearControlRegionType> shearControlRegions)
+        {
+            // deep clone. downstreams objs will contain changes made in this method, upstream objs will not.
+            // downstream and uppstream objs will share guid.
+            Shells.Slab clone = slab.DeepClone();
+
+            // deep clone shear control regions
+            var shearControlRegionsClone = shearControlRegions.DeepClone();
+
+            // check if slab material is concrete
+            if (clone.Material.Concrete == null)
+            {
+                throw new System.ArgumentException("Material of slab must be concrete");
+            }
+
+            foreach (var item in shearControlRegionsClone)
+            {
+                // add references to item
+                item.BasePlate = clone.SlabPart.Guid;
+                // add item to slab  
+                clone.ShearControlRegions.Add(item);
+            }
+
+            return clone;
+        }
+
         // check if surface reinforcement objects in list are mixed.
         private static bool MixedLayers(List<SurfaceReinforcement> srfReinfs)
         {
