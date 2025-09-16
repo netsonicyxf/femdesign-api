@@ -10,7 +10,7 @@ namespace FemDesign.Grasshopper
     /// </summary>
     public class FemDesignConnection_HubBased : FEM_Design_API_Component
     {
-        public FemDesignConnection_HubBased() : base("FEM-Design.Connection (Hub)", "Connection", "Create or configure a shared FEM-Design connection.", CategoryName.Name(), SubCategoryName.Cat8())
+        public FemDesignConnection_HubBased() : base("FEM-Design.Connection (Hub)", "Connection", "Create or configure a shared FEM-Design connection.", CategoryName.Name(), SubCategoryName.CatHub())
         {
         }
 

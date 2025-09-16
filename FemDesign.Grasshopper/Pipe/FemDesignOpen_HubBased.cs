@@ -10,7 +10,7 @@ namespace FemDesign.Grasshopper
     /// </summary>
     public class FemDesignOpen_HubBased : FEM_Design_API_Component
     {
-        public FemDesignOpen_HubBased() : base("FEM-Design.Open (Hub)", "Open", "Open model in FEM-Design using shared connection.", CategoryName.Name(), SubCategoryName.Cat8())
+        public FemDesignOpen_HubBased() : base("FEM-Design.Open (Hub)", "Open", "Open model in FEM-Design using shared connection.", CategoryName.Name(), SubCategoryName.CatHub())
         {
         }
 
@@ -22,6 +22,7 @@ namespace FemDesign.Grasshopper
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
+            pManager.AddGenericParameter("Connection", "Connection", "Shared FEM-Design connection handle.", GH_ParamAccess.item);
             pManager.AddGenericParameter("Model", "Model", "Opened model (round-tripped).", GH_ParamAccess.item);
             pManager.AddBooleanParameter("Success", "Success", "True if operation succeeded.", GH_ParamAccess.item);
             pManager.AddTextParameter("Log", "Log", "Operation log.", GH_ParamAccess.list);
@@ -56,12 +57,14 @@ namespace FemDesign.Grasshopper
                         {
                             conn.Open(m);
                         }
-                        else if (modelIn != null && modelIn.Value is string vpath)
+                        else if (modelIn != null && modelIn.Value is string)
                         {
+                            string vpath = modelIn.Value as string;
                             conn.Open(vpath);
                         }
-                        else if (modelIn != null && modelIn.Value is Model vm)
+                        else if (modelIn != null && modelIn.Value is Model)
                         {
+                            Model vm = modelIn.Value as Model;
                             conn.Open(vm);
                         }
                         else
@@ -85,6 +88,7 @@ namespace FemDesign.Grasshopper
                 success = false;
             }
 
+            DA.SetData("Connection", new object());
             DA.SetData("Model", modelOut);
             DA.SetData("Success", success);
             DA.SetDataList("Log", log);

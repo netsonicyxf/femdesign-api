@@ -82,5 +82,10 @@
         {
             return "StruSoft - LiveLink";
         }
+
+        public static string CatHub()
+        {
+            return "Hub";
+        }
     }
 }

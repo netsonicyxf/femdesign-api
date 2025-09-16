@@ -11,7 +11,7 @@ namespace FemDesign.Grasshopper
     /// </summary>
     public class FemDesignRunAnalysis_HubBased : FEM_Design_API_Component
     {
-        public FemDesignRunAnalysis_HubBased() : base("FEM-Design.RunAnalysis (Hub)", "RunAnalysis", "Run analysis on current/open model using shared connection.", CategoryName.Name(), SubCategoryName.Cat8())
+        public FemDesignRunAnalysis_HubBased() : base("FEM-Design.RunAnalysis (Hub)", "RunAnalysis", "Run analysis on current/open model using shared connection.", CategoryName.Name(), SubCategoryName.CatHub())
         {
         }
 
@@ -23,6 +23,7 @@ namespace FemDesign.Grasshopper
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
+            pManager.AddGenericParameter("Connection", "Connection", "Shared FEM-Design connection handle.", GH_ParamAccess.item);
             pManager.AddBooleanParameter("Success", "Success", "True if analysis succeeded.", GH_ParamAccess.item);
             pManager.AddTextParameter("Log", "Log", "Operation log.", GH_ParamAccess.list);
         }
@@ -63,14 +64,16 @@ namespace FemDesign.Grasshopper
                 success = false;
             }
 
+            DA.SetData("Connection", new object());
             DA.SetData("Success", success);
             DA.SetDataList("Log", log);
         }
 
-        protected override System.Drawing.Bitmap Icon => FemDesign.Properties.Resources.Calculate;
+        protected override System.Drawing.Bitmap Icon => FemDesign.Properties.Resources.FEM_RunAnalysis;
         public override Guid ComponentGuid => new Guid("E3E3A9B8-68C4-4B9F-BE18-ACC6E9C8B852");
         public override GH_Exposure Exposure => GH_Exposure.primary;
     }
 }
+
 
 
