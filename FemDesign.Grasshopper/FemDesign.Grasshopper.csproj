@@ -242,6 +242,9 @@
     <Compile Include="Pipe\FemDesignSaveDocumentation_HubBased.cs" />
     <Compile Include="Pipe\FemDesignSetCfg_HubBased.cs" />
     <Compile Include="Pipe\FemDesignSetGlobalCfg_HubBased.cs" />
+    <Compile Include="Pipe\FemDesignGetModel_HubBased.cs" />
+    <Compile Include="Pipe\FemDesignResultFromBsc_HubBased.cs" />
+    <Compile Include="Pipe\FemDesignGetQuantities_HubBased.cs" />
     <Compile Include="Pipe\PipeSetCfg.cs" />
     <Compile Include="Pipe\OBSOLETE\PipeSetGlobalCfg_OBSOLETE2306.cs" />
     <Compile Include="Pipe\WIP_PipeReadStabilityResults.cs" />
