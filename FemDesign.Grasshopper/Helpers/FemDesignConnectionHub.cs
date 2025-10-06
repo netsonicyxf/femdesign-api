@@ -7,98 +7,87 @@ using System.Threading.Tasks;
 namespace FemDesign.Grasshopper
 {
     /// <summary>
-    /// Process-wide shared FemDesignConnection with serialized access on a dedicated worker thread.
-    /// Ensures stable threading across iterations to avoid UI deadlocks.
+    /// Manages one or more FemDesignConnection instances with serialized access per instance
+    /// on dedicated worker threads. Ensures stable threading across iterations to avoid UI deadlocks.
     /// </summary>
     public static class FemDesignConnectionHub
     {
-        private static FemDesign.FemDesignConnection _connection;
-        private static volatile bool _configured;
-        private static string _fdDir;
-        private static bool _minimized;
-        private static string _outputDir;
-        private static bool _deleteOutput;
-
-        private static Thread _workerThread;
-        private static readonly BlockingCollection<Action> _queue = new BlockingCollection<Action>();
-        private static readonly object _startLock = new object();
-
-        public static void Configure(string fdDir, bool minimized, string outputDir = null, bool deleteOutput = false)
+        private class Instance
         {
-            _fdDir = fdDir;
-            _minimized = minimized;
-            _outputDir = outputDir;
-            _deleteOutput = deleteOutput;
-            _configured = true;
-            EnsureStarted();
+            public FemDesign.FemDesignConnection Connection;
+            public Thread WorkerThread;
+            public BlockingCollection<Action> Queue = new BlockingCollection<Action>();
         }
 
-        private static void EnsureStarted()
-        {
-            if (_workerThread != null) return;
-            lock (_startLock)
-            {
-                if (_workerThread != null) return;
-                if (!_configured) throw new InvalidOperationException("FemDesignConnectionHub not configured.");
+        private static readonly System.Collections.Concurrent.ConcurrentDictionary<Guid, Instance> _instances = new System.Collections.Concurrent.ConcurrentDictionary<Guid, Instance>();
 
-                _workerThread = new Thread(() =>
+        /// <summary>
+        /// Create a new FemDesign connection instance and return its handle.
+        /// </summary>
+        public static Guid Create(string fdDir, bool minimized, string outputDir = null, bool deleteOutput = false)
+        {
+            var id = Guid.NewGuid();
+            var inst = new Instance();
+            inst.WorkerThread = new Thread(() =>
+            {
+                inst.Connection = new FemDesign.FemDesignConnection(fdDir, minimized, outputDir: outputDir, tempOutputDir: deleteOutput);
+                foreach (var action in inst.Queue.GetConsumingEnumerable())
                 {
-                    _connection = new FemDesign.FemDesignConnection(_fdDir, _minimized, outputDir: _outputDir, tempOutputDir: _deleteOutput);
-                    foreach (var action in _queue.GetConsumingEnumerable())
-                    {
-                        try { action(); }
-                        catch { /* Swallow here; exceptions are delivered via TaskCompletionSource */ }
-                    }
-                });
-                _workerThread.IsBackground = true;
-                _workerThread.Name = "FemDesignConnectionHub-Worker";
-                _workerThread.Start();
-            }
+                    try { action(); }
+                    catch { /* Swallow here; exceptions are delivered via TaskCompletionSource */ }
+                }
+            });
+            inst.WorkerThread.IsBackground = true;
+            inst.WorkerThread.Name = $"FemDesignConnectionHub-Worker-{id}";
+            if (!_instances.TryAdd(id, inst)) throw new InvalidOperationException("Failed to create FemDesign connection instance.");
+            inst.WorkerThread.Start();
+            return id;
         }
 
-        public static Task<T> InvokeAsync<T>(Func<FemDesign.FemDesignConnection, T> func)
+        private static Instance Require(Guid id)
         {
-            if (_workerThread == null) EnsureStarted();
+            if (!_instances.TryGetValue(id, out var inst)) throw new InvalidOperationException("Invalid or disposed FemDesign connection handle.");
+            return inst;
+        }
+
+        public static Task<T> InvokeAsync<T>(Guid id, Func<FemDesign.FemDesignConnection, T> func)
+        {
+            var inst = Require(id);
             var tcs = new TaskCompletionSource<T>();
-            _queue.Add(() =>
+            inst.Queue.Add(() =>
             {
-                try { tcs.SetResult(func(_connection)); }
+                try { tcs.SetResult(func(inst.Connection)); }
                 catch (Exception ex) { tcs.SetException(ex); }
             });
             return tcs.Task;
         }
 
-        public static Task InvokeAsync(Action<FemDesign.FemDesignConnection> action)
+        public static Task InvokeAsync(Guid id, Action<FemDesign.FemDesignConnection> action)
         {
-            if (_workerThread == null) EnsureStarted();
+            var inst = Require(id);
             var tcs = new TaskCompletionSource<bool>();
-            _queue.Add(() =>
+            inst.Queue.Add(() =>
             {
-                try { action(_connection); tcs.SetResult(true); }
+                try { action(inst.Connection); tcs.SetResult(true); }
                 catch (Exception ex) { tcs.SetException(ex); }
             });
             return tcs.Task;
         }
 
-        public static Task DisposeAsync()
+        public static Task DisposeAsync(Guid id)
         {
             var tcs = new TaskCompletionSource<bool>();
-            if (_workerThread == null)
-            {
-                tcs.SetResult(true);
-                return tcs.Task;
-            }
+            if (!_instances.TryGetValue(id, out var inst)) { tcs.SetResult(true); return tcs.Task; }
 
-            _queue.Add(() =>
+            inst.Queue.Add(() =>
             {
-                try { _connection?.Dispose(); _connection = null; }
+                try { inst.Connection?.Dispose(); inst.Connection = null; }
                 catch { /* ignore */ }
                 finally { tcs.SetResult(true); }
             });
 
-            // complete queue after disposing to end thread
-            _queue.CompleteAdding();
-            _workerThread = null;
+            inst.Queue.CompleteAdding();
+            _instances.TryRemove(id, out _);
             return tcs.Task;
         }
     }

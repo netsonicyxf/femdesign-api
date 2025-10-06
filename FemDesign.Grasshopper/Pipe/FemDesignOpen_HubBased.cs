@@ -30,7 +30,7 @@ namespace FemDesign.Grasshopper
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            object handle = null;
+            FemDesignHubHandle handle = null;
             DA.GetData("Connection", ref handle);
 
             dynamic modelIn = null;
@@ -43,7 +43,7 @@ namespace FemDesign.Grasshopper
             try
             {
                 // Block UI while invoking hub (acceptable per requirements)
-                FemDesignConnectionHub.InvokeAsync(conn =>
+                FemDesignConnectionHub.InvokeAsync(handle.Id, conn =>
                 {
                     void onOutput(string s) { log.Add(s); }
                     conn.OnOutput += onOutput;
@@ -88,7 +88,7 @@ namespace FemDesign.Grasshopper
                 success = false;
             }
 
-            DA.SetData("Connection", new object());
+            DA.SetData("Connection", handle);
             DA.SetData("Model", modelOut);
             DA.SetData("Success", success);
             DA.SetDataList("Log", log);

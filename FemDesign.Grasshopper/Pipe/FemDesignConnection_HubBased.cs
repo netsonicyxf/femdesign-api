@@ -1,6 +1,7 @@
 // https://strusoft.com/
 using System;
 using System.Collections.Generic;
+using Grasshopper;
 using Grasshopper.Kernel;
 
 namespace FemDesign.Grasshopper
@@ -10,6 +11,7 @@ namespace FemDesign.Grasshopper
     /// </summary>
     public class FemDesignConnection_HubBased : FEM_Design_API_Component
     {
+        private Guid _handle = Guid.Empty;
         public FemDesignConnection_HubBased() : base("FEM-Design.Connection (Hub)", "Connection", "Create or configure a shared FEM-Design connection.", CategoryName.Name(), SubCategoryName.CatHub())
         {
         }
@@ -62,10 +64,28 @@ namespace FemDesign.Grasshopper
                 System.IO.Directory.SetCurrentDirectory(currentDir);
             }
 
-            FemDesignConnectionHub.Configure(fdDir, minimized, outputDir, deleteOutput);
+            if (_handle == Guid.Empty)
+            {
+                _handle = FemDesignConnectionHub.Create(fdDir, minimized, outputDir, deleteOutput);
+            }
 
-            // Emit a simple token/handle to wire downstream (no real object needed since hub is static)
-            DA.SetData("Connection", new object());
+            // Emit a handle object to wire downstream
+            DA.SetData("Connection", new FemDesign.Grasshopper.FemDesignHubHandle(_handle));
+        }
+
+        public override void RemovedFromDocument(GH_Document document)
+        {
+            try
+            {
+                if (_handle != Guid.Empty)
+                {
+                    FemDesignConnectionHub.DisposeAsync(_handle).GetAwaiter().GetResult();
+                    _handle = Guid.Empty;
+                }
+            }
+            catch { }
+
+            base.RemovedFromDocument(document);
         }
 
         protected override System.Drawing.Bitmap Icon => FemDesign.Properties.Resources.FEM_Connection;

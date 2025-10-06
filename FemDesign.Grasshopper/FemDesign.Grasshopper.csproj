@@ -208,6 +208,7 @@
     <Compile Include="Extension\GH_AsyncComponent.cs" />
     <Compile Include="Extension\WorkerInstance.cs" />
     <Compile Include="Helpers\CustomAttributes.cs" />
+    <Compile Include="Helpers\FemDesignHubHandle.cs" />
     <Compile Include="Loads\Load groups\OBSOLETE\LoadGroupToLoadComb_OBSOLETE.cs" />
     <Compile Include="Loads\Loads\MovingLoad.cs" />
     <Compile Include="Loads\Loads\SurfaceLoadVariable.cs" />
@@ -245,6 +246,7 @@
     <Compile Include="Pipe\FemDesignGetModel_HubBased.cs" />
     <Compile Include="Pipe\FemDesignResultFromBsc_HubBased.cs" />
     <Compile Include="Pipe\FemDesignGetQuantities_HubBased.cs" />
+    <Compile Include="Pipe\FemDesignDisconnect_HubBased.cs" />
     <Compile Include="Pipe\PipeSetCfg.cs" />
     <Compile Include="Pipe\OBSOLETE\PipeSetGlobalCfg_OBSOLETE2306.cs" />
     <Compile Include="Pipe\WIP_PipeReadStabilityResults.cs" />

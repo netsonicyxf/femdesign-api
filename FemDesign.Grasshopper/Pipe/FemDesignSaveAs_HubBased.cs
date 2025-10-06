@@ -29,8 +29,8 @@ namespace FemDesign.Grasshopper
 
 		protected override void SolveInstance(IGH_DataAccess DA)
 		{
-			object handle = null;
-			DA.GetData("Connection", ref handle);
+            FemDesignHubHandle handle = null;
+            DA.GetData("Connection", ref handle);
 
 			string filePath = null;
 			DA.GetData("FilePath", ref filePath);
@@ -40,7 +40,7 @@ namespace FemDesign.Grasshopper
 
 			try
 			{
-				FemDesignConnectionHub.InvokeAsync(conn =>
+                FemDesignConnectionHub.InvokeAsync(handle.Id, conn =>
 				{
 					void onOutput(string s) { log.Add(s); }
 					conn.OnOutput += onOutput;
@@ -63,7 +63,7 @@ namespace FemDesign.Grasshopper
 				success = false;
 			}
 
-			DA.SetData("Connection", new object());
+            DA.SetData("Connection", handle);
 			DA.SetData("Success", success);
 			DA.SetDataList("Log", log);
 		}

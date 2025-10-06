@@ -37,8 +37,8 @@ namespace FemDesign.Grasshopper
 
 		protected override void SolveInstance(IGH_DataAccess DA)
 		{
-			object handle = null;
-			DA.GetData("Connection", ref handle);
+            FemDesignHubHandle handle = null;
+            DA.GetData("Connection", ref handle);
 
 			var bscPaths = new List<string>();
 			DA.GetDataList("BscFilePath", bscPaths);
@@ -55,7 +55,7 @@ namespace FemDesign.Grasshopper
 
 			try
 			{
-				FemDesignConnectionHub.InvokeAsync(conn =>
+				FemDesignConnectionHub.InvokeAsync(handle.Id, conn =>
 				{
 					void onOutput(string s) { log.Add(s); }
 					conn.OnOutput += onOutput;
@@ -88,7 +88,7 @@ namespace FemDesign.Grasshopper
 				success = false;
 			}
 
-			DA.SetData("Connection", new object());
+            DA.SetData("Connection", handle);
 			DA.SetDataTree(1, resultsTree);
 			DA.SetData("Success", success);
 			DA.SetDataList("Log", log);
@@ -99,5 +99,6 @@ namespace FemDesign.Grasshopper
 		public override GH_Exposure Exposure => GH_Exposure.tertiary;
 	}
 }
+
 
 
