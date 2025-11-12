@@ -1,5 +1,6 @@
 // https://strusoft.com/
 
+using FemDesign.GenericClasses;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -11,7 +12,7 @@ namespace FemDesign.Shells
     /// slab_part_type
     /// </summary>
     [System.Serializable]
-    public partial class SlabPart: NamedEntityPartBase
+    public partial class SlabPart: NamedEntityPartBase, IStageElement
     {
         private static int _plateInstance = 0;
         private static int _wallInstance = 0;
@@ -99,6 +100,8 @@ namespace FemDesign.Shells
             get {return this._meshSize;}
             set {this._meshSize = RestrictedDouble.NonNegMax_1e20(value);}
         }
+        [XmlAttribute("stage")]
+        public int StageId { get; set; } = 1;
         //[XmlElement("contour", Order = 1)]
         //public List<Geometry.Contour> _contours;
         //[XmlIgnore]

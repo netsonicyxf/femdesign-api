@@ -103,16 +103,19 @@ namespace FemDesign
         [XmlElement("bolt_types", Order = 18)]
         public List<StruSoft.Interop.StruXml.Data.Bolt_lib_type> BoltTypes { get; set; }
 
-        [XmlElement("geometry", Order = 19)]
+        //[XmlElement("bar_end_lib_type", Order = 19)]
+        //public List<StruSoft.Interop.StruXml.Data.Bar_end_lib_type> BarEndReleaseTypes { get; set; }
+
+        [XmlElement("geometry", Order = 20)]
         public StruSoft.Interop.StruXml.Data.DatabaseGeometry Geometry { get; set; }
 
-        [XmlElement("user_defined_filter", Order = 20)]
+        [XmlElement("user_defined_filter", Order = 21)]
         public List<StruSoft.Interop.StruXml.Data.Userfilter_type> UserDefinedFilters { get; set; }
 
-        [XmlElement("user_defined_views", Order = 21)]
+        [XmlElement("user_defined_views", Order = 22)]
         public StruSoft.Interop.StruXml.Data.DatabaseUser_defined_views UserDefinedViews { get; set; }
 
-        [XmlElement("end", Order = 22)]
+        [XmlElement("end", Order = 23)]
         public string End { get; set; }
 
         internal static bool HasResults(string filePath)

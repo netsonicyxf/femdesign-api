@@ -96,7 +96,19 @@ namespace FemDesign.Bars
         public BarType Type { get; set; }
 
         [XmlAttribute("stage")]
-        public int StageId { get; set; } = 1;
+        public int _stageId = 1;
+
+        [XmlIgnore]
+        public int StageId
+        {
+            get { return _stageId; }
+            set
+            {
+                _stageId = value;
+                if (this.BarPart != null)
+                    this.BarPart.StageId = value;
+            }
+        }
 
         [XmlElement("bar_part", Order = 1)]
         public BarPart _barPart; // bar_part_type

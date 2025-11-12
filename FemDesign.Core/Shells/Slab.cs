@@ -47,7 +47,19 @@ namespace FemDesign.Shells
         public SlabType Type { get; set; }
 
         [XmlAttribute("stage")]
-        public int StageId { get; set; } = 1;
+        public int _stageId;
+
+        [XmlIgnore]
+        public int StageId
+        {
+            get { return _stageId; }
+            set
+            {
+                _stageId = value;
+                if(this.SlabPart != null)
+                    this.SlabPart.StageId = value;
+            }
+        }
 
         [XmlElement("slab_part", Order = 1)]
         public SlabPart _slabPart;
