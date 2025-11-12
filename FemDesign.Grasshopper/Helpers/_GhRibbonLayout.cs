@@ -78,6 +78,11 @@
             return new string(' ', 1) + "Results";
         }
 
+        public static string CatReinforcement()
+        {
+            return "Reinforcement";
+        }
+
         public static string Cat8()
         {
             return "StruSoft - LiveLink";
