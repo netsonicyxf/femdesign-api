@@ -198,7 +198,7 @@ namespace FemDesign.Reinforcement
         public string _height;
 
         [XmlIgnore]
-        public double Height
+        public double? Height
         {
             get
             {

@@ -7420,4 +7420,22 @@
   <data name="shearRegion" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons\shearRegion.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Punching" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icons\Punching.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="BendedBar" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icons\BendedBar.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="StirrupCircular" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icons\StirrupCircular.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="StirrupOpen" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icons\StirrupOpen.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="StudRail" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icons\StudRail.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="StudRailPeiko" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icons\StudRailPeiko.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
