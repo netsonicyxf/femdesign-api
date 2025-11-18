@@ -33,7 +33,7 @@ namespace FemDesign.Grasshopper
             evaluationUnit.RegisterInputParam(new Param_Number(), "Width", "Width", "[m]", GH_ParamAccess.item);
             evaluationUnit.Inputs[evaluationUnit.Inputs.Count - 1].Parameter.Optional = false;
 
-            evaluationUnit.RegisterInputParam(new Param_GenericObject(), "Length", "Length", "", GH_ParamAccess.item);
+            evaluationUnit.RegisterInputParam(new Param_Number(), "Length", "Length", "", GH_ParamAccess.item);
             evaluationUnit.Inputs[evaluationUnit.Inputs.Count - 1].Parameter.Optional = false;
 
             evaluationUnit.RegisterInputParam(new Param_Number(), "Height", "Height", "[mm]", GH_ParamAccess.item);
@@ -44,6 +44,9 @@ namespace FemDesign.Grasshopper
 
             evaluationUnit.RegisterInputParam(new Param_Number(), "Distance_Y", "Distance_Y", "[mm]", GH_ParamAccess.item);
             evaluationUnit.Inputs[evaluationUnit.Inputs.Count - 1].Parameter.Optional = true;
+
+            evaluationUnit.RegisterInputParam(new Param_Brep(), "RegionStirrups", "RegionStirrups", "", GH_ParamAccess.item);
+            evaluationUnit.Inputs[evaluationUnit.Inputs.Count - 1].Parameter.Optional = false;
 
 
 
@@ -57,6 +60,7 @@ namespace FemDesign.Grasshopper
             gH_ExtendableMenu0.RegisterInputPlug(evaluationUnit.Inputs[6]);
             gH_ExtendableMenu0.RegisterInputPlug(evaluationUnit.Inputs[7]);
             gH_ExtendableMenu0.RegisterInputPlug(evaluationUnit.Inputs[8]);
+            gH_ExtendableMenu0.RegisterInputPlug(evaluationUnit.Inputs[9]);
             evaluationUnit.AddMenu(gH_ExtendableMenu0);
         }
 
@@ -98,6 +102,9 @@ namespace FemDesign.Grasshopper
             DA.GetData(8, ref distance_y);
             distance_y /= 1000.0; // mm to m
 
+            Rhino.Geometry.Brep regionStirrups = null;
+            DA.GetData(9, ref regionStirrups);
+
             var punchingReinforcement = new FemDesign.Reinforcement.PunchingReinforcement();
             {
                 // punching area
@@ -113,7 +120,7 @@ namespace FemDesign.Grasshopper
             var openStirrups = new FemDesign.Reinforcement.OpenStirrups();
             {
                 openStirrups.Wire = new FemDesign.Reinforcement.Wire(stirrupDiameter, stirrupQuality, Reinforcement.WireProfileType.Ribbed);
-                openStirrups.Region = region.FromRhino();
+                openStirrups.Region = regionStirrups.FromRhino();
                 openStirrups.Width = stirrupWidth;
                 openStirrups.Length = stirrupLength;
                 openStirrups.Height = stirrupHeight;

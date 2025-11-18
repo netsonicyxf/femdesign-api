@@ -139,8 +139,21 @@ namespace FemDesign.Models
             Model model = new Model(Country.S);
             using (var connection = new FemDesign.FemDesignConnection())
             {
-                connection.Open(model, true);
+                connection.Open(model);
             }
+        }
+
+
+        [TestCategory("FEM-Design required")]
+        [TestMethod("Open a Model")]
+        public void OpenGlobalModel()
+        {
+
+            string filePath = "Model/global-test-model_MASTER_OUT.struxml";
+            var model = Model.DeserializeFromFilePath(filePath);
+
+            Assert.IsTrue(model.Entities.Bars.Count > 1);
+
         }
 
         /// <summary>

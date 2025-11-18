@@ -150,7 +150,7 @@ namespace FemDesign.Reinforcement
         public PeikkoPsbProduct PeikkoPsbProduct { get; set; }
 
         [XmlAttribute("pattern")]
-        public string Pattern { get; set; }
+        public Pattern Pattern { get; set; }
 
         [XmlAttribute("s0")]
         public double _s0 { get; set; }

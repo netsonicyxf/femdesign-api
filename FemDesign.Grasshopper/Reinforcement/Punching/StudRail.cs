@@ -87,7 +87,7 @@ namespace FemDesign.Grasshopper
             string pattern = "";
             DA.GetData(2, ref pattern);
 
-            //var _pattern = FemDesign.GenericClasses.EnumParser.Parse<FemDesign.Reinforcement.Pattern>(pattern);
+            var _pattern = FemDesign.GenericClasses.EnumParser.Parse<FemDesign.Reinforcement.Pattern>(pattern);
 
             var reinforcement = new FemDesign.Materials.Material();
             DA.GetData(3, ref reinforcement);
@@ -136,7 +136,7 @@ namespace FemDesign.Grasshopper
 
             var studRail = new FemDesign.Reinforcement.StudRails();
             {
-                studRail.Pattern = pattern;
+                studRail.Pattern = _pattern;
                 studRail.S0 = so;
                 studRail.S1 = s1;
                 studRail.S2 = s2;

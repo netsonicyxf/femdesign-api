@@ -48,7 +48,7 @@ namespace FemDesign.Grasshopper
         {
             _subcomponents.Add(new StudRail());
             _subcomponents.Add(new StirrupCircular());
-            _subcomponents.Add(new BendedBar());
+            //_subcomponents.Add(new BendedBar());
             _subcomponents.Add(new StirrupOpen());
 
 
