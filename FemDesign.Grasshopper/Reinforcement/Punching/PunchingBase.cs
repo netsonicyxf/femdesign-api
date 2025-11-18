@@ -25,7 +25,6 @@ namespace FemDesign.Grasshopper
         protected override string DefaultEvaluationUnit => _subcomponents[0].name();
         public override Guid ComponentGuid => new Guid("{68F38838-9C23-46CC-A656-386925AAE3B9}");
         public override GH_Exposure Exposure => GH_Exposure.tertiary;
-
         protected override Bitmap Icon => FemDesign.Properties.Resources.Punching;
 
         public PunchingBase()
@@ -49,6 +48,9 @@ namespace FemDesign.Grasshopper
         {
             _subcomponents.Add(new StudRail());
             _subcomponents.Add(new StirrupCircular());
+            _subcomponents.Add(new BendedBar());
+            _subcomponents.Add(new StirrupOpen());
+
 
             foreach (SubComponent item in _subcomponents)
             {

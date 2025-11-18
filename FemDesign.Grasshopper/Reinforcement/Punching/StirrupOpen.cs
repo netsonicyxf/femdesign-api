@@ -7,10 +7,10 @@ using FemDesign.Grasshopper.Components.UIWidgets;
 namespace FemDesign.Grasshopper
 {
 
-    public class StirrupCircular : SubComponent
+    public class StirrupOpen : SubComponent
     {
-        public override string name() => "StirrupCircular";
-        public override string display_name() => "StirrupCircular";
+        public override string name() => "StirrupOpen";
+        public override string display_name() => "StirrupOpen";
 
         public override void registerEvaluationUnits(EvaluationUnitManager mngr)
         {
@@ -24,32 +24,27 @@ namespace FemDesign.Grasshopper
             evaluationUnit.RegisterInputParam(new Param_Brep(), "Region", "Region", "", GH_ParamAccess.item);
             evaluationUnit.Inputs[evaluationUnit.Inputs.Count - 1].Parameter.Optional = false;
 
-            evaluationUnit.RegisterInputParam(new Param_Number(), "InnerRadius", "InnerRadius", "[m]", GH_ParamAccess.item);
-            evaluationUnit.Inputs[evaluationUnit.Inputs.Count - 1].Parameter.Optional = false;
-
             evaluationUnit.RegisterInputParam(new Param_GenericObject(), "ReinforcingMaterial", "ReinforcingMaterial", "", GH_ParamAccess.item);
             evaluationUnit.Inputs[evaluationUnit.Inputs.Count - 1].Parameter.Optional = false;
 
             evaluationUnit.RegisterInputParam(new Param_Number(), "Diameter", "Diameter", "[mm]", GH_ParamAccess.item);
             evaluationUnit.Inputs[evaluationUnit.Inputs.Count - 1].Parameter.Optional = true;
 
-            evaluationUnit.RegisterInputParam(new Param_Number(), "Width", "Width", "[mm]", GH_ParamAccess.item);
-            evaluationUnit.Inputs[evaluationUnit.Inputs.Count - 1].Parameter.Optional = true;
+            evaluationUnit.RegisterInputParam(new Param_Number(), "Width", "Width", "[m]", GH_ParamAccess.item);
+            evaluationUnit.Inputs[evaluationUnit.Inputs.Count - 1].Parameter.Optional = false;
+
+            evaluationUnit.RegisterInputParam(new Param_GenericObject(), "Length", "Length", "", GH_ParamAccess.item);
+            evaluationUnit.Inputs[evaluationUnit.Inputs.Count - 1].Parameter.Optional = false;
 
             evaluationUnit.RegisterInputParam(new Param_Number(), "Height", "Height", "[mm]", GH_ParamAccess.item);
             evaluationUnit.Inputs[evaluationUnit.Inputs.Count - 1].Parameter.Optional = true;
 
-            evaluationUnit.RegisterInputParam(new Param_Number(), "MaxDistance", "MaxDistance", "[mm]", GH_ParamAccess.item);
+            evaluationUnit.RegisterInputParam(new Param_Number(), "Distance_X", "Distance_X", "[mm]", GH_ParamAccess.item);
             evaluationUnit.Inputs[evaluationUnit.Inputs.Count - 1].Parameter.Optional = true;
 
-            evaluationUnit.RegisterInputParam(new Param_GenericObject(), "ReinforcingMaterial", "ReinforcingMaterial", "", GH_ParamAccess.item);
-            evaluationUnit.Inputs[evaluationUnit.Inputs.Count - 1].Parameter.Optional = false;
-
-            evaluationUnit.RegisterInputParam(new Param_Number(), "Diameter", "Diameter", "[mm]", GH_ParamAccess.item);
+            evaluationUnit.RegisterInputParam(new Param_Number(), "Distance_Y", "Distance_Y", "[mm]", GH_ParamAccess.item);
             evaluationUnit.Inputs[evaluationUnit.Inputs.Count - 1].Parameter.Optional = true;
 
-            evaluationUnit.RegisterInputParam(new Param_Number(), "Overlap", "Overlap", "[mm]", GH_ParamAccess.item);
-            evaluationUnit.Inputs[evaluationUnit.Inputs.Count - 1].Parameter.Optional = true;
 
 
             GH_ExtendableMenu gH_ExtendableMenu0 = new GH_ExtendableMenu(0, "");
@@ -61,16 +56,8 @@ namespace FemDesign.Grasshopper
             gH_ExtendableMenu0.RegisterInputPlug(evaluationUnit.Inputs[5]);
             gH_ExtendableMenu0.RegisterInputPlug(evaluationUnit.Inputs[6]);
             gH_ExtendableMenu0.RegisterInputPlug(evaluationUnit.Inputs[7]);
+            gH_ExtendableMenu0.RegisterInputPlug(evaluationUnit.Inputs[8]);
             evaluationUnit.AddMenu(gH_ExtendableMenu0);
-
-
-            GH_ExtendableMenu gH_ExtendableMenu1 = new GH_ExtendableMenu(1, "");
-            gH_ExtendableMenu1.Name = "Auxiliary";
-            gH_ExtendableMenu1.Expand();
-            gH_ExtendableMenu1.RegisterInputPlug(evaluationUnit.Inputs[8]);
-            gH_ExtendableMenu1.RegisterInputPlug(evaluationUnit.Inputs[9]);
-            gH_ExtendableMenu1.RegisterInputPlug(evaluationUnit.Inputs[10]);
-            evaluationUnit.AddMenu(gH_ExtendableMenu1);
         }
 
         public override void SolveInstance(IGH_DataAccess DA, out string msg, out GH_RuntimeMessageLevel level)
@@ -84,38 +71,32 @@ namespace FemDesign.Grasshopper
             Rhino.Geometry.Brep region = null;
             DA.GetData(1, ref region);
 
-            double innerRadius = 1.0;
-            DA.GetData(2, ref innerRadius);
-
             FemDesign.Materials.Material stirrupQuality = null;
-            DA.GetData(3, ref stirrupQuality);
+            DA.GetData(2, ref stirrupQuality);
 
             double stirrupDiameter = 10;
-            DA.GetData(4, ref stirrupDiameter);
+            DA.GetData(3, ref stirrupDiameter);
             stirrupDiameter /= 1000.0; // mm to m
 
             double stirrupWidth = 200;
-            DA.GetData(5, ref stirrupWidth);
+            DA.GetData(4, ref stirrupWidth);
             stirrupWidth /= 1000.0; // mm to m
+
+            double stirrupLength = 200;
+            DA.GetData(5, ref stirrupLength);
+            stirrupLength /= 1000.0; // mm to m
 
             double stirrupHeight = 200;
             DA.GetData(6, ref stirrupHeight);
             stirrupHeight /= 1000.0; // mm to m
 
-            double stirrupMaxDistance = 200;
-            DA.GetData(7, ref stirrupMaxDistance);
-            stirrupMaxDistance /= 1000.0; // mm to m
+            double distance_x = 200;
+            DA.GetData(7, ref distance_x);
+            distance_x /= 1000.0; // mm to m
 
-            FemDesign.Materials.Material auxiliaryQuality = null;
-            DA.GetData(8, ref auxiliaryQuality);
-
-            double auxiliaryDiameter = 10;
-            DA.GetData(9, ref auxiliaryDiameter);
-            auxiliaryDiameter /= 1000.0; // mm to m
-
-            double auxiliaryOverlap = 200;
-            DA.GetData(10, ref auxiliaryOverlap);
-            auxiliaryOverlap /= 1000.0; // mm to m
+            double distance_y = 200;
+            DA.GetData(8, ref distance_y);
+            distance_y /= 1000.0; // mm to m
 
             var punchingReinforcement = new FemDesign.Reinforcement.PunchingReinforcement();
             {
@@ -129,28 +110,19 @@ namespace FemDesign.Grasshopper
                 punchingReinforcement.PunchingArea = punchingArea;
             }
 
-            var reinforcingRing = new FemDesign.Reinforcement.ReinforcingRing();
+            var openStirrups = new FemDesign.Reinforcement.OpenStirrups();
             {
-                // stirrups
-                var stirrups = new FemDesign.Reinforcement.ReinforcingRingStirrups();
-                stirrups.Width = stirrupWidth;
-                stirrups.Height = stirrupHeight;
-                stirrups.MaxDistance = stirrupMaxDistance;
-                stirrups.Wire = new Reinforcement.Wire(stirrupDiameter, stirrupQuality, Reinforcement.WireProfileType.Ribbed);
-
-                // auxiliary reinforcement
-                var auxiliary = new FemDesign.Reinforcement.AuxiliaryReinforcement();
-                auxiliary.InnerRadius = 0.50;
-                auxiliary.Overlap = auxiliaryOverlap;
-                auxiliary.Wire = new Reinforcement.Wire(auxiliaryDiameter, auxiliaryQuality, Reinforcement.WireProfileType.Ribbed);
-
-                // assign to reinforcing ring
-                reinforcingRing.Stirrups = stirrups;
-                reinforcingRing.AuxiliaryReinforcement = auxiliary;
+                openStirrups.Wire = new FemDesign.Reinforcement.Wire(stirrupDiameter, stirrupQuality, Reinforcement.WireProfileType.Ribbed);
+                openStirrups.Region = region.FromRhino();
+                openStirrups.Width = stirrupWidth;
+                openStirrups.Length = stirrupLength;
+                openStirrups.Height = stirrupHeight;
+                openStirrups.DistanceX = distance_x;
+                openStirrups.DistanceY = distance_y;
             }
 
 
-            punchingReinforcement.ReinforcingRing = reinforcingRing;
+            punchingReinforcement.OpenStirrups = openStirrups;
 
             DA.SetData(0, punchingReinforcement);
         }

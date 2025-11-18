@@ -189,6 +189,30 @@ namespace FemDesign.Reinforcement
             }
         }
 
+
+        public static Shells.Slab AddPunchingReinforcement(Shells.Slab slab, List<PunchingReinforcement> punchingReinforcements)
+        {
+            // deep clone. downstreams objs will contain changes made in this method, upstream objs will not.
+            // downstream and uppstream objs will share guid.
+            Shells.Slab clone = slab.DeepClone();
+            // deep clone punching reinforcements
+            var punchingReinforcementsClone = punchingReinforcements.DeepClone();
+            // check if slab material is concrete
+            if (clone.Material.Concrete == null)
+            {
+                throw new System.ArgumentException("Material of slab must be concrete");
+            }
+            foreach (var item in punchingReinforcementsClone)
+            {
+                // add references to item
+                item.BaseShell = new GuidListType(clone.SlabPart.Guid);
+                item.PunchingArea.BaseShell = new GuidListType(clone.SlabPart.Guid);
+
+                clone.PunchingReinforcement.Add(item);
+            }
+            return clone;
+        }
+
         public static Shells.Slab AddShearControlRegionToSlab(Shells.Slab slab, List<ShearControlRegionType> shearControlRegions)
         {
             // deep clone. downstreams objs will contain changes made in this method, upstream objs will not.

@@ -10,6 +10,8 @@ using FemDesign.GenericClasses;
 using FemDesign.LibraryItems;
 using FemDesign.Loads;
 using FemDesign.Composites;
+using System.Linq;
+using Newtonsoft.Json.Linq;
 
 namespace FemDesign
 {
@@ -106,16 +108,16 @@ namespace FemDesign
         //[XmlElement("bar_end_lib_type", Order = 19)]
         //public List<StruSoft.Interop.StruXml.Data.Bar_end_lib_type> BarEndReleaseTypes { get; set; }
 
-        [XmlElement("geometry", Order = 20)]
+        [XmlElement("geometry", Order = 19)]
         public StruSoft.Interop.StruXml.Data.DatabaseGeometry Geometry { get; set; }
 
-        [XmlElement("user_defined_filter", Order = 21)]
+        [XmlElement("user_defined_filter", Order = 20)]
         public List<StruSoft.Interop.StruXml.Data.Userfilter_type> UserDefinedFilters { get; set; }
 
-        [XmlElement("user_defined_views", Order = 22)]
+        [XmlElement("user_defined_views", Order = 21)]
         public StruSoft.Interop.StruXml.Data.DatabaseUser_defined_views UserDefinedViews { get; set; }
 
-        [XmlElement("end", Order = 23)]
+        [XmlElement("end", Order = 22)]
         public string End { get; set; }
 
         internal static bool HasResults(string filePath)
@@ -2207,6 +2209,9 @@ namespace FemDesign
             // add ShearControlRegion
             this.AddShearControlRegions(obj, overwrite);
 
+            // add PunchingReinforcement
+            this.AddPunchingReinforcements(obj, overwrite);
+
             // add line connection types (predefined rigidity)
             foreach (Releases.RigidityDataLibType3 predef in obj.SlabPart.Region.GetPredefinedRigidities())
             {
@@ -2694,6 +2699,90 @@ namespace FemDesign
             return false;
         }
 
+
+        /// <summary>
+        /// Add SurfaceReinforcement(s) from Slab to Model.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="overwrite"></param>
+        private void AddPunchingReinforcements(Shells.Slab obj, bool overwrite)
+        {
+            foreach (Reinforcement.PunchingReinforcement punchingReinforcement in obj.PunchingReinforcement)
+            {
+                this.AddPunchingReinforcement(punchingReinforcement, overwrite);
+            }
+        }
+
+        private void AddPunchingReinforcement(Reinforcement.PunchingReinforcement obj, bool overwrite)
+        {
+            // in model?
+            bool inModel = this.PunchingReinforcementInModel(obj);
+
+            // in model, don't overwrite
+            if (inModel && !overwrite)
+            {
+                throw new System.ArgumentException($"{obj.GetType().FullName} with guid: {obj.Guid} has already been added to model. Did you add the same {obj.GetType().FullName} to different Slabs?");
+            }
+
+            // in model, overwrite
+            else if (inModel && overwrite)
+            {
+                this.Entities.PunchingReinforcements.RemoveAll(x => x.Guid == obj.Guid);
+            }
+
+            // add obj
+            this.Entities.PunchingReinforcements.Add(obj);
+
+            this.AddPunchingArea(obj.PunchingArea, overwrite);
+        }
+
+        private void AddPunchingArea(Reinforcement.PunchingArea obj, bool overwrite)
+        {
+            // in model?
+            bool inModel = this.PunchingAreaInModel(obj);
+            // in model, don't overwrite
+            if (inModel && !overwrite)
+            {
+                throw new System.ArgumentException($"{obj.GetType().FullName} with guid: {obj.Guid} has already been added to model. Did you add the same {obj.GetType().FullName} to different Slabs?");
+            }
+
+            // in model, overwrite
+            else if (inModel && overwrite)
+            {
+                this.Entities.PunchingArea.RemoveAll(x => x.Guid == obj.Guid);
+            }
+
+            // need a method to set local_x, local_y and region.
+            // localx and localy are set according to the connected bar.
+            // region is set according to the the section region of the bar
+
+            this.Entities.PunchingArea.Add(obj);
+
+        }
+
+        private bool PunchingReinforcementInModel(Reinforcement.PunchingReinforcement obj)
+        {
+            foreach (Reinforcement.PunchingReinforcement elem in this.Entities.PunchingReinforcements)
+            {
+                if (elem.Guid == obj.Guid)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private bool PunchingAreaInModel(Reinforcement.PunchingArea obj)
+        {
+            foreach (Reinforcement.PunchingArea elem in this.Entities.PunchingArea)
+            {
+                if (elem.Guid == obj.Guid)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
         /// <summary>
         /// Add Foundation to the Model

@@ -37,17 +37,20 @@ namespace FemDesign.Shells
         [XmlIgnore]
         public Reinforcement.SurfaceReinforcementParameters SurfaceReinforcementParameters { get; set; }
         [XmlIgnore]
-        public List<Reinforcement.SurfaceReinforcement> SurfaceReinforcement = new List<Reinforcement.SurfaceReinforcement>();
+        public List<Reinforcement.SurfaceReinforcement> SurfaceReinforcement { get; set; } = new List<Reinforcement.SurfaceReinforcement>();
 
         [XmlIgnore]
-        public List<Reinforcement.ShearControlRegionType> ShearControlRegions = new List<Reinforcement.ShearControlRegionType>();
+        public List<Reinforcement.ShearControlRegionType> ShearControlRegions { get; set; } = new List<Reinforcement.ShearControlRegionType>();
+
+        [XmlIgnore]
+        public List<Reinforcement.PunchingReinforcement> PunchingReinforcement { get; set; } = new List<Reinforcement.PunchingReinforcement>();
 
 
         [XmlAttribute("type")]
         public SlabType Type { get; set; }
 
         [XmlAttribute("stage")]
-        public int _stageId;
+        public int _stageId = 1;
 
         [XmlIgnore]
         public int StageId

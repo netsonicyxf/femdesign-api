@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Eto.Forms;
+using FemDesign.Reinforcement;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
 
@@ -25,10 +26,18 @@ namespace FemDesign.Grasshopper
         }
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            
-            // return
-            DA.SetData(0, null);
+            FemDesign.Shells.Slab slab = null;
+            DA.GetData(0, ref slab);
+
+            List<PunchingReinforcement> punchingReinforcements = new List<PunchingReinforcement>();
+            DA.GetDataList(1, punchingReinforcements);
+
+            punchingReinforcements = punchingReinforcements.DeepClone();
+
+            FemDesign.Shells.Slab obj = FemDesign.Reinforcement.SurfaceReinforcement.AddPunchingReinforcement(slab, punchingReinforcements);
+            DA.SetData(0, obj);
         }
+
         protected override System.Drawing.Bitmap Icon
         {
             get

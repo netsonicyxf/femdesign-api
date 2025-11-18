@@ -1,3 +1,4 @@
+using FemDesign.GenericClasses;
 using System.Xml.Serialization;
 
 
@@ -10,8 +11,20 @@ namespace FemDesign.Reinforcement
         public GuidListType BaseShell { get; set; }
 
         [XmlElement("punching_area", Order = 2)]
-        public GuidListType PunchingArea { get; set; }
+        public GuidListType PunchingAreaRef { get; set; }
 
+        private FemDesign.Reinforcement.PunchingArea _punchingArea;
+
+        [XmlIgnore]
+        public FemDesign.Reinforcement.PunchingArea PunchingArea
+        {
+            get => _punchingArea;
+            set
+            {
+                _punchingArea = value;
+                PunchingAreaRef = value != null ? new GuidListType(value.Guid) : null;
+            }
+        }
         // choice bended_bar
         [XmlElement("bended_bar", Order = 3)]
         public BendedBar BendedBar { get; set; }
@@ -27,6 +40,13 @@ namespace FemDesign.Reinforcement
         // choice stud_rails
         [XmlElement("stud_rails", Order = 6)]
         public StudRails StudRails { get; set; }
+
+        public PunchingReinforcement()
+        {
+            this.EntityCreated();
+        }
+
+
     }
 
     [System.Serializable]
@@ -130,13 +150,13 @@ namespace FemDesign.Reinforcement
         public PeikkoPsbProduct PeikkoPsbProduct { get; set; }
 
         [XmlAttribute("pattern")]
-        public string Patter { get; set; }
+        public string Pattern { get; set; }
 
         [XmlAttribute("s0")]
         public double _s0 { get; set; }
 
         [XmlIgnore]
-        public double S0 
+        public double S0
         {
             get => _s0;
             set => _s0 = RestrictedDouble.NonZeroMax_10_1(value);
@@ -163,53 +183,35 @@ namespace FemDesign.Reinforcement
         }
 
         [XmlAttribute("rails_on_circle")]
-        public string _railsOnCircle;
+        public int _railsOnCircle;
 
         [XmlIgnore]
         public int RailsOnCircle
         {
-            get
-            {
-                return System.Int32.Parse(this._railsOnCircle);
-            }
-            set
-            {
-                this._railsOnCircle = value.ToString();
-            }
+            get => _railsOnCircle;
+            set => _railsOnCircle = (int)RestrictedDouble.ValueInClosedInterval(value, 4, 50);
         }
 
         [XmlAttribute("studs_on_rail")]
-        public string _studsOnRail;
+        public int _studsOnRail;
 
         [XmlIgnore]
         public int StudsOnRail
         {
-            get
-            {
-                return System.Int32.Parse(this._studsOnRail);
-            }
-            set
-            {
-                this._studsOnRail = value.ToString();
-            }
+            get => _studsOnRail;
+            set => _studsOnRail = (int)RestrictedDouble.ValueInClosedInterval(value, 2, 50);
         }
 
         [XmlAttribute("height")]
         public string _height;
 
         [XmlIgnore]
-        public double? Height
+        public double Height
         {
-            get
-            {
-                return double.Parse(this._height);
-            }
-            set
-            {
-                this._height = value.ToString();
-            }
+            get => double.TryParse(_height, out var value) ? value : 0.0;
+            set => _height = RestrictedDouble.ValueInClosedInterval(value, 0.01, 10).ToString();
         }
-        
+
         [XmlAttribute("use_minimal_elements")]
         public bool UseMinimalElements { get; set; }
     }
@@ -242,5 +244,28 @@ namespace FemDesign.Reinforcement
         public int NumXDirection { get; set; }
         [XmlAttribute("n_y_dir")]
         public int NumYDireciton { get; set; }
+    }
+
+    public enum Pattern
+    {
+        [Parseable("Radial", "radial", "RADIAL")]
+        [XmlEnum("radial")]
+        Radial,
+        [Parseable("Orthogonal", "orthogonal", "ORTHOGONAL")]
+        [XmlEnum("orthogonal")]
+        Orthogonal,
+        [Parseable("SemiOrthogonal", "semiorthogonal", "SEMIORTHOGONAL")]
+        [XmlEnum("semi-orthogonal")]
+        SemiOrthogonal
+    }
+
+    public enum Direction
+    {
+        [Parseable("x", "X")]
+        [XmlEnum("x")]
+        X,
+        [Parseable("y", "Y")]
+        [XmlEnum("y")]
+        Y,
     }
 }

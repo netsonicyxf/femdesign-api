@@ -312,6 +312,7 @@
     <Compile Include="Reinforcement\PostTensionCable\Reinforcement.Ptc.cs" />
     <Compile Include="Reinforcement\Punching\BendedBar.cs" />
     <Compile Include="Reinforcement\Punching\PunchingBase.cs" />
+    <Compile Include="Reinforcement\Punching\StirrupOpen.cs" />
     <Compile Include="Reinforcement\ShearControlRegion.cs" />
     <Compile Include="Reinforcement\Punching\PunchingReinforcementAddToSlab.cs" />
     <Compile Include="Reinforcement\ShearControlRegionAddToSlab.cs" />
