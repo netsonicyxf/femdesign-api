@@ -1,5 +1,6 @@
 ﻿using FemDesign.Grasshopper.Components.UIWidgets;
 using FemDesign.Loads;
+using FemDesign.Properties;
 using GH_IO.Types;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Parameters;
@@ -18,7 +19,7 @@ namespace FemDesign.Grasshopper
         {
             EvaluationUnit evaluationUnit = new EvaluationUnit(name(), display_name(), "");
             mngr.RegisterUnit(evaluationUnit);
-            //evaluationUnit.Icon = FemDesign.Properties.Resources.StudRail;
+            evaluationUnit.Icon = FemDesign.Properties.Resources.StudRail;
 
             evaluationUnit.RegisterInputParam(new Param_Plane(), "Point|Plane", "Point|Plane", "", GH_ParamAccess.item);
             evaluationUnit.Inputs[evaluationUnit.Inputs.Count - 1].Parameter.Optional = false;
