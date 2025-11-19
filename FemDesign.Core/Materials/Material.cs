@@ -232,7 +232,7 @@ namespace FemDesign.Materials
             return newMaterial;
         }
 
-        public static Material SetCreep(this Material material, int to, int humidity, bool calculateAc, double ac, double u, bool nonLinearCreep, StruSoft.Interop.Cement_type cementType, bool increaseFinalValue)
+        public static Material SetCreep(this Material material, int to, int humidity, bool calculateAc, double ac, double u, bool nonLinearCreep, StruSoft.Interop_24.Cement_type cementType, bool increaseFinalValue)
         {
             if (material.Concrete == null)
             {
@@ -240,8 +240,8 @@ namespace FemDesign.Materials
             }
 
             // deep clone. downstreams objs will have contain changes made in this method, upstream objs will not.
-            var creep = new StruSoft.Interop.Tda_creep2();
-            creep.EN_199211_2004 = new StruSoft.Interop.Tda_creep_EN1992()
+            var creep = new StruSoft.Interop_24.Tda_creep2();
+            creep.EN_199211_2004 = new StruSoft.Interop_24.Tda_creep_EN1992()
             {
                 T0 = to,
                 RH = humidity,
@@ -263,7 +263,7 @@ namespace FemDesign.Materials
             return newMaterial;
         }
 
-        public static Material SetShrinkage(this Material material, int to, int humidity, bool calculateAc, double ac, double u, StruSoft.Interop.Cement_type cementType)
+        public static Material SetShrinkage(this Material material, int to, int humidity, bool calculateAc, double ac, double u, StruSoft.Interop_24.Cement_type cementType)
         {
             if (material.Concrete == null)
             {
@@ -271,8 +271,8 @@ namespace FemDesign.Materials
             }
 
             // deep clone. downstreams objs will have contain changes made in this method, upstream objs will not.
-            var shrinkage = new StruSoft.Interop.Tda_shrinkage();
-            shrinkage.EN_199211_2004 = new StruSoft.Interop.Tda_shrinkageEN_199211_2004()
+            var shrinkage = new StruSoft.Interop_24.Tda_shrinkage();
+            shrinkage.EN_199211_2004 = new StruSoft.Interop_24.Tda_shrinkageEN_199211_2004()
             {
                 Ts = to,
                 RH = humidity,
@@ -292,7 +292,7 @@ namespace FemDesign.Materials
             return newMaterial;
         }
 
-        public static Material setElasticity(this Material material, int to, StruSoft.Interop.Cement_type cementType)
+        public static Material setElasticity(this Material material, int to, StruSoft.Interop_24.Cement_type cementType)
         {
             if (material.Concrete == null)
             {
@@ -300,8 +300,8 @@ namespace FemDesign.Materials
             }
 
             // deep clone. downstreams objs will have contain changes made in this method, upstream objs will not.
-            var elasticity = new StruSoft.Interop.Tda_elasticity();
-            elasticity.EN_199211_2004 = new StruSoft.Interop.Tda_elasticityEN_199211_2004()
+            var elasticity = new StruSoft.Interop_24.Tda_elasticity();
+            elasticity.EN_199211_2004 = new StruSoft.Interop_24.Tda_elasticityEN_199211_2004()
             {
                 T0 = to,
                 Cement_type = cementType,
