@@ -40,6 +40,9 @@ namespace FemDesign.Grasshopper
 
             evaluationUnit.RegisterInputParam(new Param_Boolean(), "ReopeningCracks", "ReopeningCracks", "", GH_ParamAccess.item, new GH_Boolean(false));
             evaluationUnit.Inputs[evaluationUnit.Inputs.Count - 1].Parameter.Optional = true;
+
+            evaluationUnit.RegisterInputParam(new Param_Boolean(), "UseUpperLimitForEq711", "UseUpperLimitForEq711", "", GH_ParamAccess.item, new GH_Boolean(false));
+            evaluationUnit.Inputs[evaluationUnit.Inputs.Count - 1].Parameter.Optional = true;
         }
 
         public override void SolveInstance(IGH_DataAccess DA, out string msg, out GH_RuntimeMessageLevel level)
@@ -64,8 +67,10 @@ namespace FemDesign.Grasshopper
             bool reopeningCracks = false;
             DA.GetData(4, ref reopeningCracks);
 
+            bool UseUpperLimitForEq711 = false;
+            DA.GetData(5, ref UseUpperLimitForEq711);
 
-            var concreteDesignParameters = new FemDesign.Calculate.ConcreteDesignConfig(_calculationMethod, crackQuasiPermanent, crackFrequent, crackCharacteristic, reopeningCracks);
+            var concreteDesignParameters = new FemDesign.Calculate.ConcreteDesignConfig(_calculationMethod, crackQuasiPermanent, crackFrequent, crackCharacteristic, reopeningCracks, UseUpperLimitForEq711);
 
             DA.SetData(0, concreteDesignParameters);
         }

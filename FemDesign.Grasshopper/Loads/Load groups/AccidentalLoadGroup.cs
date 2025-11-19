@@ -11,7 +11,6 @@ using Rhino.Geometry;
 using FemDesign.Loads;
 using FemDesign.Grasshopper.Extension.ComponentExtension;
 using Grasshopper.Kernel.Special;
-using static FemDesign.Calculate.ConcreteDesignConfig;
 using FemDesign.GenericClasses;
 using FemDesign.Calculate;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;

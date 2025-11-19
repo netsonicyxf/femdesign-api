@@ -54,6 +54,7 @@ namespace FemDesign.Calculate
             // Concrete calculation parameters
             var concreteConfig = new Calculate.ConcreteDesignConfig(ConcreteDesignConfig.CalculationMethod.NominalCurvature, true, false, true);
             concreteConfig.ReopeningCracks = true;
+            concreteConfig.UseUpperLimitForEq711 = true;
 
             var cmdConfig = new CmdConfig(configPath, ecst, steelDesign, steelConfig, concreteConfig);
 
