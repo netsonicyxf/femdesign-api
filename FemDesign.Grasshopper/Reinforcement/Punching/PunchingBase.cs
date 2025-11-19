@@ -28,7 +28,7 @@ namespace FemDesign.Grasshopper
         protected override Bitmap Icon => FemDesign.Properties.Resources.Punching;
 
         public PunchingBase()
-            : base("Punching", "Punching",
+            : base("PunchingReinforcement", "PunchingReinforcement",
               "Punching reinforcement settings for a FEM-Design model.",
               CategoryName.Name(), SubCategoryName.CatReinforcement())
         {

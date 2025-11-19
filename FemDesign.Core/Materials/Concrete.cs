@@ -1,6 +1,6 @@
 // https://strusoft.com/
 
-using StruSoft.Interop.StruXml.Data;
+using StruSoft.Interop;
 using System.Xml.Serialization;
 
 namespace FemDesign.Materials
@@ -12,16 +12,16 @@ namespace FemDesign.Materials
     public partial class Concrete: MaterialBase
     {
         [XmlElement("tda_creep")]
-        public StruSoft.Interop.StruXml.Data.Tda_creep2 CreepTimeDependant { get; set; }
+        public StruSoft.Interop.Tda_creep2 CreepTimeDependant { get; set; }
 
         [XmlElement("tda_shrinkage")]
-        public StruSoft.Interop.StruXml.Data.Tda_shrinkage ShrinkageTimeDependant { get; set; }
+        public StruSoft.Interop.Tda_shrinkage ShrinkageTimeDependant { get; set; }
 
         [XmlElement("tda_elasticity")]
-        public StruSoft.Interop.StruXml.Data.Tda_elasticity ElasticityTimeDependant { get; set; }
+        public StruSoft.Interop.Tda_elasticity ElasticityTimeDependant { get; set; }
 
         [XmlElement("plastic_analysis_data")]
-        public StruSoft.Interop.StruXml.Data.Concrete_pl_data Plasticity { get; set; }
+        public StruSoft.Interop.Concrete_pl_data Plasticity { get; set; }
 
         [XmlAttribute("Fck")]
         public string Fck { get; set; } // material_base_value
@@ -101,7 +101,7 @@ namespace FemDesign.Materials
 
         internal void SetPlasticity(bool plastic = true, bool hardening = true, CrushingCriterion crushing = CrushingCriterion.Prager, bool tensionStrength = true, TensionStiffening tensionStiffening = TensionStiffening.Hinton, ReducedCompression reducedCompression = ReducedCompression.Vecchio1, bool reducedTransverse = false, bool ultimateStrainRebars = true )
         {
-            var plasticity = new StruSoft.Interop.StruXml.Data.Concrete_pl_attribs();
+            var plasticity = new StruSoft.Interop.Concrete_pl_attribs();
             plasticity.Elasto_plastic_behaviour = plastic;
             plasticity.Plastic_hardening = hardening;
 
@@ -159,6 +159,7 @@ namespace FemDesign.Materials
             this.Plasticity.Sf = plasticity;
             this.Plasticity.Sc = plasticity;
         }
+
 
     }
 

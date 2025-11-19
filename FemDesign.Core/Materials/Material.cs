@@ -232,5 +232,90 @@ namespace FemDesign.Materials
             return newMaterial;
         }
 
+        public static Material SetCreep(this Material material, int to, int humidity, bool calculateAc, double ac, double u, bool nonLinearCreep, StruSoft.Interop.Cement_type cementType, bool increaseFinalValue)
+        {
+            if (material.Concrete == null)
+            {
+                throw new System.ArgumentException("Material must be concrete!");
+            }
+
+            // deep clone. downstreams objs will have contain changes made in this method, upstream objs will not.
+            var creep = new StruSoft.Interop.Tda_creep2();
+            creep.EN_199211_2004 = new StruSoft.Interop.Tda_creep_EN1992()
+            {
+                T0 = to,
+                RH = humidity,
+                Calculate_Ac_u = calculateAc,
+                Ac = ac,
+                U = u,
+                Sigma_relevant = nonLinearCreep,
+                Cement_type = cementType,
+                Increase_final_value = increaseFinalValue
+            };
+
+
+            Material newMaterial = material.DeepClone();
+            newMaterial.EntityCreated();
+            newMaterial.Concrete.CreepTimeDependant = creep;
+            newMaterial.EntityModified();
+
+            // return
+            return newMaterial;
+        }
+
+        public static Material SetShrinkage(this Material material, int to, int humidity, bool calculateAc, double ac, double u, StruSoft.Interop.Cement_type cementType)
+        {
+            if (material.Concrete == null)
+            {
+                throw new System.ArgumentException("Material must be concrete!");
+            }
+
+            // deep clone. downstreams objs will have contain changes made in this method, upstream objs will not.
+            var shrinkage = new StruSoft.Interop.Tda_shrinkage();
+            shrinkage.EN_199211_2004 = new StruSoft.Interop.Tda_shrinkageEN_199211_2004()
+            {
+                Ts = to,
+                RH = humidity,
+                Calculate_Ac_u = calculateAc,
+                Ac = ac,
+                U = u,
+                Cement_type = cementType,
+            };
+
+
+            Material newMaterial = material.DeepClone();
+            newMaterial.EntityCreated();
+            newMaterial.Concrete.ShrinkageTimeDependant = shrinkage;
+            newMaterial.EntityModified();
+
+            // return
+            return newMaterial;
+        }
+
+        public static Material setElasticity(this Material material, int to, StruSoft.Interop.Cement_type cementType)
+        {
+            if (material.Concrete == null)
+            {
+                throw new System.ArgumentException("Material must be concrete!");
+            }
+
+            // deep clone. downstreams objs will have contain changes made in this method, upstream objs will not.
+            var elasticity = new StruSoft.Interop.Tda_elasticity();
+            elasticity.EN_199211_2004 = new StruSoft.Interop.Tda_elasticityEN_199211_2004()
+            {
+                T0 = to,
+                Cement_type = cementType,
+            };
+
+
+            Material newMaterial = material.DeepClone();
+            newMaterial.EntityCreated();
+            newMaterial.Concrete.ElasticityTimeDependant = elasticity;
+            newMaterial.EntityModified();
+
+            // return
+            return newMaterial;
+        }
+
     }
 }

@@ -24,7 +24,7 @@ namespace FemDesign.Grasshopper
             pManager[pManager.ParamCount - 1].Optional = true;
             pManager.AddBooleanParameter("Plastic-Hardening", "Plastic-Hardening", "Plastic-Hardening", GH_ParamAccess.item, true);
             pManager[pManager.ParamCount - 1].Optional = true;
-            pManager.AddTextParameter("Crushing", "Crushing", "Crushing", GH_ParamAccess.item, "\"Connect 'ValueList' to get the options.\nCrushing type:\nPrager\nHinton\nCervera\nCrisfield");
+            pManager.AddTextParameter("Crushing", "Crushing", "\"Connect 'ValueList' to get the options.\nCrushing type:\nPrager\nHinton\nCervera\nCrisfield", GH_ParamAccess.item, "Prager");
             pManager[pManager.ParamCount - 1].Optional = true;
             pManager.AddBooleanParameter("Tension-Strength", "Tension-Strength", "Tension strength in plastic flow rule", GH_ParamAccess.item, true);
             pManager[pManager.ParamCount - 1].Optional = true;
