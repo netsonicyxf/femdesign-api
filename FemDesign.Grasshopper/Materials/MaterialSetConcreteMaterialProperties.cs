@@ -62,7 +62,6 @@ namespace FemDesign.Grasshopper
 
             //
             FemDesign.Materials.Material modifiedMaterial = FemDesign.Materials.Material.ConcreteMaterialProperties(material, creepUls, creepSlq, creepSlf, creepSlc, shrinkage);
-            modifiedMaterial.EntityModified();
 
             // set output
             DA.SetData(0, modifiedMaterial);
