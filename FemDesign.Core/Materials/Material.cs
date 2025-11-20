@@ -232,7 +232,7 @@ namespace FemDesign.Materials
             return newMaterial;
         }
 
-        public static Material SetCreep(this Material material, int to, int humidity, bool calculateAc, double ac, double u, bool nonLinearCreep, StruSoft.Interop_24.Cement_type cementType, bool increaseFinalValue)
+        public static Material SetCreep(this Material material, int to = 28, int humidity = 50, bool nonLinearCreep = true, StruSoft.Interop_24.Cement_type cementType = StruSoft.Interop_24.Cement_type.Class_S, bool increaseFinalValue = true)
         {
             if (material.Concrete == null)
             {
@@ -245,9 +245,9 @@ namespace FemDesign.Materials
             {
                 T0 = to,
                 RH = humidity,
-                Calculate_Ac_u = calculateAc,
-                Ac = ac,
-                U = u,
+                Calculate_Ac_u = true,
+                Ac = 0.001, // set a low value as FEM-Design will overwrite with the right value
+                U = 0.001, // set a low value as FEM-Design will overwrite with the right value
                 Sigma_relevant = nonLinearCreep,
                 Cement_type = cementType,
                 Increase_final_value = increaseFinalValue
@@ -263,7 +263,7 @@ namespace FemDesign.Materials
             return newMaterial;
         }
 
-        public static Material SetShrinkage(this Material material, int to, int humidity, bool calculateAc, double ac, double u, StruSoft.Interop_24.Cement_type cementType)
+        public static Material SetShrinkage(this Material material, int to = 28, int humidity = 50, StruSoft.Interop_24.Cement_type cementType = StruSoft.Interop_24.Cement_type.Class_S)
         {
             if (material.Concrete == null)
             {
@@ -276,9 +276,9 @@ namespace FemDesign.Materials
             {
                 Ts = to,
                 RH = humidity,
-                Calculate_Ac_u = calculateAc,
-                Ac = ac,
-                U = u,
+                Calculate_Ac_u = true,
+                Ac = 0.001, // set a low value as FEM-Design will overwrite with the right value
+                U = 0.001, // set a low value as FEM-Design will overwrite with the right value
                 Cement_type = cementType,
             };
 
@@ -292,7 +292,7 @@ namespace FemDesign.Materials
             return newMaterial;
         }
 
-        public static Material setElasticity(this Material material, int to, StruSoft.Interop_24.Cement_type cementType)
+        public static Material setElasticity(this Material material, int to = 28, StruSoft.Interop_24.Cement_type cementType = StruSoft.Interop_24.Cement_type.Class_S)
         {
             if (material.Concrete == null)
             {
