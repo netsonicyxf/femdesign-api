@@ -361,50 +361,73 @@ namespace FemDesign
             string logfile = OutputFileHelper.GetLogfilePath(OutputDir);
             FdScript script;
 
-            if (analysis.Comb != null)
+            if(analysis.CalcCase || analysis.CalcComb)
             {
-                if(analysis.Comb.CombItem.Any(CombItem => CombItem.CombName != null) || analysis.Comb.CombItem.Count() == 0)
+                if (analysis.Comb == null) analysis.Comb = Comb.Default();
+                var analysis_static = Analysis.StaticAnalysis(analysis.Comb, analysis.CalcCase, analysis.CalcComb);
+
+                if (analysis_static.Comb.CombItem.Any(CombItem => CombItem.CombName != null) || analysis_static.Comb.CombItem.Count() == 0)
                 {
-                    analysis.SetCombAnalysis(this);
+                    analysis_static.SetCombAnalysis(this);
                 }
                 script = new FdScript(
                     logfile,
                     new CmdUser(CmdUserModule.RESMODE),
-                    new CmdCalculation(analysis));
-                this.RunScript(script, "RunAnalysis");
-                    
+                    new CmdCalculation(analysis_static));
+                this.RunScript(script, "RunStaticAnalysis");
             }
 
             if (analysis.Stability != null)
             {
-                analysis.SetStabilityAnalysis(this);
+                var statbility_analysis = analysis.DeepClone();
+                statbility_analysis.SetStabilityAnalysis(this);
+
                 script = new FdScript(
                     logfile,
                     new CmdUser(CmdUserModule.RESMODE),
-                    new CmdCalculation(analysis));
-                this.RunScript(script, "RunAnalysis");
+                    new CmdCalculation(statbility_analysis));
+                this.RunScript(script, "RunStabilityAnalysis");
             }
 
             if (analysis.Imperfection != null)
             {
-                analysis.SetImperfectionAnalysis(this);
+                var imperfection_analysis = analysis.DeepClone();
+                imperfection_analysis.SetImperfectionAnalysis(this);
+
                 script = new FdScript(
                     logfile,
                     new CmdUser(CmdUserModule.RESMODE),
                     new CmdCalculation(analysis));
-                this.RunScript(script, "RunAnalysis");
+                this.RunScript(script, "RunImperfectionAnalysis");
             }
 
-            if (analysis.Freq != null || analysis.Footfall != null || analysis.PeriodicEx != null || analysis.ExForce != null || analysis.GroundAcc != null)
+            if (analysis.CalcFreq)
             {
+                if (analysis.Freq == null) analysis.Freq = Freq.Default();
+                var freq_analysis = Analysis.Eigenfrequencies(analysis.Freq);
+
+                script = new FdScript(
+                    logfile,
+                    new CmdUser(CmdUserModule.RESMODE),
+                    new CmdCalculation(freq_analysis));
+                this.RunScript(script, "RunFreqAnalysis");
+            }
+
+            // it requires a refactor
+            if (analysis.Footfall != null || analysis.PeriodicEx != null || analysis.ExForce != null || analysis.GroundAcc != null)
+            {
+                analysis.CalcCase = false;
+                analysis.CalcComb = false;
+                analysis.CalcFreq = false;
+                analysis.CalcImpf = false;
+                analysis.CalcStab = false;
+
                 script = new FdScript(
                     logfile,
                     new CmdUser(CmdUserModule.RESMODE),
                     new CmdCalculation(analysis));
                 this.RunScript(script, "RunAnalysis");
             }
-
-
         }
 
         /// <summary>

@@ -450,6 +450,16 @@ namespace FemDesign.Calculate
         }
 
         /// <summary>
+        /// Define an eigenfrequencies analysis.
+        /// </summary>
+        /// <param name="freqSettings"></param>
+        /// <returns></returns>
+        public static Analysis Eigenfrequencies(Freq freqSettings)
+        {
+            return new Analysis(freq: freqSettings, calcFreq: true);
+        }
+
+        /// <summary>
         /// Define ground acceleration analysis.
         /// </summary>
         /// <param name="levelAccSpectra">If true, the level acceleration response spectra calculation will be executed.</param>

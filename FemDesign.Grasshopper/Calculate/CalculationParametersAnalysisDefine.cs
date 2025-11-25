@@ -87,7 +87,7 @@ namespace FemDesign.Grasshopper
                 // pass
             }
 
-            FemDesign.Calculate.Comb _comb = FemDesign.Calculate.Comb.Default();
+            FemDesign.Calculate.Comb _comb = null;
             if (!DA.GetData("Comb", ref _comb))
             {
                 // pass
