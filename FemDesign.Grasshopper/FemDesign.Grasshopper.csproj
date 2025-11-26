@@ -76,6 +76,10 @@
     <Compile Include="Calculate\OBSOLETE\ApplicationRun_OBSOLETE2403.cs" />
     <Compile Include="Calculate\Bedding.cs" />
     <Compile Include="Calculate\CalculationParametersAnalysisDefine.cs" />
+    <Compile Include="Pipe\FemDesignCreateResPoints.cs" />
+    <Compile Include="Pipe\FemDesignGetEigenfrequencyResults.cs" />
+    <Compile Include="Pipe\FemDesignGetFeaModel.cs" />
+    <Compile Include="Pipe\FemDesignGetStabilityResults.cs" />
     <Compile Include="Pipe\FemDesignRunAnalysis.cs" />
     <Compile Include="Pipe\FemDesignRunDesign.cs" />
     <Compile Include="Calculate\OBSOLETE\GlobalConfigs_OBSOLETE2307.cs" />
@@ -227,16 +231,15 @@
     <Compile Include="Pipe\OBSOLETE\FemDesignConnectionComponent_OBSOLETE2403.cs" />
     <Compile Include="Pipe\FemDesignConnectionComponent.cs" />
     <Compile Include="Pipe\FemDesignOpen.cs" />
+    <Compile Include="Pipe\OBSOLETE\PipeEigenFrequencyResults_OBSOLETE2403.cs" />
+    <Compile Include="Pipe\OBSOLETE\PipeGetFeaModel_OBSOLETE2403.cs" />
+    <Compile Include="Pipe\OBSOLETE\PipeResultPoints_OBSOLETE2403.cs" />
     <Compile Include="Pipe\OBSOLETE\PipeRunDesign_OBSOLETE.cs" />
     <Compile Include="Pipe\OBSOLETE\PipeCfg_OBSOLETE.cs" />
     <Compile Include="Pipe\OBSOLETE\PipeCfg_OBSOLETE2.cs" />
-    <Compile Include="Pipe\PipeCreateResPoint.cs" />
-    <Compile Include="Pipe\PipeGetFEA.cs" />
     <Compile Include="Pipe\OBSOLETE\PipeGetModel_OBSOLETE2403.cs" />
     <Compile Include="Pipe\OBSOLETE\PipeGetQuantities_OBSOLETE2403.cs" />
     <Compile Include="Pipe\OBSOLETE\PipeOpen_OBSOLETE2403.cs" />
-    <Compile Include="Pipe\PipeReadEigenFrequencyResults.cs" />
-    <Compile Include="Pipe\PipeReadStabilityResults.cs" />
     <Compile Include="Pipe\OBSOLETE\PipeResultFromBsc_OBSOLETE2403.cs" />
     <Compile Include="Pipe\FemDesignGetCaseCombResults.cs" />
     <Compile Include="Pipe\FemDesignSaveAs.cs" />
@@ -249,7 +252,6 @@
     <Compile Include="Pipe\FemDesignDisconnect.cs" />
     <Compile Include="Pipe\OBSOLETE\PipeSetCfg_OBSOLETE2403.cs" />
     <Compile Include="Pipe\OBSOLETE\PipeSetGlobalCfg_OBSOLETE2306.cs" />
-    <Compile Include="Pipe\WIP_PipeReadStabilityResults.cs" />
     <Compile Include="Pipe\OBSOLETE\PipeReadCaseCombResults_OBSOLETE2403.cs" />
     <Compile Include="Pipe\OBSOLETE\PipeResultFromBsc_OBSOLETE.cs" />
     <Compile Include="Pipe\OBSOLETE\PipeRunAnalysis_OBSOLETE2403.cs" />
@@ -294,6 +296,7 @@
     <Compile Include="Pipe\OBSOLETE\PipeRunDesign_OBSOLETE2403.cs" />
     <Compile Include="Pipe\OBSOLETE\PipeSaveAs_OBSOLETE2403.cs" />
     <Compile Include="Pipe\OBSOLETE\PipeSaveDocumentation_OBSOLETE2403.cs" />
+    <Compile Include="Pipe\OBSOLETE\PipeStabilityResults_OBSOLETE2403.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
