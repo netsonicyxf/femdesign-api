@@ -6,8 +6,8 @@ using System.Reflection;
 using Grasshopper;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
+
 using FemDesign.Calculate;
-using FemDesign.Results;
 
 namespace FemDesign.Grasshopper
 {

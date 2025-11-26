@@ -11,9 +11,9 @@ using GrasshopperAsyncComponent;
 
 namespace FemDesign.Grasshopper
 {
-    public class PipeGetFeaModel : GH_AsyncComponent
+    public class PipeGetFeaModel_OBSOLETE2403 : GH_AsyncComponent
     {
-        public PipeGetFeaModel() : base("FEM-Design.GetFeModel", "GetFeModel", "Read the finite element data.", CategoryName.Name(), SubCategoryName.Cat8())
+        public PipeGetFeaModel_OBSOLETE2403() : base("FEM-Design.GetFeModel", "GetFeModel", "Read the finite element data.", CategoryName.Name(), SubCategoryName.Cat8())
         {
 
             BaseWorker = new ApplicationGetFeaModelWorker(this);
@@ -38,7 +38,7 @@ namespace FemDesign.Grasshopper
         protected override System.Drawing.Bitmap Icon => FemDesign.Properties.Resources.FEM_GetMesh;
 
         public override Guid ComponentGuid => new Guid("{6231B7A4-936A-4BA2-8302-D3BB4CA1594F}");
-        public override GH_Exposure Exposure => GH_Exposure.tertiary;
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
     }
 
     public class ApplicationGetFeaModelWorker : WorkerInstance

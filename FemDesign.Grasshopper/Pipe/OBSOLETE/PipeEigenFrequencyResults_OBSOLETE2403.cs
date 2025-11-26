@@ -2,11 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 using System.Reflection;
 using Grasshopper;
 using Grasshopper.Kernel;
-using Grasshopper.Kernel.Data;
 using GrasshopperAsyncComponent;
 
 using FemDesign.Calculate;
@@ -15,9 +13,9 @@ using FemDesign.Results.Utils;
 
 namespace FemDesign.Grasshopper
 {
-    public class PipeEigenFrequencyResults : GH_AsyncComponent
+    public class PipeEigenFrequencyResults_OBSOLETE2403 : GH_AsyncComponent
     {
-        public PipeEigenFrequencyResults() : base("FEM-Design.GetEigenfrequencyResults", "EigenfrequencyResults", "Read the eigenfrequency results from a model. .csv list files are saved in the same work directory as StruxmlPath.\nDO NOT USE THE COMPONENT IF YOU WANT TO PERFORM ITERATIVE ANALYSIS (i.e. Galapos)", CategoryName.Name(), SubCategoryName.Cat8())
+        public PipeEigenFrequencyResults_OBSOLETE2403() : base("FEM-Design.GetEigenfrequencyResults", "EigenfrequencyResults", "Read the eigenfrequency results from a model. .csv list files are saved in the same work directory as StruxmlPath.\nDO NOT USE THE COMPONENT IF YOU WANT TO PERFORM ITERATIVE ANALYSIS (i.e. Galapos)", CategoryName.Name(), SubCategoryName.Cat8())
         {
             BaseWorker = new ApplicationReadEigenFrequencyResultWorker(this);
         }
@@ -46,7 +44,7 @@ namespace FemDesign.Grasshopper
         protected override System.Drawing.Bitmap Icon => FemDesign.Properties.Resources.FEM_readresult;
 
         public override Guid ComponentGuid => new Guid("{285AA531-CFCF-43A7-95DC-6101D5F674B4}");
-        public override GH_Exposure Exposure => GH_Exposure.tertiary;
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
     }
 
     public class ApplicationReadEigenFrequencyResultWorker : WorkerInstance

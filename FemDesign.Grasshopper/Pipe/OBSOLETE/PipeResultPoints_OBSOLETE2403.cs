@@ -12,9 +12,9 @@ using FemDesign.Calculate;
 
 namespace FemDesign.Grasshopper
 {
-    public class PipeResultPoints : GH_AsyncComponent
+    public class PipeResultPoints_OBSOLETE2403 : GH_AsyncComponent
     {
-        public PipeResultPoints() : base("FEM-Design.CreateResPoints", "CreateResPoints", "Create result points.\nDO NOT USE THE COMPONENT IF YOU WANT TO PERFORM ITERATIVE ANALYSIS (i.e. Galapos)", CategoryName.Name(), SubCategoryName.Cat8())
+        public PipeResultPoints_OBSOLETE2403() : base("FEM-Design.CreateResPoints", "CreateResPoints", "Create result points.\nDO NOT USE THE COMPONENT IF YOU WANT TO PERFORM ITERATIVE ANALYSIS (i.e. Galapos)", CategoryName.Name(), SubCategoryName.Cat8())
         {
             BaseWorker = new ApplicationCreateResultPoints(this);
         }
@@ -35,7 +35,7 @@ namespace FemDesign.Grasshopper
 
         protected override System.Drawing.Bitmap Icon => FemDesign.Properties.Resources.FEM_readresult;
         public override Guid ComponentGuid => new Guid("{6D03BF35-92DB-4207-99EA-91372E9E7A70}");
-        public override GH_Exposure Exposure => GH_Exposure.tertiary;
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
 
         private class ApplicationCreateResultPoints : WorkerInstance
         {
