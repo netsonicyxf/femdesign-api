@@ -11,7 +11,7 @@ namespace FemDesign.Grasshopper
 	/// </summary>
 	public class FemDesignRunDesign : FEM_Design_API_Component
 	{
-		public FemDesignRunDesign() : base("FEM-Design.RunDesign", "RunDesign", "Run design on current/open model using shared connection.", CategoryName.Name(), SubCategoryName.CatHub())
+		public FemDesignRunDesign() : base("FEM-Design.RunDesign", "RunDesign", "Run design on current/open model using shared connection.", CategoryName.Name(), SubCategoryName.Cat8())
 		{
 		}
 

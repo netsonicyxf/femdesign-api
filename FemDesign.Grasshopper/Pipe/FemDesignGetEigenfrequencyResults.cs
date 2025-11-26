@@ -61,8 +61,8 @@ namespace FemDesign.Grasshopper
             var log = new List<string>();
             bool success = false;
 
-            var vibrationTree = new DataTree<NodalVibration>();
-            var frequencyTree = new DataTree<EigenFrequencies>();
+            var vibrationTree = new DataTree<FemDesign.Results.NodalVibration>();
+            var frequencyTree = new DataTree<FemDesign.Results.EigenFrequencies>();
 
             // check inputs
             if (handle == null)
@@ -85,14 +85,14 @@ namespace FemDesign.Grasshopper
                             return res.ToList();
                         }
 
-                        var vibrationRes = InvokeGetResults(typeof(NodalVibration)).Cast<NodalVibration>().ToList();
-                        var frequencyRes = InvokeGetResults(typeof(EigenFrequencies)).Cast<EigenFrequencies>().ToList();
+                        var vibrationRes = InvokeGetResults(typeof(FemDesign.Results.NodalVibration)).Cast<FemDesign.Results.NodalVibration>().ToList();
+                        var frequencyRes = InvokeGetResults(typeof(FemDesign.Results.EigenFrequencies)).Cast<FemDesign.Results.EigenFrequencies>().ToList();
 
                         if (vibrationRes.Count == 0 && frequencyRes.Count == 0)
                             throw new Exception("Eigenfrequencies results have not been found. Have you run the eigenfrequencies analysis?");
 
-                        string vibPropName = nameof(NodalVibration.ShapeId);
-                        string freqPropName = nameof(EigenFrequencies.ShapeId);
+                        string vibPropName = nameof(FemDesign.Results.NodalVibration.ShapeId);
+                        string freqPropName = nameof(FemDesign.Results.EigenFrequencies.ShapeId);
 
                         if (shapeIds.Any())
                         {

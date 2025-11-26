@@ -66,8 +66,8 @@ namespace FemDesign.Grasshopper
             var log = new List<string>();
             bool success = false;
 
-            var bucklingTree = new DataTree<NodalBucklingShape>();
-            var critParameterTree = new DataTree<CriticalParameter>();
+            var bucklingTree = new DataTree<FemDesign.Results.NodalBucklingShape>();
+            var critParameterTree = new DataTree<FemDesign.Results.CriticalParameter>();
 
             try
             {
@@ -92,8 +92,8 @@ namespace FemDesign.Grasshopper
                         }
 
                         // read full result sets
-                        var bucklingRes = InvokeStabilityResults(typeof(NodalBucklingShape)).Cast<NodalBucklingShape>().ToList();
-                        var critParamRes = InvokeStabilityResults(typeof(CriticalParameter)).Cast<CriticalParameter>().ToList();
+                        var bucklingRes = InvokeStabilityResults(typeof(FemDesign.Results.NodalBucklingShape)).Cast<FemDesign.Results.NodalBucklingShape>().ToList();
+                        var critParamRes = InvokeStabilityResults(typeof(FemDesign.Results.CriticalParameter)).Cast<FemDesign.Results.CriticalParameter>().ToList();
 
                         if (bucklingRes.Count == 0)
                             throw new Exception("Stability results have not been found. Have you run the Stability analysis?");
@@ -131,7 +131,7 @@ namespace FemDesign.Grasshopper
             DA.SetDataList("Log", log);
         }
 
-        private static void ValidateCombos(List<NodalBucklingShape> results, List<string> combos)
+        private static void ValidateCombos(List<FemDesign.Results.NodalBucklingShape> results, List<string> combos)
         {
             if (!combos.Any())
                 return;
@@ -144,7 +144,7 @@ namespace FemDesign.Grasshopper
             }
         }
 
-        private static void ValidateShapes(List<NodalBucklingShape> results, List<int> shapes)
+        private static void ValidateShapes(List<FemDesign.Results.NodalBucklingShape> results, List<int> shapes)
         {
             if (!shapes.Any())
                 return;
@@ -157,11 +157,11 @@ namespace FemDesign.Grasshopper
             }
         }
 
-        private static DataTree<NodalBucklingShape> CreateBucklingTree(List<NodalBucklingShape> results)
+        private static DataTree<FemDesign.Results.NodalBucklingShape> CreateBucklingTree(List<FemDesign.Results.NodalBucklingShape> results)
         {
             var uniqueCaseId = results.Select(x => x.CaseIdentifier).Distinct().ToList();
             var uniqueShape = results.Select(x => x.Shape).Distinct().ToList();
-            var resultsTree = new DataTree<NodalBucklingShape>();
+            var resultsTree = new DataTree<FemDesign.Results.NodalBucklingShape>();
 
             for (int i = 0; i < uniqueCaseId.Count; i++)
             {
@@ -190,7 +190,7 @@ namespace FemDesign.Grasshopper
             return resultsTree;
         }
 
-        private static DataTree<NodalBucklingShape> FilterBucklingTree(DataTree<NodalBucklingShape> tree, List<string> loadCombinations, List<int> shapeIds)
+        private static DataTree<FemDesign.Results.NodalBucklingShape> FilterBucklingTree(DataTree<FemDesign.Results.NodalBucklingShape> tree, List<string> loadCombinations, List<int> shapeIds)
         {
             var removable = new List<GH_Path>();
             var filteredTree = tree;
@@ -216,7 +216,7 @@ namespace FemDesign.Grasshopper
             return filteredTree;
         }
 
-        private static DataTree<CriticalParameter> FilterCriticalTree(DataTree<CriticalParameter> tree, List<string> loadCombinations, List<int> shapeIds)
+        private static DataTree<FemDesign.Results.CriticalParameter> FilterCriticalTree(DataTree<FemDesign.Results.CriticalParameter> tree, List<string> loadCombinations, List<int> shapeIds)
         {
             var removable = new List<GH_Path>();
             var filteredTree = tree;
@@ -251,9 +251,9 @@ namespace FemDesign.Grasshopper
             return filteredTree;
         }
 
-        private static DataTree<NodalBucklingShape> RenumberBucklingTree(DataTree<NodalBucklingShape> tree)
+        private static DataTree<FemDesign.Results.NodalBucklingShape> RenumberBucklingTree(DataTree<FemDesign.Results.NodalBucklingShape> tree)
         {
-            var orderedTree = new DataTree<NodalBucklingShape>();
+            var orderedTree = new DataTree<FemDesign.Results.NodalBucklingShape>();
             if (tree.BranchCount == 0)
                 return orderedTree;
 
