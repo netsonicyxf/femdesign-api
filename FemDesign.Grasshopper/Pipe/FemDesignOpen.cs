@@ -8,16 +8,16 @@ namespace FemDesign.Grasshopper
     /// <summary>
     /// Open a model using the shared hub connection (standard GH_Component, UI-blocking).
     /// </summary>
-    public class FemDesignOpen_HubBased : FEM_Design_API_Component
+    public class FemDesignOpen : FEM_Design_API_Component
     {
-        public FemDesignOpen_HubBased() : base("FEM-Design.Open (Hub)", "Open", "Open model in FEM-Design using shared connection.", CategoryName.Name(), SubCategoryName.CatHub())
+        public FemDesignOpen() : base("FEM-Design.OpenModel", "OpenModel", "Open model in FEM-Design using shared connection.", CategoryName.Name(), SubCategoryName.Cat8())
         {
         }
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddGenericParameter("Connection", "Connection", "Shared FEM-Design connection handle.", GH_ParamAccess.item);
-            pManager.AddGenericParameter("Model", "Model", "Model object or file path.", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Model", "Model", "Model to open or file path.", GH_ParamAccess.item);
         }
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
@@ -43,40 +43,40 @@ namespace FemDesign.Grasshopper
             try
             {
                 // Block UI while invoking hub (acceptable per requirements)
-                FemDesignConnectionHub.InvokeAsync(handle.Id, conn =>
+                FemDesignConnectionHub.InvokeAsync(handle.Id, connection =>
                 {
                     void onOutput(string s) { log.Add(s); }
-                    conn.OnOutput += onOutput;
+                    connection.OnOutput += onOutput;
                     try
                     {
                         if (modelIn is string path)
                         {
-                            conn.Open(path);
+                            connection.Open(path);
                         }
                         else if (modelIn is Model m)
                         {
-                            conn.Open(m);
+                            connection.Open(m);
                         }
                         else if (modelIn != null && modelIn.Value is string)
                         {
                             string vpath = modelIn.Value as string;
-                            conn.Open(vpath);
+                            connection.Open(vpath);
                         }
                         else if (modelIn != null && modelIn.Value is Model)
                         {
                             Model vm = modelIn.Value as Model;
-                            conn.Open(vm);
+                            connection.Open(vm);
                         }
                         else
                         {
                             throw new Exception("Unsupported 'Model' input. Provide file path or FemDesign.Model.");
                         }
 
-                        modelOut = conn.GetModel();
+                        modelOut = connection.GetModel();
                     }
                     finally
                     {
-                        conn.OnOutput -= onOutput;
+                        connection.OnOutput -= onOutput;
                     }
                 }).GetAwaiter().GetResult();
 
@@ -95,7 +95,7 @@ namespace FemDesign.Grasshopper
         }
 
         protected override System.Drawing.Bitmap Icon => FemDesign.Properties.Resources.FEM_open;
-        public override Guid ComponentGuid => new Guid("7E2C6206-7B4A-4C6F-8F39-59B324F11213");
+        public override Guid ComponentGuid => new Guid("{667EFCEA-8B2D-4516-ADC5-DBC08585CBA1}");
         public override GH_Exposure Exposure => GH_Exposure.primary;
     }
 }

@@ -6,49 +6,55 @@ using Grasshopper.Kernel;
 namespace FemDesign.Grasshopper
 {
 	/// <summary>
-	/// Get the current open model using the shared hub connection (standard GH_Component, UI-blocking).
+	/// Save model using the shared hub connection (standard GH_Component, UI-blocking).
 	/// </summary>
-	public class FemDesignGetModel_HubBased : FEM_Design_API_Component
+	public class FemDesignSaveAs : FEM_Design_API_Component
 	{
-		public FemDesignGetModel_HubBased() : base("FEM-Design.GetModel (Hub)", "GetModel", "Get the current open model in FEM-Design using shared connection.", CategoryName.Name(), SubCategoryName.CatHub())
+		public FemDesignSaveAs() : base("FEM-Design.Save", "Save", "Save the current model using shared connection.", CategoryName.Name(), SubCategoryName.Cat8())
 		{
 		}
 
 		protected override void RegisterInputParams(GH_InputParamManager pManager)
 		{
 			pManager.AddGenericParameter("Connection", "Connection", "Shared FEM-Design connection handle.", GH_ParamAccess.item);
+			pManager.AddTextParameter("FilePath", "FilePath", "Save the model to .struxml or .str file.", GH_ParamAccess.item);
 		}
 
 		protected override void RegisterOutputParams(GH_OutputParamManager pManager)
 		{
 			pManager.AddGenericParameter("Connection", "Connection", "Shared FEM-Design connection handle.", GH_ParamAccess.item);
-			pManager.AddGenericParameter("Model", "Model", "Current FEM-Design model.", GH_ParamAccess.item);
-			pManager.AddBooleanParameter("Success", "Success", "True if succeeded.", GH_ParamAccess.item);
+			pManager.AddBooleanParameter("Success", "Success", "True if save succeeded.", GH_ParamAccess.item);
 			pManager.AddTextParameter("Log", "Log", "Operation log.", GH_ParamAccess.list);
 		}
 
 		protected override void SolveInstance(IGH_DataAccess DA)
 		{
-            FemDesign.Grasshopper.FemDesignHubHandle handle = null;
+            FemDesignHubHandle handle = null;
             DA.GetData("Connection", ref handle);
+
+			string filePath = null;
+			DA.GetData("FilePath", ref filePath);
 
 			var log = new List<string>();
 			bool success = false;
-			Model model = null;
 
-			try
-			{
-                FemDesignConnectionHub.InvokeAsync(handle.Id, conn =>
+            // check inputs
+            if (string.IsNullOrWhiteSpace(filePath)) 
+				throw new Exception("'FilePath' is null or empty.");
+
+            try
+            {
+                FemDesignConnectionHub.InvokeAsync(handle.Id, connection =>
 				{
 					void onOutput(string s) { log.Add(s); }
-					conn.OnOutput += onOutput;
+					connection.OnOutput += onOutput;
 					try
 					{
-						model = conn.GetModel();
+						connection.Save(filePath);
 					}
 					finally
 					{
-						conn.OnOutput -= onOutput;
+						connection.OnOutput -= onOutput;
 					}
 				}).GetAwaiter().GetResult();
 
@@ -61,16 +67,14 @@ namespace FemDesign.Grasshopper
 			}
 
             DA.SetData("Connection", handle);
-			DA.SetData("Model", model);
 			DA.SetData("Success", success);
 			DA.SetDataList("Log", log);
 		}
 
-		protected override System.Drawing.Bitmap Icon => FemDesign.Properties.Resources.FEM_readresult;
-		public override Guid ComponentGuid => new Guid("B6A1C36B-2B99-4B9F-9C48-8F3D6A9F1E2C");
+		protected override System.Drawing.Bitmap Icon => FemDesign.Properties.Resources.FEM_SaveAs;
+		public override Guid ComponentGuid => new Guid("{9997E67D-1212-4EB4-BA95-B050D6A0563A}");
 		public override GH_Exposure Exposure => GH_Exposure.primary;
 	}
 }
-
 
 

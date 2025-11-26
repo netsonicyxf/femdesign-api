@@ -8,9 +8,9 @@ using Rhino.Commands;
 
 namespace FemDesign.Grasshopper
 {
-    public class PipeOpen : GH_AsyncComponent
+    public class PipeOpen_OBSOLETE2403 : GH_AsyncComponent
     {
-        public PipeOpen() : base("FEM-Design.OpenModel", "OpenModel", "Open model in FEM-Design.", CategoryName.Name(), SubCategoryName.Cat8())
+        public PipeOpen_OBSOLETE2403() : base("FEM-Design.OpenModel", "OpenModel", "Open model in FEM-Design.", CategoryName.Name(), SubCategoryName.Cat8())
         {
             BaseWorker = new ModelOpenWorker(this);
         }
@@ -31,7 +31,7 @@ namespace FemDesign.Grasshopper
         protected override System.Drawing.Bitmap Icon => FemDesign.Properties.Resources.FEM_open;
 
         public override Guid ComponentGuid => new Guid("AF4D71BF-693D-48FA-8C63-9F344A54DDAC");
-        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
     }
 
     /// <summary>

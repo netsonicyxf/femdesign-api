@@ -9,9 +9,9 @@ namespace FemDesign.Grasshopper
 	/// <summary>
 	/// Run design using the shared hub connection (standard GH_Component, UI-blocking).
 	/// </summary>
-	public class FemDesignRunDesign_HubBased : FEM_Design_API_Component
+	public class FemDesignRunDesign : FEM_Design_API_Component
 	{
-		public FemDesignRunDesign_HubBased() : base("FEM-Design.RunDesign (Hub)", "RunDesign", "Run design on current/open model using shared connection.", CategoryName.Name(), SubCategoryName.CatHub())
+		public FemDesignRunDesign() : base("FEM-Design.RunDesign", "RunDesign", "Run design on current/open model using shared connection.", CategoryName.Name(), SubCategoryName.CatHub())
 		{
 		}
 
@@ -44,21 +44,24 @@ namespace FemDesign.Grasshopper
 			var log = new List<string>();
 			bool success = false;
 
-			try
-			{
-                FemDesignConnectionHub.InvokeAsync(handle.Id, conn =>
+            // check inputs
+            if (design == null) 
+				throw new Exception("'Design' input is null.");
+
+            try
+            {
+                FemDesignConnectionHub.InvokeAsync(handle.Id, connection =>
 				{
 					void onOutput(string s) { log.Add(s); }
-					conn.OnOutput += onOutput;
+					connection.OnOutput += onOutput;
 					try
 					{
-						if (design == null) throw new Exception("'Design' input is null.");
 						var userModule = design.Mode;
-						conn.RunDesign(userModule, design, designGroups);
+						connection.RunDesign(userModule, design, designGroups);
 					}
 					finally
 					{
-						conn.OnOutput -= onOutput;
+						connection.OnOutput -= onOutput;
 					}
 				}).GetAwaiter().GetResult();
 
@@ -76,7 +79,7 @@ namespace FemDesign.Grasshopper
 		}
 
 		protected override System.Drawing.Bitmap Icon => FemDesign.Properties.Resources.FEM_RunDesign;
-		public override Guid ComponentGuid => new Guid("B2CDE1C7-4C8F-4B57-9B3B-7B4A1E2C6C9E");
+		public override Guid ComponentGuid => new Guid("{0F185ABC-C496-4C6A-A59C-848ADE3A8390}");
 		public override GH_Exposure Exposure => GH_Exposure.secondary;
 	}
 }

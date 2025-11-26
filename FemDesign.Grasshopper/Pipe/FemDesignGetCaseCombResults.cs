@@ -15,16 +15,16 @@ namespace FemDesign.Grasshopper
     /// Read load cases and load combinations results using the shared hub connection (standard GH_Component, UI-blocking).
     /// Mirrors PipeReadResults logic but executes via FemDesignConnectionHub.
     /// </summary>
-    public class FemDesignGetCaseCombResults_HubBased : FEM_Design_API_Component
+    public class FemDesignGetCaseCombResults : FEM_Design_API_Component
     {
-        public FemDesignGetCaseCombResults_HubBased() : base("FEM-Design.GetCaseCombResults (Hub)", "CaseCombResults", "Read load cases and load combinations results from current model using shared connection.", CategoryName.Name(), SubCategoryName.CatHub())
+        public FemDesignGetCaseCombResults() : base("FEM-Design.GetCaseCombResults", "CaseCombResults", "Read load cases and load combinations results from current model using shared connection. Result files (.csv) are saved into the output directory.", CategoryName.Name(), SubCategoryName.Cat8())
         {
         }
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddGenericParameter("Connection", "Connection", "Shared FEM-Design connection handle.", GH_ParamAccess.item);
-            pManager.AddTextParameter("ResultType", "ResultType", "Result type names under FemDesign.Results namespace (e.g. 'NodalDisplacement').", GH_ParamAccess.list);
+            pManager.AddTextParameter("ResultType", "ResultType", "Result type names (e.g. 'NodalDisplacement').", GH_ParamAccess.list);
             pManager.AddTextParameter("Case Name", "Case Name", "Optional. Load case names to filter. If empty, all cases are considered.", GH_ParamAccess.list);
             pManager[pManager.ParamCount - 1].Optional = true;
             pManager.AddTextParameter("Combination Name", "Combo Name", "Optional. Load combination names to filter. If empty, all combinations are considered.", GH_ParamAccess.list);
@@ -33,7 +33,8 @@ namespace FemDesign.Grasshopper
             pManager[pManager.ParamCount - 1].Optional = true;
             pManager.AddGenericParameter("Options", "Options", "Optional settings for output location. Default is 'ByStep' and 'Vertices'.", GH_ParamAccess.item);
             pManager[pManager.ParamCount - 1].Optional = true;
-            pManager.AddGenericParameter("Units", "Units", "Optional. Specify result units for specific types.", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Units", "Units", "Optional. Specify result units for specific types." +
+                "Default Units are: Length.m, Angle.deg, SectionalData.m, Force.kN, Mass.kg, Displacement.m, Stress.Pa", GH_ParamAccess.item);
             pManager[pManager.ParamCount - 1].Optional = true;
         }
 
@@ -74,10 +75,10 @@ namespace FemDesign.Grasshopper
 
             try
             {
-                FemDesignConnectionHub.InvokeAsync(handle.Id, conn =>
+                FemDesignConnectionHub.InvokeAsync(handle.Id, connection =>
                 {
                     void onOutput(string s) { log.Add(s); }
-                    conn.OnOutput += onOutput;
+                    connection.OnOutput += onOutput;
                     try
                     {
                         int resIndex = 0;
@@ -88,14 +89,13 @@ namespace FemDesign.Grasshopper
 
                             string typeName = $"FemDesign.Results.{rt}, FemDesign.Core";
                             Type resultType = Type.GetType(typeName);
-                            if (resultType == null)
-                                throw new ArgumentException($"Class object of name '{typeName}' does not exist!");
+                            
 
                             // Helper to invoke private generic methods on FemDesignConnection
                             List<Results.IResult> InvokeGeneric(string methodName, Type genericType, object[] args)
                             {
-                                var mi = conn.GetType().GetMethod(methodName, BindingFlags.Instance | BindingFlags.NonPublic).MakeGenericMethod(genericType);
-                                var res = (IEnumerable<Results.IResult>)mi.Invoke(conn, args);
+                                var mi = connection.GetType().GetMethod(methodName, BindingFlags.Instance | BindingFlags.NonPublic).MakeGenericMethod(genericType);
+                                var res = (IEnumerable<Results.IResult>)mi.Invoke(connection, args);
                                 return res.ToList();
                             }
 
@@ -131,7 +131,7 @@ namespace FemDesign.Grasshopper
                     }
                     finally
                     {
-                        conn.OnOutput -= onOutput;
+                        connection.OnOutput -= onOutput;
                     }
                 }).GetAwaiter().GetResult();
 
@@ -150,7 +150,7 @@ namespace FemDesign.Grasshopper
         }
 
         protected override System.Drawing.Bitmap Icon => FemDesign.Properties.Resources.FEM_readresult;
-        public override Guid ComponentGuid => new Guid("D9B9F6B4-62C3-4D62-9E6B-9E2B1D5B2C8A");
+        public override Guid ComponentGuid => new Guid("{51BEFDB6-363C-4F5C-99B1-D75C5FA670F7}");
         public override GH_Exposure Exposure => GH_Exposure.tertiary;
     }
 }

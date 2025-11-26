@@ -9,9 +9,9 @@ namespace FemDesign.Grasshopper
     /// <summary>
     /// Run analysis using the shared hub connection (standard GH_Component, UI-blocking).
     /// </summary>
-    public class FemDesignRunAnalysis_HubBased : FEM_Design_API_Component
+    public class FemDesignRunAnalysis : FEM_Design_API_Component
     {
-        public FemDesignRunAnalysis_HubBased() : base("FEM-Design.RunAnalysis (Hub)", "RunAnalysis", "Run analysis on current/open model using shared connection.", CategoryName.Name(), SubCategoryName.CatHub())
+        public FemDesignRunAnalysis() : base("FEM-Design.RunAnalysis", "RunAnalysis", "Run analysis on current/open model using shared connection.", CategoryName.Name(), SubCategoryName.Cat8())
         {
         }
 
@@ -39,20 +39,23 @@ namespace FemDesign.Grasshopper
             var log = new List<string>();
             bool success = false;
 
+            // check inputs
+            if (analysis == null) 
+                throw new Exception("'Analysis' input is null.");
+
             try
             {
-                FemDesignConnectionHub.InvokeAsync(handle.Id, conn =>
+                FemDesignConnectionHub.InvokeAsync(handle.Id, connection =>
                 {
                     void onOutput(string s) { log.Add(s); }
-                    conn.OnOutput += onOutput;
+                    connection.OnOutput += onOutput;
                     try
                     {
-                        if (analysis == null) throw new Exception("'Analysis' input is null.");
-                        conn.RunAnalysis(analysis);
+                        connection.RunAnalysis(analysis);
                     }
                     finally
                     {
-                        conn.OnOutput -= onOutput;
+                        connection.OnOutput -= onOutput;
                     }
                 }).GetAwaiter().GetResult();
 
@@ -70,7 +73,7 @@ namespace FemDesign.Grasshopper
         }
 
         protected override System.Drawing.Bitmap Icon => FemDesign.Properties.Resources.FEM_RunAnalysis;
-        public override Guid ComponentGuid => new Guid("E3E3A9B8-68C4-4B9F-BE18-ACC6E9C8B852");
+        public override Guid ComponentGuid => new Guid("{166B94CD-DCE9-467A-B693-01405D22D20E}");
         public override GH_Exposure Exposure => GH_Exposure.primary;
     }
 }

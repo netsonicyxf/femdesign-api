@@ -12,9 +12,9 @@ using System.Reflection;
 
 namespace FemDesign.Grasshopper
 {
-    public class PipSave : GH_AsyncComponent
+    public class PipeSaveAs_OBSOLETE2403 : GH_AsyncComponent
     {
-        public PipSave() : base("FEM-Design.Save", "Save", "Save a model.", CategoryName.Name(), SubCategoryName.Cat8())
+        public PipeSaveAs_OBSOLETE2403() : base("FEM-Design.Save", "Save", "Save a model.", CategoryName.Name(), SubCategoryName.Cat8())
         {
             BaseWorker = new ApplicationSaveAs(this);
         }
@@ -33,7 +33,7 @@ namespace FemDesign.Grasshopper
 
         protected override System.Drawing.Bitmap Icon => FemDesign.Properties.Resources.FEM_SaveAs;
         public override Guid ComponentGuid => new Guid("{473C29D5-4021-4D26-8397-56035D3EBC95}");
-        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
     }
 
     public class ApplicationSaveAs : WorkerInstance

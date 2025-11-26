@@ -6,42 +6,35 @@ using Grasshopper.Kernel;
 namespace FemDesign.Grasshopper
 {
 	/// <summary>
-	/// Save documentation using the shared hub connection (standard GH_Component, UI-blocking).
+	/// Get the current open model using the shared hub connection (standard GH_Component, UI-blocking).
 	/// </summary>
-	public class FemDesignSaveDocumentation_HubBased : FEM_Design_API_Component
+	public class FemDesignGetModel : FEM_Design_API_Component
 	{
-		public FemDesignSaveDocumentation_HubBased() : base("FEM-Design.Documentation (Hub)", "SaveDocx", "Save documentation of current model using shared connection.", CategoryName.Name(), SubCategoryName.CatHub())
+		public FemDesignGetModel() : base("FEM-Design.GetModel", "GetModel", "Get the current open model in FEM-Design using shared connection.", CategoryName.Name(), SubCategoryName.Cat8())
 		{
 		}
 
 		protected override void RegisterInputParams(GH_InputParamManager pManager)
 		{
 			pManager.AddGenericParameter("Connection", "Connection", "Shared FEM-Design connection handle.", GH_ParamAccess.item);
-			pManager.AddTextParameter("Docx", "Docx", "Docx file path for the documentation output.", GH_ParamAccess.item);
-			pManager.AddTextParameter("Template", "Template", ".dsc template file path.", GH_ParamAccess.item);
-			pManager[pManager.ParamCount - 1].Optional = true;
 		}
 
 		protected override void RegisterOutputParams(GH_OutputParamManager pManager)
 		{
 			pManager.AddGenericParameter("Connection", "Connection", "Shared FEM-Design connection handle.", GH_ParamAccess.item);
-			pManager.AddBooleanParameter("Success", "Success", "True if documentation saved.", GH_ParamAccess.item);
+			pManager.AddGenericParameter("Model", "Model", "Current FEM-Design model.", GH_ParamAccess.item);
+			pManager.AddBooleanParameter("Success", "Success", "True if succeeded.", GH_ParamAccess.item);
 			pManager.AddTextParameter("Log", "Log", "Operation log.", GH_ParamAccess.list);
 		}
 
 		protected override void SolveInstance(IGH_DataAccess DA)
 		{
-            FemDesignHubHandle handle = null;
+            FemDesign.Grasshopper.FemDesignHubHandle handle = null;
             DA.GetData("Connection", ref handle);
-
-			string docx = null;
-			DA.GetData("Docx", ref docx);
-
-			string template = null;
-			DA.GetData("Template", ref template);
 
 			var log = new List<string>();
 			bool success = false;
+			Model model = null;
 
 			try
 			{
@@ -51,8 +44,7 @@ namespace FemDesign.Grasshopper
 					conn.OnOutput += onOutput;
 					try
 					{
-						if (string.IsNullOrWhiteSpace(docx)) throw new Exception("'Docx' path is null or empty.");
-						conn.SaveDocx(docx, template);
+						model = conn.GetModel();
 					}
 					finally
 					{
@@ -69,14 +61,16 @@ namespace FemDesign.Grasshopper
 			}
 
             DA.SetData("Connection", handle);
+			DA.SetData("Model", model);
 			DA.SetData("Success", success);
 			DA.SetDataList("Log", log);
 		}
 
-		protected override System.Drawing.Bitmap Icon => FemDesign.Properties.Resources.Docx;
-		public override Guid ComponentGuid => new Guid("C1A1D62B-2B2D-4F81-8C7B-21BC04C4B5B8");
+		protected override System.Drawing.Bitmap Icon => FemDesign.Properties.Resources.FEM_readresult;
+		public override Guid ComponentGuid => new Guid("{65B2948C-4F04-4038-AC14-694091005DC5}");
 		public override GH_Exposure Exposure => GH_Exposure.primary;
 	}
 }
+
 
 

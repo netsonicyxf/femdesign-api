@@ -11,9 +11,9 @@ namespace FemDesign.Grasshopper
 	/// <summary>
 	/// Extract results from a model using a .bsc file with the shared hub connection (standard GH_Component, UI-blocking).
 	/// </summary>
-	public class FemDesignResultFromBsc_HubBased : FEM_Design_API_Component
+	public class FemDesignResultFromBsc : FEM_Design_API_Component
 	{
-		public FemDesignResultFromBsc_HubBased() : base("FEM-Design.GetResultFromBsc (Hub)", "ResultFromBsc", "Extract results using .bsc with shared connection.", CategoryName.Name(), SubCategoryName.CatHub())
+		public FemDesignResultFromBsc() : base("FEM-Design.GetResultFromBsc", "ResultFromBsc", "Extract results using a .bsc file with shared connection.", CategoryName.Name(), SubCategoryName.Cat8())
 		{
 		}
 
@@ -55,10 +55,10 @@ namespace FemDesign.Grasshopper
 
 			try
 			{
-				FemDesignConnectionHub.InvokeAsync(handle.Id, conn =>
+				FemDesignConnectionHub.InvokeAsync(handle.Id, connection =>
 				{
 					void onOutput(string s) { log.Add(s); }
-					conn.OnOutput += onOutput;
+					connection.OnOutput += onOutput;
 					try
 					{
 						if (csvPaths == null || csvPaths.Count == 0)
@@ -66,7 +66,7 @@ namespace FemDesign.Grasshopper
 							csvPaths = bscPaths.Select(b => System.IO.Path.ChangeExtension(b, "csv")).ToList();
 						}
 
-						var results = bscPaths.Zip(csvPaths, (bsc, csv) => conn.GetResultsFromBsc(bsc, csv, elements));
+						var results = bscPaths.Zip(csvPaths, (bsc, csv) => connection.GetResultsFromBsc(bsc, csv, elements));
 						int i = 0;
 						foreach (var r in results)
 						{
@@ -76,7 +76,7 @@ namespace FemDesign.Grasshopper
 					}
 					finally
 					{
-						conn.OnOutput -= onOutput;
+						connection.OnOutput -= onOutput;
 					}
 				}).GetAwaiter().GetResult();
 
@@ -95,7 +95,7 @@ namespace FemDesign.Grasshopper
 		}
 
 		protected override System.Drawing.Bitmap Icon => FemDesign.Properties.Resources.FEM_readresult;
-		public override Guid ComponentGuid => new Guid("5B83B0F7-2A6A-4F0C-82D1-1A2A7CC9E4DA");
+		public override Guid ComponentGuid => new Guid("{59667BED-D84B-47E7-BC56-B6D99DC5C274}");
 		public override GH_Exposure Exposure => GH_Exposure.tertiary;
 	}
 }

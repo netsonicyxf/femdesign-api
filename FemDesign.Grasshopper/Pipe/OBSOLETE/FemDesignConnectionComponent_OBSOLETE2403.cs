@@ -9,11 +9,11 @@ using Rhino.Geometry;
 
 namespace FemDesign.Grasshopper
 {
-    public class FemDesignConnectionComponent : FEM_Design_API_Component
+    public class FemDesignConnectionComponent_OBSOLETE2403 : FEM_Design_API_Component
     {
         private FemDesignConnection _connection;
 
-        public FemDesignConnectionComponent() : base("FEM-Design.Connection", "Connection", "Component that creates a direct link between Grasshopper and FEM-Design. Use it to specify the 'Connection' for LiveLink components.", CategoryName.Name(), SubCategoryName.Cat8())
+        public FemDesignConnectionComponent_OBSOLETE2403() : base("FEM-Design.Connection", "Connection", "Component that creates a direct link between Grasshopper and FEM-Design. Use it to specify the 'Connection' for LiveLink components.", CategoryName.Name(), SubCategoryName.Cat8())
         {
         }
         protected override void RegisterInputParams(GH_InputParamManager pManager)
@@ -111,7 +111,7 @@ namespace FemDesign.Grasshopper
 
         protected override System.Drawing.Bitmap Icon => FemDesign.Properties.Resources.FEM_Connection;
         public override Guid ComponentGuid => new Guid("{B2D8285D-0260-479C-91BF-2FA8DAB5A37E}");
-        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
     }
 }
 

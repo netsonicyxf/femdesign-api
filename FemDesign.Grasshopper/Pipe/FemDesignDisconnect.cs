@@ -8,15 +8,15 @@ namespace FemDesign.Grasshopper
 	/// <summary>
 	/// Disconnects a specific FEM-Design hub connection (standard GH_Component, UI-blocking).
 	/// </summary>
-	public class FemDesignDisconnect_HubBased : FEM_Design_API_Component
+	public class FemDesignDisconnect : FEM_Design_API_Component
 	{
-		public FemDesignDisconnect_HubBased() : base("FEM-Design.Disconnect (Hub)", "Disconnect", "Close the FEM-Design instance associated with the given hub connection.", CategoryName.Name(), SubCategoryName.CatHub())
+		public FemDesignDisconnect() : base("FEM-Design.Disconnect", "Disconnect", "Detach the connection, but keeps open FEM-Design.", CategoryName.Name(), SubCategoryName.Cat8())
 		{
 		}
 
 		protected override void RegisterInputParams(GH_InputParamManager pManager)
 		{
-			pManager.AddGenericParameter("Connection", "Connection", "Hub connection handle to disconnect.", GH_ParamAccess.item);
+			pManager.AddGenericParameter("Connection", "Connection", "Connection handle to disconnect.", GH_ParamAccess.item);
 		}
 
 		protected override void RegisterOutputParams(GH_OutputParamManager pManager)
@@ -52,7 +52,7 @@ namespace FemDesign.Grasshopper
 		}
 
 		protected override System.Drawing.Bitmap Icon => FemDesign.Properties.Resources.FEM_Connection;
-		public override Guid ComponentGuid => new Guid("D1D3C1D9-0E4F-4A5E-8C6B-3C1A4E2B9D61");
+		public override Guid ComponentGuid => new Guid("{5A52243F-4136-48F0-9279-3E7E3DF82D2E}");
 		public override GH_Exposure Exposure => GH_Exposure.secondary;
 	}
 }

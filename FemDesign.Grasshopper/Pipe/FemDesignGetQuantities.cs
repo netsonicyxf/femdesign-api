@@ -4,22 +4,32 @@ using System.Collections.Generic;
 using System.Reflection;
 using Grasshopper.Kernel;
 
+using FemDesign.Calculate;
+
 namespace FemDesign.Grasshopper
 {
 	/// <summary>
 	/// Get quantities using the shared hub connection (standard GH_Component, UI-blocking).
 	/// Mirrors PipeGetQuantities behavior.
 	/// </summary>
-	public class FemDesignGetQuantities_HubBased : FEM_Design_API_Component
+	public class FemDesignGetQuantities: FEM_Design_API_Component
 	{
-		public FemDesignGetQuantities_HubBased() : base("FEM-Design.GetQuantities (Hub)", "GetQuantities", "Get quantities from current model using shared connection.", CategoryName.Name(), SubCategoryName.CatHub())
+		public FemDesignGetQuantities() : base("FEM-Design.GetQuantities", "GetQuantities", "Get quantities from current model using shared connection. Result files (.csv) are saved into the output directory.", CategoryName.Name(), SubCategoryName.Cat8())
 		{
 		}
 
 		protected override void RegisterInputParams(GH_InputParamManager pManager)
 		{
 			pManager.AddGenericParameter("Connection", "Connection", "Shared FEM-Design connection handle.", GH_ParamAccess.item);
-			pManager.AddTextParameter("QuantityType", "QuantityType", "Quantity type name matching FemDesign.Results classes.", GH_ParamAccess.item);
+			pManager.AddTextParameter("QuantityType", "QuantityType", "Quantity type:\n\n" +
+                nameof(ListProc.QuantityEstimationConcrete) + "\n" +
+                nameof(ListProc.QuantityEstimationReinforcement) + "\n" +
+                nameof(ListProc.QuantityEstimationSteel) + "\n" +
+                nameof(ListProc.QuantityEstimationTimber) + "\n" +
+                nameof(ListProc.QuantityEstimationTimberPanel) + "\n" +
+                nameof(ListProc.QuantityEstimationMasonry) + "\n" +
+                nameof(ListProc.QuantityEstimationGeneral) + "\n" +
+                nameof(ListProc.QuantityEstimationProfiledPanel), GH_ParamAccess.item);
 			pManager.AddGenericParameter("Units", "Units", "Optional result units.", GH_ParamAccess.item);
 			pManager[pManager.ParamCount - 1].Optional = true;
 		}
@@ -47,27 +57,32 @@ namespace FemDesign.Grasshopper
 			bool success = false;
 			var results = new List<Results.IResult>();
 
-			try
+            // check inputs
+            if (string.IsNullOrWhiteSpace(resultTypeName)) 
+				throw new Exception("'QuantityType' is null or empty.");
+
+            // try getting the quantity result type
+            string typeName = $"FemDesign.Results.{resultTypeName}, FemDesign.Core";
+            Type resultType = Type.GetType(typeName);
+            if (resultType == null) 
+				throw new ArgumentException($"QuantityType '{typeName}' does not exist!");
+
+            try
 			{
-                FemDesignConnectionHub.InvokeAsync(handle.Id, conn =>
+                FemDesignConnectionHub.InvokeAsync(handle.Id, connection =>
 				{
 					void onOutput(string s) { log.Add(s); }
-					conn.OnOutput += onOutput;
+					connection.OnOutput += onOutput;
 					try
 					{
-						if (string.IsNullOrWhiteSpace(resultTypeName)) throw new Exception("'QuantityType' is null or empty.");
-						string typeName = $"FemDesign.Results.{resultTypeName}, FemDesign.Core";
-						Type resultType = Type.GetType(typeName);
-						if (resultType == null) throw new ArgumentException($"Class object of name '{typeName}' does not exist!");
-
 						var methodName = nameof(FemDesign.FemDesignConnection._getQuantities);
-						var mi = conn.GetType().GetMethod(methodName, BindingFlags.Instance | BindingFlags.NonPublic).MakeGenericMethod(resultType);
-						var res = (IEnumerable<Results.IResult>)mi.Invoke(conn, new object[] { units, true });
+						var method = connection.GetType().GetMethod(methodName, BindingFlags.Instance | BindingFlags.NonPublic).MakeGenericMethod(resultType);
+						var res = (IEnumerable<Results.IResult>)method.Invoke(connection, new object[] { units, false });
 						results.AddRange(res);
 					}
 					finally
 					{
-						conn.OnOutput -= onOutput;
+						connection.OnOutput -= onOutput;
 					}
 				}).GetAwaiter().GetResult();
 
@@ -86,7 +101,7 @@ namespace FemDesign.Grasshopper
 		}
 
 		protected override System.Drawing.Bitmap Icon => FemDesign.Properties.Resources.FEM_readresult;
-		public override Guid ComponentGuid => new Guid("1F2D4C7A-6A39-4F73-9F20-1C5E9A7A4B62");
+		public override Guid ComponentGuid => new Guid("{4498FBC1-1EA9-4885-8658-FF79652C51CB}");
 		public override GH_Exposure Exposure => GH_Exposure.tertiary;
 	}
 }

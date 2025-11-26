@@ -17,9 +17,9 @@ using FemDesign.Calculate;
 
 namespace FemDesign.Grasshopper
 {
-    public class PipeGetQuantities : GH_AsyncComponent
+    public class PipeGetQuantities_OBSOLETE2403 : GH_AsyncComponent
     {
-        public PipeGetQuantities() : base(" FEM-Design.GetQuantities", "GetQuantities", "Get quantities from a model. .csv list files are saved in the same work directory as StruxmlPath.\nDO NOT USE THE COMPONENT IF YOU WANT TO PERFORM ITERATIVE ANALYSIS (i.e. Galapos)", CategoryName.Name(), SubCategoryName.Cat8())
+        public PipeGetQuantities_OBSOLETE2403() : base("FEM-Design.GetQuantities", "GetQuantities", "Get quantities from a model. .csv list files are saved in the same work directory as StruxmlPath.\nDO NOT USE THE COMPONENT IF YOU WANT TO PERFORM ITERATIVE ANALYSIS (i.e. Galapos)", CategoryName.Name(), SubCategoryName.Cat8())
         {
             BaseWorker = new ApplicationGetQuantitiesWorker(this);
         }
@@ -54,7 +54,7 @@ namespace FemDesign.Grasshopper
         protected override System.Drawing.Bitmap Icon => FemDesign.Properties.Resources.FEM_readresult;
 
         public override Guid ComponentGuid => new Guid("{81E32E19-C6A6-4E9E-A0B2-EB6CE1BA888F}");
-        public override GH_Exposure Exposure => GH_Exposure.tertiary;
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
 
     }
 

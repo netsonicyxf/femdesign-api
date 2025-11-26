@@ -13,9 +13,9 @@ using System.Dynamic;
 
 namespace FemDesign.Grasshopper
 {
-    public class PipeSetCfg : GH_AsyncComponent
+    public class PipeSetCfg_OBSOLETE2403 : GH_AsyncComponent
     {
-        public PipeSetCfg() : base("FEM-Design.SetConfigurations", "SetCfg", "Set design settings for a FEM-Design model using a configuration file.", CategoryName.Name(), SubCategoryName.Cat8())
+        public PipeSetCfg_OBSOLETE2403() : base("FEM-Design.SetConfigurations", "SetCfg", "Set design settings for a FEM-Design model using a configuration file.", CategoryName.Name(), SubCategoryName.Cat8())
         {
             BaseWorker = new ApplicationSetCfgWorker(this);
         }
@@ -35,7 +35,7 @@ namespace FemDesign.Grasshopper
 
         protected override System.Drawing.Bitmap Icon => FemDesign.Properties.Resources.FEM_Config;
         public override Guid ComponentGuid => new Guid("{AADEF422-856D-4798-9936-125B614F1D8C}");
-        public override GH_Exposure Exposure => GH_Exposure.obscure;
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
     }
 
     public class ApplicationSetCfgWorker : WorkerInstance

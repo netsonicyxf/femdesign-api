@@ -12,9 +12,9 @@ using System.Reflection;
 
 namespace FemDesign.Grasshopper
 {
-    public class PipeDocx : GH_AsyncComponent
+    public class PipeSaveDocumentation_OBSOLETE2403 : GH_AsyncComponent
     {
-        public PipeDocx() : base("FEM-Design.Documentation", "SaveDocx", "Save documentation of a model.", CategoryName.Name(), SubCategoryName.Cat8())
+        public PipeSaveDocumentation_OBSOLETE2403() : base("FEM-Design.Documentation", "SaveDocx", "Save documentation of a model.", CategoryName.Name(), SubCategoryName.Cat8())
         {
             BaseWorker = new ApplicationSaveDocxWorker(this);
         }
@@ -35,7 +35,7 @@ namespace FemDesign.Grasshopper
 
         protected override System.Drawing.Bitmap Icon => FemDesign.Properties.Resources.Docx;
         public override Guid ComponentGuid => new Guid("{48633F87-356E-4E10-AC86-189DAD5AD0B0}");
-        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
     }
 
     public class ApplicationSaveDocxWorker : WorkerInstance

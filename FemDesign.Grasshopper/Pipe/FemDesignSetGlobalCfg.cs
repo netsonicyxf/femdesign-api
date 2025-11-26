@@ -10,16 +10,16 @@ namespace FemDesign.Grasshopper
 	/// Set global configurations using the shared hub connection (standard GH_Component, UI-blocking).
 	/// Mirrors PipeSetGlobalCfg behavior.
 	/// </summary>
-	public class FemDesignSetGlobalCfg_HubBased : FEM_Design_API_Component
+	public class FemDesignSetGlobalCfg : FEM_Design_API_Component
 	{
-		public FemDesignSetGlobalCfg_HubBased() : base("FEM-Design.SetGlobalConfigurations (Hub)", "SetGlobalCfg", "Set global settings for current model using shared connection.", CategoryName.Name(), SubCategoryName.Cat8())
+		public FemDesignSetGlobalCfg() : base("FEM-Design.SetGlobalConfigurations", "SetGlobalCfg", "Set global settings for current model using shared connection. It defines the calculation settings that will instruct FEM-Design in operation like creating the finite element mesh.", CategoryName.Name(), SubCategoryName.Cat8())
 		{
 		}
 
 		protected override void RegisterInputParams(GH_InputParamManager pManager)
 		{
 			pManager.AddGenericParameter("Connection", "Connection", "Shared FEM-Design connection handle.", GH_ParamAccess.item);
-			pManager.AddGenericParameter("GlobalConfig", "GlobCfg", "Filepath of global configuration file or GlobConfig objects.", GH_ParamAccess.list);
+			pManager.AddGenericParameter("GlobalConfig", "GlobCfg", "Filepath of global configuration file or GlobConfig objects.\nIf file path is not provided, the component will read the cmdglobalcfg.xml file in the package manager library folder.\n%AppData%\\McNeel\\Rhinoceros\\packages\\7.0\\FemDesign\\", GH_ParamAccess.list);
 			pManager[pManager.ParamCount - 1].Optional = true;
 		}
 
@@ -43,17 +43,17 @@ namespace FemDesign.Grasshopper
 
 			try
 			{
-                FemDesignConnectionHub.InvokeAsync(handle.Id, conn =>
+                FemDesignConnectionHub.InvokeAsync(handle.Id, connection =>
 				{
 					void onOutput(string s) { log.Add(s); }
-					conn.OnOutput += onOutput;
+					connection.OnOutput += onOutput;
 					try
 					{
 						if (globCfg.Count == 0)
 						{
 							string assemblyLocation = Assembly.GetExecutingAssembly().Location;
 							var globCfgfilePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(assemblyLocation), @"cmdglobalcfg.xml");
-							conn.SetGlobalConfig(globCfgfilePath);
+							connection.SetGlobalConfig(globCfgfilePath);
 						}
 						else
 						{
@@ -61,28 +61,28 @@ namespace FemDesign.Grasshopper
 							{
 								if (c is string s)
 								{
-									conn.SetGlobalConfig(s);
+									connection.SetGlobalConfig(s);
 								}
 								else if (c != null && c.Value is string)
 								{
 									string vs = c.Value as string;
-                                    conn.SetGlobalConfig(vs);
+                                    connection.SetGlobalConfig(vs);
 								}
 								else if (c is FemDesign.Calculate.GlobConfig cfgObj)
 								{
-									conn.SetGlobalConfig(cfgObj);
+									connection.SetGlobalConfig(cfgObj);
 								}
 								else if (c != null && c.Value is FemDesign.Calculate.GlobConfig)
 								{
 									FemDesign.Calculate.GlobConfig vCfgObj = c.Value as FemDesign.Calculate.GlobConfig;
-                                    conn.SetGlobalConfig(vCfgObj);
+                                    connection.SetGlobalConfig(vCfgObj);
 								}
 							}
 						}
 					}
 					finally
 					{
-						conn.OnOutput -= onOutput;
+						connection.OnOutput -= onOutput;
 					}
 				}).GetAwaiter().GetResult();
 
@@ -100,7 +100,7 @@ namespace FemDesign.Grasshopper
 		}
 
 		protected override System.Drawing.Bitmap Icon => FemDesign.Properties.Resources.FEM_Config;
-		public override Guid ComponentGuid => new Guid("BC8A2A7D-8F2D-4B7B-9F52-5C6A8E2F3A44");
+		public override Guid ComponentGuid => new Guid("{C223693E-139D-4A1C-8F02-F8618BEDB4BA}");
 		public override GH_Exposure Exposure => GH_Exposure.obscure;
 	}
 }

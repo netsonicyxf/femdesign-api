@@ -14,9 +14,9 @@ using FemDesign.Results;
 
 namespace FemDesign.Grasshopper
 {
-    public class PipeReadResults : GH_AsyncComponent
+    public class PipeReadResults_OBSOLETE2403 : GH_AsyncComponent
     {
-        public PipeReadResults() : base(" FEM-Design.GetCaseCombResults", "CaseCombResults", "Read load cases and load combinations results from a model. .csv list files are saved in the same work directory as StruxmlPath.\nDO NOT USE THE COMPONENT IF YOU WANT TO PERFORM ITERATIVE ANALYSIS (i.e. Galapos)", CategoryName.Name(), SubCategoryName.Cat8())
+        public PipeReadResults_OBSOLETE2403() : base(" FEM-Design.GetCaseCombResults", "CaseCombResults", "Read load cases and load combinations results from a model. .csv list files are saved in the same work directory as StruxmlPath.\nDO NOT USE THE COMPONENT IF YOU WANT TO PERFORM ITERATIVE ANALYSIS (i.e. Galapos)", CategoryName.Name(), SubCategoryName.Cat8())
         {
             BaseWorker = new ApplicationReadResultWorker(this);
         }
@@ -48,7 +48,7 @@ namespace FemDesign.Grasshopper
         protected override System.Drawing.Bitmap Icon => FemDesign.Properties.Resources.FEM_readresult;
 
         public override Guid ComponentGuid => new Guid("{169E5FC3-469F-499C-96DF-D12E042C1FD0}");
-        public override GH_Exposure Exposure => GH_Exposure.tertiary;
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
         private class ApplicationReadResultWorker : WorkerInstance
         {
             public dynamic _getResults(Type resultType, Results.UnitResults units = null, Options options = null, List<FemDesign.GenericClasses.IStructureElement> elements = null)

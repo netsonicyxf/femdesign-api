@@ -12,9 +12,9 @@ using System.Reflection;
 
 namespace FemDesign.Grasshopper
 {
-    public class PipeSetGlobalCfg : GH_AsyncComponent
+    public class PipeSetGlobalCfg_OBSOLETE2403 : GH_AsyncComponent
     {
-        public PipeSetGlobalCfg() : base("FEM-Design.SetGlobalConfigurations", "SetGlobalCfg", "Set global settings for a FEM-Design model using a global configuration file. It defines the calculation settings that will instruct FEM-Design in operation like creating the finite element mesh.", CategoryName.Name(), SubCategoryName.Cat8())
+        public PipeSetGlobalCfg_OBSOLETE2403() : base("FEM-Design.SetGlobalConfigurations", "SetGlobalCfg", "Set global settings for a FEM-Design model using a global configuration file. It defines the calculation settings that will instruct FEM-Design in operation like creating the finite element mesh.", CategoryName.Name(), SubCategoryName.Cat8())
         {
             BaseWorker = new ApplicationSetGlobalCfgWorker(this);
         }
@@ -34,7 +34,7 @@ namespace FemDesign.Grasshopper
 
         protected override System.Drawing.Bitmap Icon => FemDesign.Properties.Resources.FEM_Config;
         public override Guid ComponentGuid => new Guid("{FDEDD8F7-99CC-48F0-8FF8-2946921DC9F6}");
-        public override GH_Exposure Exposure => GH_Exposure.obscure;
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
     }
 
     public class ApplicationSetGlobalCfgWorker : WorkerInstance

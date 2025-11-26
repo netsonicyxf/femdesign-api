@@ -10,16 +10,16 @@ namespace FemDesign.Grasshopper
 	/// Set configurations using the shared hub connection (standard GH_Component, UI-blocking).
 	/// Mirrors PipeSetCfg behavior.
 	/// </summary>
-	public class FemDesignSetCfg_HubBased : FEM_Design_API_Component
+	public class FemDesignSetCfg : FEM_Design_API_Component
 	{
-		public FemDesignSetCfg_HubBased() : base("FEM-Design.SetConfigurations (Hub)", "SetCfg", "Set design settings for current model using shared connection.", CategoryName.Name(), SubCategoryName.CatHub())
+		public FemDesignSetCfg() : base("FEM-Design.SetConfigurations", "SetCfg", "Set design settings for current model using shared connection.", CategoryName.Name(), SubCategoryName.Cat8())
 		{
 		}
 
 		protected override void RegisterInputParams(GH_InputParamManager pManager)
 		{
 			pManager.AddGenericParameter("Connection", "Connection", "Shared FEM-Design connection handle.", GH_ParamAccess.item);
-			pManager.AddGenericParameter("Config", "Cfg", "Filepath of configuration file or Config objects.", GH_ParamAccess.list);
+			pManager.AddGenericParameter("Config", "Cfg", "Filepath of the configuration file or Config objects.\nIf file path is not provided, the component will read the cfg.xml file in the package manager library folder.\n%AppData%\\McNeel\\Rhinoceros\\packages\\7.0\\FemDesign\\", GH_ParamAccess.list);
 			pManager[pManager.ParamCount - 1].Optional = true;
 		}
 
@@ -43,17 +43,17 @@ namespace FemDesign.Grasshopper
 
 			try
 			{
-				FemDesignConnectionHub.InvokeAsync(handle.Id, conn =>
+				FemDesignConnectionHub.InvokeAsync(handle.Id, connection =>
 				{
 					void onOutput(string s) { log.Add(s); }
-					conn.OnOutput += onOutput;
+					connection.OnOutput += onOutput;
 					try
 					{
 						if (cfg.Count == 0)
 						{
 							string assemblyLocation = Assembly.GetExecutingAssembly().Location;
 							var cfgfilePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(assemblyLocation), @"cfg.xml");
-							conn.SetConfig(cfgfilePath);
+							connection.SetConfig(cfgfilePath);
 						}
 						else
 						{
@@ -61,28 +61,28 @@ namespace FemDesign.Grasshopper
 							{
 								if (c is string s)
 								{
-									conn.SetConfig(s);
+									connection.SetConfig(s);
 								}
 								else if (c != null && c.Value is string)
 								{
 									string vs = c.Value as string;
-                                    conn.SetConfig(vs);
+                                    connection.SetConfig(vs);
 								}
 								else if (c is FemDesign.Calculate.CONFIG cfgObj)
 								{
-									conn.SetConfig(cfgObj);
+									connection.SetConfig(cfgObj);
 								}
 								else if (c != null && c.Value is FemDesign.Calculate.CONFIG)
 								{
                                     FemDesign.Calculate.CONFIG vCfgObj = c.Value as FemDesign.Calculate.CONFIG;
-                                    conn.SetConfig(vCfgObj);
+                                    connection.SetConfig(vCfgObj);
 								}
 							}
 						}
 					}
 					finally
 					{
-						conn.OnOutput -= onOutput;
+						connection.OnOutput -= onOutput;
 					}
 				}).GetAwaiter().GetResult();
 
@@ -100,7 +100,7 @@ namespace FemDesign.Grasshopper
 		}
 
 		protected override System.Drawing.Bitmap Icon => FemDesign.Properties.Resources.FEM_Config;
-		public override Guid ComponentGuid => new Guid("A8F2D25E-9D7D-4CF9-8B50-ED8F5C6A3B11");
+		public override Guid ComponentGuid => new Guid("{24BCEA1D-13E7-47D0-B0F8-4403B0912D44}");
 		public override GH_Exposure Exposure => GH_Exposure.obscure;
 	}
 }

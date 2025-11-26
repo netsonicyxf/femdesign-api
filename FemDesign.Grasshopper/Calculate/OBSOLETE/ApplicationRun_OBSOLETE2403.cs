@@ -22,9 +22,9 @@ using GH_IO.Serialization;
 
 namespace FemDesign.Grasshopper
 {
-    public class ApplicationRun : FEM_Design_API_Component
+    public class ApplicationRun_OBSOLETE2403 : FEM_Design_API_Component
     {
-        public ApplicationRun() : base("Application.Run", "RunApplication", "Run application for a model.", CategoryName.Name(), SubCategoryName.Cat7a())
+        public ApplicationRun_OBSOLETE2403() : base("Application.Run", "RunApplication", "Run application for a model.", CategoryName.Name(), SubCategoryName.Cat7a())
         {
             _minimised = false;
             _keepOpen = false;
@@ -377,7 +377,7 @@ namespace FemDesign.Grasshopper
             get { return new Guid("{64EF2A60-5694-4901-B493-57AF83C04969}"); }
         }
 
-        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
 
     }
 }
