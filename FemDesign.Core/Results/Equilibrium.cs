@@ -50,7 +50,7 @@ namespace FemDesign.Results
         {
             get
             {
-                return new Regex(@"(?'type'Equilibrium)|(Load comb|Case)|\[.*\]");
+                return new Regex(@"(?'type'Equilibrium)|(Load comb\tComp.\tLoads\tReactions\tError|Case\tComponent\tLoads\tReactions\tError)|\[.*\]");
             }
         }
 
