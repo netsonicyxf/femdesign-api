@@ -51,7 +51,7 @@ namespace FemDesign.Grasshopper
         private static Instance Require(Guid id)
         {
             if (!_instances.TryGetValue(id, out var inst)) 
-                throw new InvalidOperationException("Invalid or disposed FemDesign connection handle.");
+                throw new InvalidOperationException("Invalid or disposed FemDesign connection.");
 
             return inst;
         }

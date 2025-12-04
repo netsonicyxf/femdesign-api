@@ -139,6 +139,7 @@ namespace FemDesign.Grasshopper
             }
             catch (Exception ex)
             {
+                this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, ex.Message);
                 log.Add(ex.InnerException?.Message ?? ex.Message);
                 success = false;
             }
