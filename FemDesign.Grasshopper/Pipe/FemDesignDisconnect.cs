@@ -10,7 +10,7 @@ namespace FemDesign.Grasshopper
 	/// </summary>
 	public class FemDesignDisconnect : FEM_Design_API_Component
 	{
-		public FemDesignDisconnect() : base("FEM-Design.Disconnect", "Disconnect", "Detach the connection, but keeps open FEM-Design.", CategoryName.Name(), SubCategoryName.Cat8())
+		public FemDesignDisconnect() : base("FEM-Design.Disconnect", "Disconnect", "Detach and close the connection, but keeps open FEM-Design.", CategoryName.Name(), SubCategoryName.Cat8())
 		{
 		}
 
@@ -21,7 +21,6 @@ namespace FemDesign.Grasshopper
 
 		protected override void RegisterOutputParams(GH_OutputParamManager pManager)
 		{
-			pManager.AddGenericParameter("Connection", "Connection", "Same handle (now disposed).", GH_ParamAccess.item);
 			pManager.AddBooleanParameter("Success", "Success", "True if disconnect succeeded.", GH_ParamAccess.item);
 			pManager.AddTextParameter("Log", "Log", "Operation log.", GH_ParamAccess.list);
 		}
@@ -36,8 +35,10 @@ namespace FemDesign.Grasshopper
 
 			try
 			{
-				if (handle == null) throw new Exception("'Connection' handle is null.");
-				FemDesignConnectionHub.DisposeAsync(handle.Id).GetAwaiter().GetResult();
+				if (handle == null) 
+					throw new Exception("'Connection' handle is null.");
+				
+				FemDesignConnectionHub.DisposeAsync(handle.Id, true).GetAwaiter().GetResult();
 				success = true;
 			}
 			catch (Exception ex)
@@ -46,14 +47,13 @@ namespace FemDesign.Grasshopper
 				success = false;
 			}
 
-			DA.SetData("Connection", handle);
 			DA.SetData("Success", success);
 			DA.SetDataList("Log", log);
 		}
 
 		protected override System.Drawing.Bitmap Icon => FemDesign.Properties.Resources.FEM_Connection;
 		public override Guid ComponentGuid => new Guid("{5A52243F-4136-48F0-9279-3E7E3DF82D2E}");
-		public override GH_Exposure Exposure => GH_Exposure.secondary;
+		public override GH_Exposure Exposure => GH_Exposure.primary;
 	}
 }
 
