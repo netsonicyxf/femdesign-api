@@ -74,7 +74,7 @@ namespace FemDesign.Grasshopper
 
         protected override System.Drawing.Bitmap Icon => FemDesign.Properties.Resources.FEM_RunAnalysis;
         public override Guid ComponentGuid => new Guid("{166B94CD-DCE9-467A-B693-01405D22D20E}");
-        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override GH_Exposure Exposure => GH_Exposure.secondary;
     }
 }
 
