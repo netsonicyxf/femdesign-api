@@ -15,6 +15,15 @@ namespace FemDesign.Grasshopper
         public FemDesignConnectionComponent() : base("FEM-Design.Connection", "Connection", "Create or configure a shared FEM-Design connection. Use it to specify the 'Connection' for the LiveLink components.\n\n" +
             "Note: Removing this component will automatically close the FEM-Design window. To keep FEM-Design open after closing the connection, use the 'Disconnect' component.", CategoryName.Name(), SubCategoryName.Cat8())
         {
+            ObjectChanged += FemDesignConnectionComponent_ObjectChanged;
+        }
+
+        private void FemDesignConnectionComponent_ObjectChanged(object sender, GH_ObjectChangedEventArgs e)
+        {
+            if (e.Type is GH_ObjectEventType.Enabled)
+            {
+                CloseConnection();
+            }
         }
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
@@ -22,7 +31,7 @@ namespace FemDesign.Grasshopper
             pManager.AddTextParameter("FEM-Design dir", "FEM-Design dir", "Path to the FEM-Design installation directory.", GH_ParamAccess.item, @"C:\\Program Files\\StruSoft\\FEM-Design 24\\");
             pManager[pManager.ParamCount - 1].Optional = true;
 
-            pManager.AddBooleanParameter("Minimized", "Minimized", "If true, FEM-Design window will open in a minimised mode.", GH_ParamAccess.item, true);
+            pManager.AddBooleanParameter("Minimized", "Minimized", "If true, FEM-Design window will open in a minimised mode.", GH_ParamAccess.item, false);
             pManager[pManager.ParamCount - 1].Optional = true;
 
             pManager.AddTextParameter("OutputDir", "OutputDir", "The directory where the script, log and result files will be saved. By default, the files will be written to the same directory as your .gh script.", GH_ParamAccess.item);
@@ -42,7 +51,7 @@ namespace FemDesign.Grasshopper
             string fdDir = @"C:\\Program Files\\StruSoft\\FEM-Design 24\\";
             DA.GetData("FEM-Design dir", ref fdDir);
 
-            bool minimized = true;
+            bool minimized = false;
             DA.GetData("Minimized", ref minimized);
 
             string outputDir = null;
@@ -74,15 +83,20 @@ namespace FemDesign.Grasshopper
             DA.SetData("Connection", new FemDesign.Grasshopper.FemDesignHubHandle(_handle));
         }
 
+        private void CloseConnection()
+        {
+            if (_handle != Guid.Empty)
+            {
+                FemDesignConnectionHub.DisposeAsync(_handle).GetAwaiter().GetResult();
+                _handle = Guid.Empty;
+            }
+        }
+
         public override void RemovedFromDocument(GH_Document document)
         {
             try
             {
-                if (_handle != Guid.Empty)
-                {
-                    FemDesignConnectionHub.DisposeAsync(_handle).GetAwaiter().GetResult();
-                    _handle = Guid.Empty;
-                }
+                CloseConnection();
             }
             catch { }
 
