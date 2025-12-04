@@ -77,8 +77,6 @@
     <Compile Include="Calculate\Bedding.cs" />
     <Compile Include="Calculate\CalculationParametersAnalysisDefine.cs" />
     <Compile Include="Materials\SetConcreteTimeDependant.cs" />
-    <Compile Include="Pipe\FemDesignRunAnalysis_HubBased.cs" />
-    <Compile Include="Pipe\FemDesignRunDesign_HubBased.cs" />
     <Compile Include="Pipe\FemDesignCreateResPoints.cs" />
     <Compile Include="Pipe\FemDesignGetEigenfrequencyResults.cs" />
     <Compile Include="Pipe\FemDesignGetFeaModel.cs" />
