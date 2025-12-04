@@ -17,7 +17,7 @@ namespace FemDesign.Grasshopper
 
         public override string ToString()
         {
-            return $"FemDesignHubHandle: {Id}";
+            return $"Connection ID: {Id}";
         }
     }
 }
