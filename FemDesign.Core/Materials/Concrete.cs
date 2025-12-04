@@ -112,7 +112,7 @@ namespace FemDesign.Materials
             else
             {
                 plasticity.Concrete_crushing = true;
-                plasticity.Concrete_crushing_option = (Cc_type)crushing;
+                plasticity.Concrete_crushing_option = (StruSoft.Interop_24.Cc_type)crushing;
             }
 
             plasticity.Tension_strength = tensionStrength;
@@ -124,7 +124,7 @@ namespace FemDesign.Materials
             else
             {
                 plasticity.Tension_stiffening = true;
-                plasticity.Tension_stiffening_option = (Ts_type)tensionStiffening;
+                plasticity.Tension_stiffening_option = (StruSoft.Interop_24.Ts_type)tensionStiffening;
 
                 if(tensionStiffening == TensionStiffening.Hinton)
                     plasticity.Tension_stiffening_param = 0.5;
@@ -143,10 +143,12 @@ namespace FemDesign.Materials
             else
             {
                 plasticity.Reduced_compression_strength = true;
-                plasticity.Reduced_compression_strength_option = (Rcsm_type) reducedCompression;
+                plasticity.Reduced_compression_strength_option = (StruSoft.Interop_24.Rcsm_type) reducedCompression;
 
                 if(reducedCompression == ReducedCompression.Cervera)
                     plasticity.Reduced_compression_strength_param = 0.550;
+                else if(reducedCompression == ReducedCompression.EN_1992_1_1_2023)
+                    plasticity.Reduced_compression_strength_param = 110;
             }
 
 
@@ -196,10 +198,15 @@ namespace FemDesign.Materials
         [System.Xml.Serialization.XmlEnumAttribute("Vecchio 2")]
         Vecchio2,
 
+        [System.Xml.Serialization.XmlEnumAttribute("Cervera")]
         Cervera,
+
+        [System.Xml.Serialization.XmlEnumAttribute("EN 1992-1-1:2023")]
+        EN_1992_1_1_2023,
 
         [System.Xml.Serialization.XmlEnumAttribute("Model Code 2010")]
         ModelCode2010,
+
         None,
     }
 }
