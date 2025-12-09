@@ -74,7 +74,7 @@ namespace FemDesign.Calculate
         [TestMethod("Stability_2")]
         public void TestMethod2()
         {
-            var stability = new Analysis(stability: Stability_2(), calcStab: true);
+            var stability = new Analysis(stability: Stability_2(), calcStab: true, diaphragm: DiaphragmType.None);
 
             var loadCombination = GetLoadCombinationsTests();
             stability._setStabilityAnalysis(loadCombination.Values.ToList());
@@ -103,7 +103,7 @@ namespace FemDesign.Calculate
         [TestMethod("Stability_1")]
         public void TestMethod1()
         {
-            var stability = new Analysis(stability: Stability_1(), calcStab: true);
+            var stability = new Analysis(stability: Stability_1(), calcStab: true, diaphragm: DiaphragmType.None);
 
             //stability.Comb.CombItem.Clear();
             var loadCombination = GetLoadCombinationsTests();

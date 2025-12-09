@@ -34,7 +34,7 @@ namespace FemDesign.Examples
             double Ecm = double.Parse(material.Concrete.Ecm);
 
             // ITERATION & ANALYSIS PROCESS
-            Analysis analysis = new Analysis(calcCase: true);
+            Analysis analysis = new Analysis(calcCase: true, diaphragm: DiaphragmType.None);
 
             using (var femDesign = new FemDesignConnection(minimized: true))
                 for (int i = 1; i < 6; i++)

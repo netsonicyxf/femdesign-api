@@ -1,4 +1,5 @@
-﻿using FemDesign.Sections;
+﻿using FemDesign.Calculate;
+using FemDesign.Sections;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -138,7 +139,7 @@ namespace FemDesign.Results
             Model model = Model.DeserializeFromFilePath(struxmlPath);
 
             var stability = new Calculate.Stability(new List<string> { "LC2ULS" }, new List<int> { 10 }, false, 5);
-            FemDesign.Calculate.Analysis analysis = new FemDesign.Calculate.Analysis(stability: stability, calcComb: true, calcStab: true);
+            FemDesign.Calculate.Analysis analysis = new FemDesign.Calculate.Analysis(stability: stability, calcComb: true, calcStab: true, diaphragm: DiaphragmType.None);
 
 
             using (var femDesign = new FemDesignConnection(fdInstallationDir: @"C:\Program Files\StruSoft\FEM-Design 24\", outputDir: "My analyzed model", keepOpen: false))
