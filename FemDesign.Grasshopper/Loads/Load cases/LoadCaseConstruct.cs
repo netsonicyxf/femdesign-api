@@ -67,7 +67,9 @@ namespace FemDesign.Grasshopper
 
         protected override void BeforeSolveInstance()
         {
-            ValueListUtils.UpdateValueLists(this, 1, Enum.GetNames(typeof(LoadCaseType)).ToList(), null, GH_ValueListMode.DropDown);
+            var lcTypes = Enum.GetNames(typeof(LoadCaseType)).ToList();
+            lcTypes = lcTypes.Where(t => t != LoadCaseType.Static.ToString()).ToList();
+            ValueListUtils.UpdateValueLists(this, 1, lcTypes, null, GH_ValueListMode.DropDown);
 
         
             ValueListUtils.UpdateValueLists(this, 2, Enum.GetNames(typeof(LoadCaseDuration)).ToList(), null, GH_ValueListMode.DropDown);

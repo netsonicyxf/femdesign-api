@@ -125,7 +125,7 @@ namespace FemDesign.Loads
         [TestMethod("Combination Name")]
         public void LoadCombinationName()
         {
-            var loadCase = new LoadCase("loadcase", LoadCaseType.Static, LoadCaseDuration.Permanent);
+            var loadCase = new LoadCase("loadcase", LoadCaseType.Ordinary, LoadCaseDuration.Permanent);
 
             var raiseErrorText = new List<string>
             {

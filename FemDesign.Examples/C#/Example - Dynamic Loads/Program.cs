@@ -47,7 +47,7 @@ namespace FemDesign.Examples
 
             // create load cases
             var dl = new LoadCase("DL", LoadCaseType.DeadLoad, LoadCaseDuration.Permanent);
-            var ll = new LoadCase("LL", LoadCaseType.Static, LoadCaseDuration.Permanent);
+            var ll = new LoadCase("LL", LoadCaseType.Ordinary, LoadCaseDuration.Permanent);
 
             model.AddLoadCases(dl, ll);
 

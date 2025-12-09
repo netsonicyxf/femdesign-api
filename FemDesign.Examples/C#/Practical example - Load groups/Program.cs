@@ -23,8 +23,8 @@ namespace FemDesign.Examples
             // CREATING LOAD CASES
             LoadCase deadLoad1 = new LoadCase("Deadload1", LoadCaseType.DeadLoad, LoadCaseDuration.Permanent);
             LoadCase deadLoad2 = new LoadCase("Deadload2", LoadCaseType.DeadLoad, LoadCaseDuration.Permanent);
-            LoadCase liveLoad1 = new LoadCase("Liveload1", LoadCaseType.Static, LoadCaseDuration.Permanent);
-            LoadCase liveLoad2 = new LoadCase("Liveload2", LoadCaseType.Static, LoadCaseDuration.Permanent);
+            LoadCase liveLoad1 = new LoadCase("Liveload1", LoadCaseType.Ordinary, LoadCaseDuration.Permanent);
+            LoadCase liveLoad2 = new LoadCase("Liveload2", LoadCaseType.Ordinary, LoadCaseDuration.Permanent);
 
             List<LoadCase> loadCasesDeadLoads = new List<LoadCase>() { deadLoad1, deadLoad2 };
             List<LoadCase> loadCaseLiveLoads = new List<LoadCase>() { liveLoad1, liveLoad2 };
