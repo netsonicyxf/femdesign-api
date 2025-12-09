@@ -241,26 +241,26 @@ namespace FemDesign.Examples
             {
                 connection.Open(filePath);
 
-                analysis = new Analysis(comb: comb, calcCase: true, calcComb: true);
+                analysis = new Analysis(comb: comb, calcCase: true, calcComb: true, diaphragm: DiaphragmType.None);
                 connection.RunAnalysis(analysis);
 
-                analysis = new Analysis(comb: combWithName, calcCase: true, calcComb: true);
+                analysis = new Analysis(comb: combWithName, calcCase: true, calcComb: true, diaphragm: DiaphragmType.None);
                 connection.RunAnalysis(analysis);
 
-                analysis = new Analysis(comb: noComb, calcCase: true, calcComb: true);
+                analysis = new Analysis(comb: noComb, calcCase: true, calcComb: true, diaphragm: DiaphragmType.None);
                 connection.RunAnalysis(analysis);
 
 
-                analysis = new Analysis(comb: combDefault, calcCase: true, calcComb: true);
+                analysis = new Analysis(comb: combDefault, calcCase: true, calcComb: true, diaphragm: DiaphragmType.None);
                 connection.RunAnalysis(analysis);
 
-                analysis = new Analysis(freq: freqSettings, calcFreq: true);
+                analysis = new Analysis(freq: freqSettings, calcFreq: true, diaphragm: DiaphragmType.None);
                 connection.RunAnalysis(analysis);
 
                 //analysis = new Analysis(stability: stabilitySettings, calcStab: true);
                 //connection.RunAnalysis(analysis);
 
-                analysis = new Analysis(imperfection: imperfectionSettings, calcImpf: true);
+                analysis = new Analysis(imperfection: imperfectionSettings, calcImpf: true, diaphragm: DiaphragmType.None);
                 connection.RunAnalysis(analysis);
             }
         }

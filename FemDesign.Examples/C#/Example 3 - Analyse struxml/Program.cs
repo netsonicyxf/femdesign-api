@@ -29,7 +29,8 @@ namespace FemDesign.Examples
             // CHOOSING WHAT ANALYSIS TO RUN
             FemDesign.Calculate.Analysis analysis = new FemDesign.Calculate.Analysis(
                 calcCase: true,
-                calcComb: true
+                calcComb: true, 
+                diaphragm: DiaphragmType.None
                 );
 
 
