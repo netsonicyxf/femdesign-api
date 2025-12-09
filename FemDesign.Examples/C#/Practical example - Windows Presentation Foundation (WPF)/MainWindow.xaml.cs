@@ -74,7 +74,7 @@ namespace Practical_example___WPF
                     }
 
                     connection.Open(model);
-                    var analysis = new Analysis(comb: Comb, calcCase: true, calcComb: true);
+                    var analysis = new Analysis(comb: Comb, calcCase: true, calcComb: true, diaphragm: DiaphragmType.None);
                     connection.RunAnalysis(analysis);
 
                     var quantities = connection.GetQuantities<FemDesign.Results.QuantityEstimationSteel>();
@@ -101,7 +101,7 @@ namespace Practical_example___WPF
                 //        slab.UpdateThickness(i * thickness / 1000);
                 //    }
                 //    connection.Open(model);
-                //    var analysis = new Analysis(comb: Comb, calcCase: true, calcComb: true);
+                //    var analysis = new Analysis(comb: Comb, calcCase: true, calcComb: true, diaphragm: DiaphragmType.None);
                 //    connection.RunAnalysis(analysis);
 
                 //    var quantities = connection.GetQuantities<FemDesign.Results.QuantityEstimationSteel>();
