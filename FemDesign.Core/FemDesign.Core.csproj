@@ -77,6 +77,7 @@
     <Compile Include="Calculate\Config\SteelBarCalculationParameters.cs" />
     <Compile Include="Calculate\Config\SteelBarDesignParameters.cs" />
     <Compile Include="Calculate\Config\SteelDesignConfiguration.cs" />
+    <Compile Include="Calculate\DiaphragmType.cs" />
     <Compile Include="Calculate\ExcitationForce.cs" />
     <Compile Include="Calculate\GroundAcc.cs" />
     <Compile Include="Calculate\Imperfection.cs" />

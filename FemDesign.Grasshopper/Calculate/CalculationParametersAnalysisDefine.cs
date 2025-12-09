@@ -77,173 +77,98 @@ namespace FemDesign.Grasshopper
         }
         protected override void BeforeSolveInstance()
         {
-            ValueListUtils.UpdateValueLists(this, 17, new List<string> { "None", "Rigid membrane", "Fully rigid" }, new List<int> { 0, 1, 2 }, GH_ValueListMode.DropDown);
+            ValueListUtils.UpdateValueLists(this, 25, new List<string> { "None", "Rigid membrane", "Fully rigid" }, new List<int> { 0, 1, 2 }, GH_ValueListMode.DropDown);
         }
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            // get inputs
             FemDesign.Calculate.Stage stage = null;
-            if (!DA.GetData("StageSetting", ref stage))
-            {
-                // pass
-            }
+            DA.GetData("StageSetting", ref stage);
 
             FemDesign.Calculate.Comb _comb = null;
-            if (!DA.GetData("Comb", ref _comb))
-            {
-                // pass
-            }
+            DA.GetData("Comb", ref _comb);
 
             FemDesign.Calculate.Stability _stability = null;
-            if (!DA.GetData("Stability", ref _stability))
-            {
-                // pass
-            }
+            DA.GetData("Stability", ref _stability);
 
             FemDesign.Calculate.Imperfection _imperfection = null;
-            if (!DA.GetData("Imperfection", ref _imperfection))
-            {
-                //pass
-            }
+            DA.GetData("Imperfection", ref _imperfection);
 
             FemDesign.Calculate.Bedding _bedding = null;
-            if (!DA.GetData("Bedding", ref _bedding))
-            {
-                //pass
-            }
+            DA.GetData("Bedding", ref _bedding);
 
             FemDesign.Calculate.Freq _freq = null;
-            if (!DA.GetData("Freq", ref _freq))
-            {
-                // pass
-            }
+            DA.GetData("Freq", ref _freq);
 
             FemDesign.Calculate.Footfall _footfall = null;
-            if (!DA.GetData("Footfall", ref _footfall))
-            {
-                // pass
-            }
+            DA.GetData("Footfall", ref _footfall);
 
             FemDesign.Calculate.GroundAcc _groundAcc = null;
-            if (!DA.GetData("GroundAcc", ref _groundAcc))
-            {
-                // pass
-            }
+            DA.GetData("GroundAcc", ref _groundAcc);
 
             FemDesign.Calculate.ExcitationForce _exForce = null;
-            if (!DA.GetData("ExForce", ref _exForce))
-            {
-                // pass
-            }
+            DA.GetData("ExForce", ref _exForce);
 
             FemDesign.Calculate.PeriodicExcitation _periodicExcitation = null;
-            if (!DA.GetData("PeriodicEx", ref _periodicExcitation))
-            {
-                // pass
-            }
+            DA.GetData("PeriodicEx", ref _periodicExcitation);
 
             bool calcCase = true;
-            if (!DA.GetData("calcCase", ref calcCase))
-            {
-                // pass
-            }
+            DA.GetData("calcCase", ref calcCase);
 
             bool calcComb = true;
-            if (!DA.GetData("calcComb", ref calcComb))
-            {
-                // pass
-            }
+            DA.GetData("calcComb", ref calcComb);
 
             bool calcCstage = false;
-            if (!DA.GetData("calcCstage", ref calcCstage))
-            {
-                // pass
-            }
+            DA.GetData("calcCstage", ref calcCstage);
 
             bool calcImpf = false;
-            if (!DA.GetData("calcImpf", ref calcImpf))
-            {
-                // pass
-            }
-
+            DA.GetData("calcImpf", ref calcImpf);
 
             bool calcGMax = false;
-            if (!DA.GetData("calcGmax", ref calcGMax))
-            {
-                // pass
-            }
+            DA.GetData("calcGmax", ref calcGMax);
 
             bool calcStab = false;
-            if (!DA.GetData("calcStab", ref calcStab))
-            {
-                // pass
-            }
+            DA.GetData("calcStab", ref calcStab);
 
             bool calcFreq = false;
-            if (!DA.GetData("calcFreq", ref calcFreq))
-            {
-                // pass
-            }
+            DA.GetData("calcFreq", ref calcFreq);
 
             bool calcSeis = false; // not implemented
-            if (!DA.GetData("calcSeis", ref calcSeis))
-            {
-                // pass
-            }
+            DA.GetData("calcSeis", ref calcSeis);
 
             bool calcFootfall = false;
-            if (!DA.GetData("calcFootfall", ref calcFootfall))
-            {
-                // pass
-            }
+            DA.GetData("calcFootfall", ref calcFootfall);
 
             bool calcBedding = false;
-            if (!DA.GetData("calcBedding", ref calcBedding))
-            {
-                // pass
-            }
+            DA.GetData("calcBedding", ref calcBedding);
 
             bool calcGroundAcc = false;
-            if (!DA.GetData("calcGroundAcc", ref calcGroundAcc))
-            {
-                // pass
-            }
+            DA.GetData("calcGroundAcc", ref calcGroundAcc);
 
             bool calcExForce = false;
-            if (!DA.GetData("calcExForce", ref calcExForce))
-            {
-                // pass
-            }
+            DA.GetData("calcExForce", ref calcExForce);
 
             bool calcPeriodicEx = false;
-            if (!DA.GetData("calcPeriodicEx", ref calcPeriodicEx))
-            {
-                // pass
-            }
+            DA.GetData("calcPeriodicEx", ref calcPeriodicEx);
 
             bool calcDesign = true;
-            if (!DA.GetData("calcDesign", ref calcDesign))
-            {
-                // pass
-            }
+            DA.GetData("calcDesign", ref calcDesign);
 
             bool elemFine = true;
-            if (!DA.GetData("elemfine", ref elemFine))
-            {
-                // pass
-            }
+            DA.GetData("elemfine", ref elemFine);
 
-            int diaphragm = 0;
-            if (!DA.GetData("diaphragm", ref diaphragm))
-            {
-                // pass
-            }
+            int _diaphragm = 0;
+            DA.GetData("diaphragm", ref _diaphragm);
 
             bool peakSmoothing = false;
-            if (!DA.GetData("peakSmoothing", ref peakSmoothing))
-            {
-                // pass
-            }
+            DA.GetData("peakSmoothing", ref peakSmoothing);
 
+            // check inputs
+            if (_diaphragm < 0 || _diaphragm > 2)
+                throw new ArgumentException($"Diaphragm is set to {_diaphragm}. Value must be '0'= None , '1'= Rigid membrane or '2'= Fully rigid.\n" +
+                    $"To access the available options, connect `ValueList`.");
+            
+            FemDesign.Calculate.DiaphragmType diaphragm = (FemDesign.Calculate.DiaphragmType)_diaphragm;
 
             // Create Analysis
             FemDesign.Calculate.Analysis obj = new FemDesign.Calculate.Analysis(stage: stage, stability: _stability.DeepClone(), imperfection: _imperfection.DeepClone(), comb: _comb.DeepClone(), freq: _freq.DeepClone(), footfall: _footfall.DeepClone(), bedding: _bedding.DeepClone(), groundAcc: _groundAcc.DeepClone(), exForce: _exForce.DeepClone(), periodicEx: _periodicExcitation.DeepClone(), calcCase: calcCase, calcCStage: calcCstage, calcImpf: calcImpf, calcComb: calcComb, calcGMax: calcGMax, calcStab: calcStab, calcFreq: calcFreq, calcSeis: calcSeis, calcFootfall: calcFootfall, calcBedding: calcBedding, calcGroundAcc: calcGroundAcc, calcExForce: calcExForce, calcPeriodicEx: calcPeriodicEx, calcDesign: calcDesign, elemFine: elemFine, diaphragm: diaphragm, peakSmoothing: peakSmoothing);
