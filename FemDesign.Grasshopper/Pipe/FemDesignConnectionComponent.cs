@@ -74,10 +74,8 @@ namespace FemDesign.Grasshopper
                 System.IO.Directory.SetCurrentDirectory(currentDir);
             }
 
-            if (_handle == Guid.Empty)
-            {
-                _handle = FemDesignConnectionHub.Create(fdDir, minimized, outputDir, deleteOutput);
-            }
+            CloseConnection();
+            _handle = FemDesignConnectionHub.Create(fdDir, minimized, outputDir, deleteOutput);
 
             // Emit a handle object to wire downstream
             DA.SetData("Connection", new FemDesign.Grasshopper.FemDesignHubHandle(_handle));
