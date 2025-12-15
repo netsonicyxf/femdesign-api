@@ -500,6 +500,7 @@
     <Compile Include="Supports\PointSupportHinged.cs" />
     <Compile Include="Supports\PointSupportRigid.cs" />
     <Compile Include="Supports\OBSOLETE\SurfaceSupportConstruct_OBSOLETE.cs" />
+    <Compile Include="UI\LoadMainMenu.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
