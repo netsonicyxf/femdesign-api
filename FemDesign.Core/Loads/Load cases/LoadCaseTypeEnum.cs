@@ -19,14 +19,13 @@ namespace FemDesign.Loads
         /// </summary>
         [Obsolete("Use Ordinary instead. Will be removed in the next version.")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        [Parseable("Ordinary", "ordinary", "ORDINARY", "static", "Static", "STATIC")]
         [XmlEnum("static")]
         Static,
 
         /// <summary>
         /// "Ordinary" load type
         /// </summary>
-        [Parseable("Ordinary", "ordinary", "ORDINARY")]
+        [Parseable("Ordinary", "ordinary", "ORDINARY", "static", "Static", "STATIC")]
         [XmlEnum("static")]
         Ordinary,
 
