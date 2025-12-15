@@ -211,31 +211,6 @@ namespace FemDesign.Info
                 format.Dispose();
             }
         }
-
-        // this method can be removed >>
-        //public override GH.GUI.Canvas.GH_ObjectResponse RespondToMouseUp(GH.GUI.Canvas.GH_Canvas sender, GH.GUI.GH_CanvasMouseEvent e)
-        //{
-        //    if (e.Button != System.Windows.Forms.MouseButtons.Left) 
-        //        return base.RespondToMouseUp(sender, e);
-
-        //    // Left mouse button up
-        //    if (link1.Contains(e.CanvasLocation))
-        //    {
-        //        System.Diagnostics.Process.Start("https://femdesign-api-docs.onstrusoft.com");
-        //        return GH.GUI.Canvas.GH_ObjectResponse.Handled;
-        //    }
-        //    else if (link2.Contains(e.CanvasLocation))
-        //    {
-        //        System.Diagnostics.Process.Start("https://strusoft.freshdesk.com");
-        //        return GH.GUI.Canvas.GH_ObjectResponse.Handled;
-        //    }
-        //    else if (link3.Contains(e.CanvasLocation))
-        //    {
-        //        System.Diagnostics.Process.Start("https://github.com/strusoft/femdesign-api");
-        //        return GH.GUI.Canvas.GH_ObjectResponse.Handled;
-        //    }
-        //    return GH.GUI.Canvas.GH_ObjectResponse.Ignore;
-        //}
     }
 
 }

@@ -410,7 +410,7 @@
     <Compile Include="Loads\Load categories\LoadCategoryGetLoadCatergoryByName.cs" />
     <Compile Include="Deconstruct\ModellingTools\DiaphragmDeconstruct.cs" />
     <Compile Include="Info\Info.cs" />
-    <Compile Include="Info\TabInfo.cs" />
+    <Compile Include="Info\PluginInfo.cs" />
     <Compile Include="Materials\MaterialTimberPlateMaterial.cs" />
     <Compile Include="Materials\MaterialTimberFactorsConstruct.cs" />
     <Compile Include="Calculate\CalculationParametersFootfallDefine.cs" />
