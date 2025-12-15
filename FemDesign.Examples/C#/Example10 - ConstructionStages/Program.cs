@@ -87,8 +87,8 @@ namespace FemDesign.Examples
 
             // Create Load Cases
             var deadLoadCase = new Loads.LoadCase("DL", Loads.LoadCaseType.DeadLoad, Loads.LoadCaseDuration.Permanent);
-            var windCase = new Loads.LoadCase("WIND", Loads.LoadCaseType.Static, Loads.LoadCaseDuration.Permanent);
-            var imposedCase = new Loads.LoadCase("IMPOSED", Loads.LoadCaseType.Static, Loads.LoadCaseDuration.Permanent);
+            var windCase = new Loads.LoadCase("WIND", Loads.LoadCaseType.Ordinary, Loads.LoadCaseDuration.Permanent);
+            var imposedCase = new Loads.LoadCase("IMPOSED", Loads.LoadCaseType.Ordinary, Loads.LoadCaseDuration.Permanent);
             var loadcases = new List<Loads.LoadCase>() { deadLoadCase, windCase, imposedCase };
 
             // Create loads

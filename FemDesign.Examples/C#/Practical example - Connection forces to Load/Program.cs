@@ -40,7 +40,7 @@ namespace FemDesign.Examples
                 var caseCombs = new List<LoadCase>();
                 foreach(var caseComb in loadCaseComb)
                 {
-                    var loadCase = new LoadCase(caseComb, LoadCaseType.Static, LoadCaseDuration.Permanent);
+                    var loadCase = new LoadCase(caseComb, LoadCaseType.Ordinary, LoadCaseDuration.Permanent);
                     caseCombs.Add(loadCase);
                 }
                 var combDictionary = caseCombs.ToDictionary(x => x.Name);

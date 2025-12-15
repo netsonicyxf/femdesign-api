@@ -47,7 +47,7 @@ namespace FemDesign.Examples
 
             // Define load cases
             var loadCaseDL = new LoadCase("DL", LoadCaseType.DeadLoad, LoadCaseDuration.Permanent);
-            var loadCaseLL = new LoadCase("LL", LoadCaseType.Static, LoadCaseDuration.Permanent);
+            var loadCaseLL = new LoadCase("LL", LoadCaseType.Ordinary, LoadCaseDuration.Permanent);
             var loadCases = new List<LoadCase> { loadCaseDL, loadCaseLL };
 
             // Define load combination

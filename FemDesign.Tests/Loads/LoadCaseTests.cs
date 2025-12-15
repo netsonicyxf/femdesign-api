@@ -39,11 +39,11 @@ namespace FemDesign.Loads
 
 
             foreach (var text in raiseErrorText)
-                Assert.ThrowsException<ArgumentException>(() => new LoadCase(text, LoadCaseType.Static, LoadCaseDuration.Permanent));
+                Assert.ThrowsException<ArgumentException>(() => new LoadCase(text, LoadCaseType.Ordinary, LoadCaseDuration.Permanent));
 
 
             foreach (var text in validText)
-                new LoadCase(text, LoadCaseType.Static, LoadCaseDuration.Permanent);
+                new LoadCase(text, LoadCaseType.Ordinary, LoadCaseDuration.Permanent);
         }
 
     }

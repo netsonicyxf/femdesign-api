@@ -1,10 +1,11 @@
-﻿using System;
+﻿using FemDesign.GenericClasses;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
-using FemDesign.GenericClasses;
 
 namespace FemDesign.Loads
 {
@@ -16,9 +17,17 @@ namespace FemDesign.Loads
         /// <summary>
         /// "Ordinary" load type
         /// </summary>
-        [Parseable("Ordinary", "ordinary", "ORDINARY", "static", "Static", "STATIC")]
+        [Obsolete("Use Ordinary instead. Will be removed in the next version.")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlEnum("static")]
         Static,
+
+        /// <summary>
+        /// "Ordinary" load type
+        /// </summary>
+        [Parseable("Ordinary", "ordinary", "ORDINARY", "static", "Static", "STATIC")]
+        [XmlEnum("static")]
+        Ordinary,
 
         /// <summary>
         /// "Struc. dead load" load type
@@ -37,14 +46,14 @@ namespace FemDesign.Loads
         /// <summary>
         /// "Shrinkage" load type
         /// </summary>
-        [Parseable("shrinkage", "Shrinkage", "SHRINKAGE")]
+        [Parseable("+Shrinkage", "shrinkage", "Shrinkage", "SHRINKAGE")]
         [XmlEnum("shrinkage")]
         Shrinkage,
 
         /// <summary>
         /// "Camber sim." load type
         /// </summary>
-        [Parseable("+Shrinkage", "prestressing", "Prestressing", "PRESTRESSING", "camber_sim", "Camber_sim", "CAMBER_SIM")]
+        [Parseable("+Camber sim.", "prestressing", "Prestressing", "PRESTRESSING", "camber_sim", "Camber_sim", "CAMBER_SIM")]
         [XmlEnum("prestressing")]
         Prestressing,
 
