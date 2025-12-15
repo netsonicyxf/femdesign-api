@@ -1,4 +1,5 @@
 ﻿using GH_IO.Serialization;
+using Grasshopper;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel;
@@ -13,16 +14,21 @@ namespace FemDesign.Grasshopper.UI
 {
     public class MenuLoad
     {
-        private static ToolStripMenuItem simplexMenu;
+        private static string documentationUrl = "https://femdesign-api-docs.onstrusoft.com";
+        private static string supportUrl = "https://strusoft.freshdesk.com";
+        private static string communityUrl = "https://femdesign.discourse.group/";
+        private static string gitHubUrl = "https://github.com/strusoft/femdesign-api";
+
+        private static ToolStripMenuItem fdMenu;
 
         internal static void OnStartup(GH_Canvas canvas)
         {
-            simplexMenu = new ToolStripMenuItem("Simplex")
+            fdMenu = new ToolStripMenuItem("FEM-Design")
             {
-                Name = "Simplex",
+                Name = "FEM-Design",
             };
 
-            PopulateSub(simplexMenu);
+            PopulateSub(fdMenu);
 
             GH_DocumentEditor editor = null;
 
@@ -32,17 +38,17 @@ namespace FemDesign.Grasshopper.UI
                 Thread.Sleep(321);
             }
 
-            if (!editor.MainMenuStrip.Items.ContainsKey("Simplex"))
+            if (!editor.MainMenuStrip.Items.ContainsKey("FEM-Design"))
             {
-                editor.MainMenuStrip.Items.Add(simplexMenu);
+                editor.MainMenuStrip.Items.Add(fdMenu);
             }
             else
             {
-                simplexMenu = (ToolStripMenuItem)editor.MainMenuStrip.Items["Simplex"];
-                lock (simplexMenu)
+                fdMenu = (ToolStripMenuItem)editor.MainMenuStrip.Items["FEM-Design"];
+                lock (fdMenu)
                 {
-                    simplexMenu.DropDown.Items.Add(new ToolStripSeparator());
-                    PopulateSub(simplexMenu);
+                    fdMenu.DropDown.Items.Add(new ToolStripSeparator());
+                    PopulateSub(fdMenu);
                 }
             }
 
@@ -51,60 +57,26 @@ namespace FemDesign.Grasshopper.UI
 
         private static void PopulateSub(ToolStripMenuItem menuItem)
         {
-            // Add Login
+            menuItem.DropDown.Items.Add("Documentation", Properties.Resources.FEM_Connection,
+                (sender, e) => OpenBrowser(sender, e, documentationUrl));
+
             menuItem.DropDown.Items.Add(
-                "Login",
-                SimplexGh.Properties.Resources.SimplexIconBlue,
-                OpenForm);
+                "Community", Properties.Resources.FEM_Connection,
+                (sender, e) => OpenBrowser(sender, e, communityUrl));
 
-            menuItem.DropDown.Items.Add(new ToolStripSeparator());
-            //----------------------------------------------------
-
-            // Add Documentation
-            menuItem.DropDown.Items.Add("Documentation", SimplexGh.Properties.Resources.SimplexIconBlue,
-                (sender, e) => OpenBrowser(sender, e, "https://simplex-docs.onstrusoft.com/api/grasshopper/get-started"));
-
-            // Add Examples (submenu)
-            var exampleSubMenu = new ToolStripMenuItem("&Examples");
-
-            var templateItem = new ToolStripMenuItem(
-                "&Simplex Foundation template",
-                SimplexGh.Properties.Resources.SimplexIconBlue,
-                (sender, e) => OpenExample(sender, e, "SimplexFoundationTemplate", null)
-                );
-            templateItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.T;
-            templateItem.ShowShortcutKeys = true;
-            exampleSubMenu.DropDown.Items.Add(templateItem);
-
-            exampleSubMenu.DropDown.Items.Add(
-                "Excel & Simplex connection",
-                SimplexGh.Properties.Resources.SimplexIconBlue,
-                (sender, e) => OpenExample(sender, e, "ExcelSxConnectionExample", "ExcelSxConnectionExample")
-                );
-
-            exampleSubMenu.DropDown.Items.Add(
-                "FEM-Design & Simplex connection",
-                SimplexGh.Properties.Resources.SimplexIconBlue,
-                (sender, e) => OpenExample(sender, e, "FDSxConnectionExample", "FDSxConnectionExample")
-                );
-
-            menuItem.DropDown.Items.Add(exampleSubMenu);
-
-            menuItem.DropDown.Items.Add(new ToolStripSeparator());
-            //----------------------------------------------------
-
-            // Add Help
             menuItem.DropDown.Items.Add(
-                "Help",
-                SimplexGh.Properties.Resources.SimplexIconBlue,
-                (sender, e) => OpenBrowser(sender, e, "https://strusoft.freshdesk.com/en/support/tickets/new")
-                );
+                "Support", Properties.Resources.FEM_Connection,
+                (sender, e) => OpenBrowser(sender, e, supportUrl));
+
+            menuItem.DropDown.Items.Add(
+                "GitHub", Properties.Resources.FEM_Connection,
+                (sender, e) => OpenBrowser(sender, e, gitHubUrl));
         }
 
         // event handler that opens up a sub-window
         private static void OpenForm(object sender, System.EventArgs e)
         {
-            new Form1().ShowDialog();
+            // write content here...
         }
 
         // event handler that opens up a browser window
@@ -123,8 +95,8 @@ namespace FemDesign.Grasshopper.UI
                 : System.IO.Path.Combine(folderAssembly, "Files", "Examples", exampleFolder);
 
             // Make this folder discoverable to GH
-            Grasshopper.Instances.Settings.SetValue("SIMPLEX_BASEDIR", examplesDir);
-            Rhino.RhinoDoc.ActiveDoc?.Strings.SetString("SIMPLEX_BASEDIR", examplesDir);
+            Grasshopper.Instances.Settings.SetValue("FEMDESIGN_BASEDIR", examplesDir);
+            Rhino.RhinoDoc.ActiveDoc?.Strings.SetString("FEMDESIGN_BASEDIR", examplesDir);
 
             fileName = fileName + ".gh";
             string exampleFile = System.IO.Path.Combine(examplesDir, fileName);
