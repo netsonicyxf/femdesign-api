@@ -31917,7 +31917,7 @@ namespace StruSoft.Interop_24
         public System.DateTime Last_change { get; set; }
         
         [System.Xml.Serialization.XmlAttributeAttribute("action")]
-        public Modification_type Action { get; set; }
+        public StruSoft.Interop.StruXml.Data.Modification_type Action { get; set; }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private string _hash_order_id = "-1";
