@@ -51,7 +51,7 @@ namespace FemDesign.Grasshopper
 			DA.SetDataList("Log", log);
 		}
 
-		protected override System.Drawing.Bitmap Icon => FemDesign.Properties.Resources.FEM_Connection;
+		protected override System.Drawing.Bitmap Icon => FemDesign.Properties.Resources.FEM_Disconnect;
 		public override Guid ComponentGuid => new Guid("{5A52243F-4136-48F0-9279-3E7E3DF82D2E}");
 		public override GH_Exposure Exposure => GH_Exposure.primary;
 	}

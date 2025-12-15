@@ -1006,6 +1006,7 @@
     <None Include="Resources\icons\FilledCruciformProfile.png" />
     <None Include="Resources\icons\FilledIProfile.png" />
     <None Include="Resources\icons\FilledSteelTube.png" />
+    <None Include="Resources\icons\FEM_Disconnect.png" />
     <Content Include="Resources\icons\FootfallDefine2.png" />
     <Content Include="Resources\icons\FootfallDefine3.png" />
     <Content Include="Resources\icons\FreqDefine2.png" />
