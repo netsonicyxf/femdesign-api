@@ -112,10 +112,10 @@ namespace FemDesign.Info
             // Compute the width of the NickName of the owner (plus some extra padding), 
             // then make sure we have at least 80 pixels.
             //int width = GH_FontServer.StringWidth(Owner.NickName, GH_FontServer.Standard);
-            int width = 300; //Math.Max(width + 10, 80);
+            int width = 220; //Math.Max(width + 10, 80);
 
             // The height of our object is always 60 pixels
-            int height = 220;
+            int height = 150;
 
             // Assign the width and height to the Bounds property.
             // Also, make sure the Bounds are anchored to the Pivot
@@ -194,26 +194,17 @@ namespace FemDesign.Info
                 graphics.DrawImage(image, textRectangle);
 
                 textRectangle.Y += 40;
-                graphics.DrawString($"Current version: {currentVersion}", GH_FontServer.StandardItalic, Brushes.Black, textRectangle, format);
+                string txt1 = $"Current version: {currentVersion}";
+                var font = GH_FontServer.StandardItalic;
+                var layoutRectangle = textRectangle;
+                layoutRectangle.X = textRectangle.X + (textRectangle.Width - graphics.MeasureString(txt1, font).Width) / 2;
+                graphics.DrawString(txt1, font, Brushes.Black, layoutRectangle, format);
 
                 textRectangle.Y += 20;
-                graphics.DrawString($"Created with: {creationVersion}", GH_FontServer.StandardItalic, Brushes.Black, textRectangle, format);
-
-                textRectangle.Y += 20;
-                graphics.DrawString(String.Format("Useful links:"), GH_FontServer.StandardItalic, Brushes.Black, textRectangle, format);
-
-                textRectangle.Y += 20;
-                link1 = textRectangle;
-                Font linkFont = new Font(GH_FontServer.StandardItalic, FontStyle.Underline);
-                graphics.DrawString(String.Format("https://femdesign-api-docs.onstrusoft.com"), linkFont, Brushes.Blue, textRectangle, format);
-
-                textRectangle.Y += 20;
-                link2 = textRectangle;
-                graphics.DrawString(String.Format("https://strusoft.freshdesk.com", 5), linkFont, Brushes.Blue, textRectangle, format);
-
-                textRectangle.Y += 20;
-                link3 = textRectangle;
-                graphics.DrawString(String.Format("https://github.com/strusoft/femdesign-api"), linkFont, Brushes.Blue, textRectangle, format);
+                string txt2 = $"Created with: {creationVersion}";
+                layoutRectangle = textRectangle;
+                layoutRectangle.X = textRectangle.X + (textRectangle.Width - graphics.MeasureString(txt2, font).Width) / 2;
+                graphics.DrawString(txt2, font, Brushes.Black, layoutRectangle, format);
 
 
                 // Always dispose of any GDI+ object that implement IDisposable.
@@ -221,29 +212,30 @@ namespace FemDesign.Info
             }
         }
 
-        public override GH.GUI.Canvas.GH_ObjectResponse RespondToMouseUp(GH.GUI.Canvas.GH_Canvas sender, GH.GUI.GH_CanvasMouseEvent e)
-        {
-            if (e.Button != System.Windows.Forms.MouseButtons.Left) 
-                return base.RespondToMouseUp(sender, e);
+        // this method can be removed >>
+        //public override GH.GUI.Canvas.GH_ObjectResponse RespondToMouseUp(GH.GUI.Canvas.GH_Canvas sender, GH.GUI.GH_CanvasMouseEvent e)
+        //{
+        //    if (e.Button != System.Windows.Forms.MouseButtons.Left) 
+        //        return base.RespondToMouseUp(sender, e);
 
-            // Left mouse button up
-            if (link1.Contains(e.CanvasLocation))
-            {
-                System.Diagnostics.Process.Start("https://femdesign-api-docs.onstrusoft.com");
-                return GH.GUI.Canvas.GH_ObjectResponse.Handled;
-            }
-            else if (link2.Contains(e.CanvasLocation))
-            {
-                System.Diagnostics.Process.Start("https://strusoft.freshdesk.com");
-                return GH.GUI.Canvas.GH_ObjectResponse.Handled;
-            }
-            else if (link3.Contains(e.CanvasLocation))
-            {
-                System.Diagnostics.Process.Start("https://github.com/strusoft/femdesign-api");
-                return GH.GUI.Canvas.GH_ObjectResponse.Handled;
-            }
-            return GH.GUI.Canvas.GH_ObjectResponse.Ignore;
-        }
+        //    // Left mouse button up
+        //    if (link1.Contains(e.CanvasLocation))
+        //    {
+        //        System.Diagnostics.Process.Start("https://femdesign-api-docs.onstrusoft.com");
+        //        return GH.GUI.Canvas.GH_ObjectResponse.Handled;
+        //    }
+        //    else if (link2.Contains(e.CanvasLocation))
+        //    {
+        //        System.Diagnostics.Process.Start("https://strusoft.freshdesk.com");
+        //        return GH.GUI.Canvas.GH_ObjectResponse.Handled;
+        //    }
+        //    else if (link3.Contains(e.CanvasLocation))
+        //    {
+        //        System.Diagnostics.Process.Start("https://github.com/strusoft/femdesign-api");
+        //        return GH.GUI.Canvas.GH_ObjectResponse.Handled;
+        //    }
+        //    return GH.GUI.Canvas.GH_ObjectResponse.Ignore;
+        //}
     }
 
 }
