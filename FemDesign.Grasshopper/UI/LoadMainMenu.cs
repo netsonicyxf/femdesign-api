@@ -57,19 +57,19 @@ namespace FemDesign.Grasshopper.UI
 
         private static void PopulateSub(ToolStripMenuItem menuItem)
         {
-            menuItem.DropDown.Items.Add("Documentation", Properties.Resources.FdLogo,
+            menuItem.DropDown.Items.Add("Documentation", Properties.Resources.MainMenu_Documentation,
                 (sender, e) => OpenBrowser(sender, e, documentationUrl));
 
             menuItem.DropDown.Items.Add(
-                "Community", Properties.Resources.FdLogo,
+                "Community", Properties.Resources.MainMenu_Discourse,
                 (sender, e) => OpenBrowser(sender, e, communityUrl));
 
             menuItem.DropDown.Items.Add(
-                "Support", Properties.Resources.FdLogo,
+                "Support", Properties.Resources.MainMenu_FreshdeskIcon,
                 (sender, e) => OpenBrowser(sender, e, supportUrl));
 
             menuItem.DropDown.Items.Add(
-                "GitHub", Properties.Resources.FdLogo,
+                "GitHub", Properties.Resources.MainMenu_Github,
                 (sender, e) => OpenBrowser(sender, e, gitHubUrl));
         }
 

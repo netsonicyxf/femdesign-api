@@ -7438,4 +7438,16 @@
   <data name="StudRailPeiko" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons\StudRailPeiko.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="MainMenu_Discourse" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icons\MainMenu_Discourse.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="MainMenu_Documentation" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icons\MainMenu_Documentation.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="MainMenu_FreshdeskIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icons\MainMenu_FreshdeskIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="MainMenu_Github" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icons\MainMenu_Github.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

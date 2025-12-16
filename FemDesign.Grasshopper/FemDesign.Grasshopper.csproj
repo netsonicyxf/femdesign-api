@@ -1021,6 +1021,10 @@
     <Content Include="Resources\icons\LineConnection.bmp" />
     <None Include="Resources\icons\PeriodicCase.png" />
     <None Include="Resources\icons\parseAll.png" />
+    <None Include="Resources\icons\MainMenu_Discourse.png" />
+    <None Include="Resources\icons\MainMenu_Documentation.png" />
+    <None Include="Resources\icons\MainMenu_FreshdeskIcon.png" />
+    <None Include="Resources\icons\MainMenu_Github.png" />
     <Content Include="Resources\icons\PeriodicExcitationDefine2.png" />
     <Content Include="Resources\icons\PeriodicExcitationDefine3.png" />
     <None Include="Resources\icons\PeriodicExcitationLoad.png" />
