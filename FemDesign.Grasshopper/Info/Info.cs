@@ -34,7 +34,7 @@ namespace FemDesign.Info
 
     public class InfoComponent : GH_Component
     {
-        public InfoComponent() : base("Info", "Info", "Information about FEM Design API", FGH.CategoryName.Name(), FGH.SubCategoryName.Cat8())
+        public InfoComponent() : base("Info", "Info", "Information about FEM-Design API", FGH.CategoryName.Name(), FGH.SubCategoryName.Cat8())
         {
 
         }
@@ -112,10 +112,10 @@ namespace FemDesign.Info
             // Compute the width of the NickName of the owner (plus some extra padding), 
             // then make sure we have at least 80 pixels.
             //int width = GH_FontServer.StringWidth(Owner.NickName, GH_FontServer.Standard);
-            int width = 300; //Math.Max(width + 10, 80);
+            int width = 250; //Math.Max(width + 10, 80);
 
             // The height of our object is always 60 pixels
-            int height = 220;
+            int height = 150;
 
             // Assign the width and height to the Bounds property.
             // Also, make sure the Bounds are anchored to the Pivot
@@ -165,16 +165,15 @@ namespace FemDesign.Info
                 // Our entire capsule is 60 pixels high, and we'll draw 
                 // three lines of text, each 20 pixels high.
                 RectangleF textRectangle = Bounds;
-                textRectangle.Height = 20;
+                textRectangle.Height = 30;
 
                 textRectangle.Y += 5;
                 // Draw the NickName in a Standard Grasshopper font.
-                graphics.DrawString("About FemDesign API", GH_FontServer.Large, Brushes.Black, textRectangle, format);
+                graphics.DrawString("About FEM-Design API", GH_FontServer.Large, Brushes.Black, textRectangle, format);
 
 
                 // Now we need to draw the median and mean information.
                 // Adjust the formatting and the layout rectangle.
-                format.Alignment = StringAlignment.Near;
                 textRectangle.Inflate(-5, 0);
 
                 //API version number
@@ -182,67 +181,29 @@ namespace FemDesign.Info
                 string creationVersion = this.Owner.VersionWhenFirstCreated;
 
                 Pen pen = new Pen(Brushes.Black, Convert.ToSingle(0.5));
-                PointF pt1 = new PointF(textRectangle.X, textRectangle.Y + 20);
-                PointF pt2 = new PointF(textRectangle.X + textRectangle.Width, textRectangle.Y + 20);
+                PointF pt1 = new PointF(textRectangle.X, textRectangle.Y + 30);
+                PointF pt2 = new PointF(textRectangle.X + textRectangle.Width, textRectangle.Y + 30);
                 graphics.DrawLine(pen, pt1, pt2);
 
 
-                textRectangle.Y += 30;
+                textRectangle.Y += 40;
                 textRectangle.Height = Convert.ToSingle(textRectangle.Width * 0.227);
                 Image image = FemDesign.Properties.Resources.FdLogo;
 
                 graphics.DrawImage(image, textRectangle);
 
                 textRectangle.Y += 40;
-                graphics.DrawString($"Current version: {currentVersion}", GH_FontServer.StandardItalic, Brushes.Black, textRectangle, format);
+                string txt1 = $"Current version: {currentVersion}";
+                graphics.DrawString(txt1, GH_FontServer.StandardItalic, Brushes.Black, textRectangle, format);
 
                 textRectangle.Y += 20;
-                graphics.DrawString($"Created with: {creationVersion}", GH_FontServer.StandardItalic, Brushes.Black, textRectangle, format);
-
-                textRectangle.Y += 20;
-                graphics.DrawString(String.Format("Useful links:"), GH_FontServer.StandardItalic, Brushes.Black, textRectangle, format);
-
-                textRectangle.Y += 20;
-                link1 = textRectangle;
-                Font linkFont = new Font(GH_FontServer.StandardItalic, FontStyle.Underline);
-                graphics.DrawString(String.Format("https://femdesign-api-docs.onstrusoft.com"), linkFont, Brushes.Blue, textRectangle, format);
-
-                textRectangle.Y += 20;
-                link2 = textRectangle;
-                graphics.DrawString(String.Format("https://strusoft.freshdesk.com", 5), linkFont, Brushes.Blue, textRectangle, format);
-
-                textRectangle.Y += 20;
-                link3 = textRectangle;
-                graphics.DrawString(String.Format("https://github.com/strusoft/femdesign-api"), linkFont, Brushes.Blue, textRectangle, format);
+                string txt2 = $"Created with: {creationVersion}";
+                graphics.DrawString(txt2, GH_FontServer.StandardItalic, Brushes.Black, textRectangle, format);
 
 
                 // Always dispose of any GDI+ object that implement IDisposable.
                 format.Dispose();
             }
-        }
-
-        public override GH.GUI.Canvas.GH_ObjectResponse RespondToMouseUp(GH.GUI.Canvas.GH_Canvas sender, GH.GUI.GH_CanvasMouseEvent e)
-        {
-            if (e.Button != System.Windows.Forms.MouseButtons.Left) 
-                return base.RespondToMouseUp(sender, e);
-
-            // Left mouse button up
-            if (link1.Contains(e.CanvasLocation))
-            {
-                System.Diagnostics.Process.Start("https://femdesign-api-docs.onstrusoft.com");
-                return GH.GUI.Canvas.GH_ObjectResponse.Handled;
-            }
-            else if (link2.Contains(e.CanvasLocation))
-            {
-                System.Diagnostics.Process.Start("https://strusoft.freshdesk.com");
-                return GH.GUI.Canvas.GH_ObjectResponse.Handled;
-            }
-            else if (link3.Contains(e.CanvasLocation))
-            {
-                System.Diagnostics.Process.Start("https://github.com/strusoft/femdesign-api");
-                return GH.GUI.Canvas.GH_ObjectResponse.Handled;
-            }
-            return GH.GUI.Canvas.GH_ObjectResponse.Ignore;
         }
     }
 
