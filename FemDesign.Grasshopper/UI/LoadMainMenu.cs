@@ -21,11 +21,13 @@ namespace FemDesign.Grasshopper.UI
 
         private static ToolStripMenuItem fdMenu;
 
+        private static string toolName = "FEM-Design";
+
         internal static void OnStartup(GH_Canvas canvas)
         {
-            fdMenu = new ToolStripMenuItem("FEM-Design")
+            fdMenu = new ToolStripMenuItem(toolName)
             {
-                Name = "FEM-Design",
+                Name = toolName,
             };
 
             PopulateSub(fdMenu);
@@ -38,13 +40,13 @@ namespace FemDesign.Grasshopper.UI
                 Thread.Sleep(321);
             }
 
-            if (!editor.MainMenuStrip.Items.ContainsKey("FEM-Design"))
+            if (!editor.MainMenuStrip.Items.ContainsKey(toolName))
             {
                 editor.MainMenuStrip.Items.Add(fdMenu);
             }
             else
             {
-                fdMenu = (ToolStripMenuItem)editor.MainMenuStrip.Items["FEM-Design"];
+                fdMenu = (ToolStripMenuItem)editor.MainMenuStrip.Items[toolName];
                 lock (fdMenu)
                 {
                     fdMenu.DropDown.Items.Add(new ToolStripSeparator());
@@ -57,19 +59,19 @@ namespace FemDesign.Grasshopper.UI
 
         private static void PopulateSub(ToolStripMenuItem menuItem)
         {
-            menuItem.DropDown.Items.Add("Documentation", Properties.Resources.MainMenu_Documentation,
+            menuItem.DropDown.Items.Add("Documentation", null/*Properties.Resources.MainMenu_Documentation*/,
                 (sender, e) => OpenBrowser(sender, e, documentationUrl));
 
             menuItem.DropDown.Items.Add(
-                "Community", Properties.Resources.MainMenu_Discourse,
+                "Community", null/*Properties.Resources.MainMenu_Discourse*/,
                 (sender, e) => OpenBrowser(sender, e, communityUrl));
 
             menuItem.DropDown.Items.Add(
-                "Support", Properties.Resources.MainMenu_FreshdeskIcon,
+                "Support", null/*Properties.Resources.MainMenu_FreshdeskIcon*/,
                 (sender, e) => OpenBrowser(sender, e, supportUrl));
 
             menuItem.DropDown.Items.Add(
-                "GitHub", Properties.Resources.MainMenu_Github,
+                "GitHub", null/*Properties.Resources.MainMenu_Github*/,
                 (sender, e) => OpenBrowser(sender, e, gitHubUrl));
         }
 
