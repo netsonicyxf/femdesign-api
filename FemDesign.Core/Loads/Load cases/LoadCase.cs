@@ -36,9 +36,23 @@ namespace FemDesign.Loads
         }
         [XmlAttribute("type")]
         public LoadCaseType Type { get; set; } // loadcasetype_type
+
         [XmlAttribute("duration_class")]
-        public LoadCaseDuration DurationClass { get; set; } // loadcasedurationtype
-        
+        public LoadCaseDuration _durationClass; // loadcasedurationtype
+
+        [XmlIgnore]
+        public LoadCaseDuration DurationClass // loadcasedurationtype
+        { 
+            get => _durationClass;
+            set
+            {
+                if(Type == LoadCaseType.Diaphragm && value != LoadCaseDuration.ShortTerm)
+                    throw new ArgumentException("Diaphragm load cases must have ShortTerm duration class!");
+                else
+                    _durationClass = value;
+            }
+        }
+
         /// <summary>
         /// Parameterless constructor for serialization.
         /// </summary>

@@ -113,5 +113,11 @@ namespace FemDesign.Loads
         [XmlEnum("seis_max")]
         Seis_max,
 
+        /// <summary>
+        /// 
+        /// </summary>
+        [Parseable("diaphragm", "Diaphragm", "DIAPHRAGM")]
+        [XmlEnum("diaphragm")]
+        Diaphragm,
     }
 }
