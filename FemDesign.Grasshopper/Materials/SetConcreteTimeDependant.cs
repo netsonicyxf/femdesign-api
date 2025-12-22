@@ -22,14 +22,14 @@ namespace FemDesign.Grasshopper
     public class MaterialSetTDA : GH_SwitcherComponent
     {
         /// </summary>
-        public MaterialSetTDA() : base("SetTDA", "SetTDA", "", CategoryName.Name(), SubCategoryName.Cat4a())
+        public MaterialSetTDA() : base("SetConcreteTDA", "SetConcreteTDA", "Set concrete time dependant analysis", CategoryName.Name(), SubCategoryName.Cat4a())
         {
 
         }
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Material", "Material", "Material.", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Material", "Material", "Concrete material.", GH_ParamAccess.item);
             pManager[pManager.ParamCount - 1].Optional = false;
 
 
@@ -222,5 +222,8 @@ namespace FemDesign.Grasshopper
         {
             get { return new Guid("{A80FC5B7-F548-4DBF-97C4-AE73FA07CCC6}"); }
         }
+
+        public override GH_Exposure Exposure => GH_Exposure.tertiary;
+
     }
 }
