@@ -32,6 +32,8 @@ namespace FemDesign.Grasshopper
                 nameof(ListProc.QuantityEstimationProfiledPanel), GH_ParamAccess.item);
 			pManager.AddGenericParameter("Units", "Units", "Optional result units.", GH_ParamAccess.item);
 			pManager[pManager.ParamCount - 1].Optional = true;
+			pManager.AddBooleanParameter("RunNode", "RunNode", "If true node will execute. If false node will not execute.", GH_ParamAccess.item, true);
+			pManager[pManager.ParamCount - 1].Optional = true;
 		}
 
 		protected override void RegisterOutputParams(GH_OutputParamManager pManager)
@@ -53,9 +55,22 @@ namespace FemDesign.Grasshopper
 			Results.UnitResults units = null;
 			DA.GetData("Units", ref units);
 
+			bool runNode = true;
+			DA.GetData("RunNode", ref runNode);
+
 			var log = new List<string>();
 			bool success = false;
 			var results = new List<Results.IResult>();
+
+			if (!runNode)
+			{
+				this.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Run node set to false.");
+				DA.SetData("Connection", null);
+				DA.SetDataList("Quantities", results);
+				DA.SetData("Success", false);
+				DA.SetDataList("Log", log);
+				return;
+			}
 
             // check inputs
             if (string.IsNullOrWhiteSpace(resultTypeName)) 

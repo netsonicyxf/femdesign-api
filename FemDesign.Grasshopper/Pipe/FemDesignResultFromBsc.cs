@@ -25,6 +25,8 @@ namespace FemDesign.Grasshopper
 			pManager[pManager.ParamCount - 1].Optional = true;
 			pManager.AddGenericParameter("Elements", "Elements", "Optional elements filter.", GH_ParamAccess.list);
 			pManager[pManager.ParamCount - 1].Optional = true;
+			pManager.AddBooleanParameter("RunNode", "RunNode", "If true node will execute. If false node will not execute.", GH_ParamAccess.item, true);
+			pManager[pManager.ParamCount - 1].Optional = true;
 		}
 
 		protected override void RegisterOutputParams(GH_OutputParamManager pManager)
@@ -49,9 +51,22 @@ namespace FemDesign.Grasshopper
 			var elements = new List<FemDesign.GenericClasses.IStructureElement>();
 			DA.GetDataList("Elements", elements);
 
+			bool runNode = true;
+			DA.GetData("RunNode", ref runNode);
+
 			var log = new List<string>();
 			bool success = false;
 			var resultsTree = new DataTree<object>();
+
+			if (!runNode)
+			{
+				this.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Run node set to false.");
+				DA.SetData("Connection", null);
+				DA.SetDataTree(1, resultsTree);
+				DA.SetData("Success", false);
+				DA.SetDataList("Log", log);
+				return;
+			}
 
 			try
 			{

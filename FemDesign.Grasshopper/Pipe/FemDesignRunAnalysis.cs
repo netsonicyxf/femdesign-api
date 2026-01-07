@@ -19,6 +19,8 @@ namespace FemDesign.Grasshopper
         {
             pManager.AddGenericParameter("Connection", "Connection", "Shared FEM-Design connection handle.", GH_ParamAccess.item);
             pManager.AddGenericParameter("Analysis", "Analysis", "Analysis settings.", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("RunNode", "RunNode", "If true node will execute. If false node will not execute.", GH_ParamAccess.item, true);
+            pManager[pManager.ParamCount - 1].Optional = true;
         }
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
@@ -36,8 +38,20 @@ namespace FemDesign.Grasshopper
             Analysis analysis = null;
             DA.GetData("Analysis", ref analysis);
 
+            bool runNode = true;
+            DA.GetData("RunNode", ref runNode);
+
             var log = new List<string>();
             bool success = false;
+
+            if (!runNode)
+            {
+                this.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Run node set to false.");
+                DA.SetData("Connection", null);
+                DA.SetData("Success", false);
+                DA.SetDataList("Log", log);
+                return;
+            }
 
             // check inputs
             if (analysis == null) 

@@ -35,6 +35,8 @@ namespace FemDesign.Grasshopper
             pManager[pManager.ParamCount - 1].Optional = true;
             pManager.AddGenericParameter("Units", "Units", "Specify the Result Units for some specific type.\nDefault Units are: Length.m, Angle.deg, SectionalData.m, Force.kN, Mass.kg, Displacement.m, Stress.Pa", GH_ParamAccess.item);
             pManager[pManager.ParamCount - 1].Optional = true;
+            pManager.AddBooleanParameter("RunNode", "RunNode", "If true node will execute. If false node will not execute.", GH_ParamAccess.item, true);
+            pManager[pManager.ParamCount - 1].Optional = true;
         }
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
@@ -63,11 +65,25 @@ namespace FemDesign.Grasshopper
             Results.UnitResults units = null;
             DA.GetData("Units", ref units);
 
+            bool runNode = true;
+            DA.GetData("RunNode", ref runNode);
+
             var log = new List<string>();
             bool success = false;
 
             var bucklingTree = new DataTree<FemDesign.Results.NodalBucklingShape>();
             var critParameterTree = new DataTree<FemDesign.Results.CriticalParameter>();
+
+            if (!runNode)
+            {
+                this.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Run node set to false.");
+                DA.SetData("Connection", null);
+                DA.SetDataTree(1, bucklingTree);
+                DA.SetDataTree(2, critParameterTree);
+                DA.SetData("Success", false);
+                DA.SetDataList("Log", log);
+                return;
+            }
 
             try
             {
