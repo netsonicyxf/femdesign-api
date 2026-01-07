@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 
 using Grasshopper;
 using Grasshopper.Kernel;
@@ -15,11 +16,25 @@ using FemDesign.Results.Utils;
 namespace FemDesign.Grasshopper
 {
     /// <summary>
-    /// Read stability results using the shared hub connection (standard GH_Component, UI-blocking).
-    /// Mirrors PipeStabilityResults behavior without the async workaround.
+    /// Read stability results using the shared hub connection.
+    /// Supports both sync (UI-blocking) and async (non-blocking) modes via FemDesignSettings.
     /// </summary>
-    public class FemDesignGetStabilityResults : FEM_Design_API_Component
+    public class FemDesignGetStabilityResults : FemDesignHybridComponent
     {
+        // Input data
+        private FemDesignHubHandle _handle;
+        private List<string> _combos;
+        private List<int> _shapeIds;
+        private Options _options;
+        private Results.UnitResults _units;
+        private bool _runNode;
+
+        // Output data
+        private DataTree<FemDesign.Results.NodalBucklingShape> _bucklingTree;
+        private DataTree<FemDesign.Results.CriticalParameter> _critParameterTree;
+        private List<string> _log;
+        private bool _success;
+
         public FemDesignGetStabilityResults() : base("FEM-Design.GetStabilityResults", "StabilityResults", "Read stability results from current model using shared connection. Result files (.csv) are saved into the output directory.", CategoryName.Name(), SubCategoryName.Cat8())
         {
         }
@@ -48,104 +63,115 @@ namespace FemDesign.Grasshopper
             pManager.AddTextParameter("Log", "Log", "Operation log.", GH_ParamAccess.list);
         }
 
-        protected override void SolveInstance(IGH_DataAccess DA)
+        protected override void CollectInputData(IGH_DataAccess DA)
         {
-            FemDesignHubHandle handle = null;
-            DA.GetData("Connection", ref handle);
+            _handle = null;
+            DA.GetData("Connection", ref _handle);
 
-            var combos = new List<string>();
-            DA.GetDataList("Combination Name", combos);
+            _combos = new List<string>();
+            DA.GetDataList("Combination Name", _combos);
 
-            var shapeIds = new List<int>();
-            DA.GetDataList("ShapeId", shapeIds);
+            _shapeIds = new List<int>();
+            DA.GetDataList("ShapeId", _shapeIds);
 
-            Options options = null;
-            DA.GetData("Options", ref options);
+            _options = null;
+            DA.GetData("Options", ref _options);
 
-            Results.UnitResults units = null;
-            DA.GetData("Units", ref units);
+            _units = null;
+            DA.GetData("Units", ref _units);
 
-            bool runNode = true;
-            DA.GetData("RunNode", ref runNode);
+            _runNode = true;
+            DA.GetData("RunNode", ref _runNode);
 
-            var log = new List<string>();
-            bool success = false;
+            // Reset output data
+            _bucklingTree = new DataTree<FemDesign.Results.NodalBucklingShape>();
+            _critParameterTree = new DataTree<FemDesign.Results.CriticalParameter>();
+            _log = new List<string>();
+            _success = false;
+        }
 
-            var bucklingTree = new DataTree<FemDesign.Results.NodalBucklingShape>();
-            var critParameterTree = new DataTree<FemDesign.Results.CriticalParameter>();
-
-            if (!runNode)
+        protected override bool ShouldExecute()
+        {
+            if (!_runNode)
             {
                 this.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Run node set to false.");
-                DA.SetData("Connection", null);
-                DA.SetDataTree(1, bucklingTree);
-                DA.SetDataTree(2, critParameterTree);
-                DA.SetData("Success", false);
-                DA.SetDataList("Log", log);
-                return;
+                return false;
             }
-
-            try
+            if (_handle == null)
             {
-                if (handle == null)
-                    throw new Exception("Connection handle is null.");
+                this.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Connection input is null.");
+                return false;
+            }
+            return true;
+        }
 
-                FemDesignConnectionHub.InvokeAsync(handle.Id, connection =>
+        protected override void ExecuteWork(CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            FemDesignConnectionHub.InvokeAsync(_handle.Id, connection =>
+            {
+                void onOutput(string s) { _log.Add(s); }
+                connection.OnOutput += onOutput;
+                try
                 {
-                    void onOutput(string s) { log.Add(s); }
-                    connection.OnOutput += onOutput;
-                    try
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    // Helper to invoke private generic _getStabilityResults
+                    List<IResult> InvokeStabilityResults(Type resultType, string loadCombination = null, int? shapeId = null)
                     {
-                        // helper to invoke private generic _getStabilityResults
-                        List<IResult> InvokeStabilityResults(Type resultType, string loadCombination = null, int? shapeId = null)
-                        {
-                            string methodName = nameof(FemDesign.FemDesignConnection._getStabilityResults);
-                            MethodInfo genericMethod = connection.GetType().GetMethod(methodName, BindingFlags.Instance | BindingFlags.NonPublic).MakeGenericMethod(resultType);
-                            var shapeList = shapeId.HasValue ? new List<int> { shapeId.Value } : null;
-                            var combList = loadCombination != null ? new List<string> { loadCombination } : null;
-                            var res = (IEnumerable<IResult>)genericMethod.Invoke(connection, new object[] { combList, shapeList, units, options, false });
-                            return res.ToList();
-                        }
-
-                        // read full result sets
-                        var bucklingRes = InvokeStabilityResults(typeof(FemDesign.Results.NodalBucklingShape)).Cast<FemDesign.Results.NodalBucklingShape>().ToList();
-                        var critParamRes = InvokeStabilityResults(typeof(FemDesign.Results.CriticalParameter)).Cast<FemDesign.Results.CriticalParameter>().ToList();
-
-                        if (bucklingRes.Count == 0)
-                            throw new Exception("Stability results have not been found. Have you run the Stability analysis?");
-
-                        // validate filters
-                        ValidateCombos(bucklingRes, combos);
-                        ValidateShapes(bucklingRes, shapeIds);
-
-                        // build trees and filter
-                        var rawBucklingTree = CreateBucklingTree(bucklingRes);
-                        bucklingTree = FilterBucklingTree(rawBucklingTree, combos, shapeIds);
-
-                        string critParamPropName = nameof(CriticalParameter.CaseIdentifier);
-                        var rawCritTree = critParamRes.CreateResultTree(critParamPropName);
-                        critParameterTree = FilterCriticalTree(rawCritTree, combos, shapeIds);
+                        string methodName = nameof(FemDesign.FemDesignConnection._getStabilityResults);
+                        MethodInfo genericMethod = connection.GetType().GetMethod(methodName, BindingFlags.Instance | BindingFlags.NonPublic).MakeGenericMethod(resultType);
+                        var shapeList = shapeId.HasValue ? new List<int> { shapeId.Value } : null;
+                        var combList = loadCombination != null ? new List<string> { loadCombination } : null;
+                        var res = (IEnumerable<IResult>)genericMethod.Invoke(connection, new object[] { combList, shapeList, _units, _options, false });
+                        return res.ToList();
                     }
-                    finally
-                    {
-                        connection.OnOutput -= onOutput;
-                    }
-                }).GetAwaiter().GetResult();
 
-                success = true;
-            }
-            catch (Exception ex)
-            {
-                this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, ex.Message);
-                log.Add(ex.Message);
-                success = false;
-            }
+                    // Read full result sets
+                    var bucklingRes = InvokeStabilityResults(typeof(FemDesign.Results.NodalBucklingShape)).Cast<FemDesign.Results.NodalBucklingShape>().ToList();
+                    var critParamRes = InvokeStabilityResults(typeof(FemDesign.Results.CriticalParameter)).Cast<FemDesign.Results.CriticalParameter>().ToList();
 
-            DA.SetData("Connection", handle);
-            DA.SetDataTree(1, bucklingTree);
-            DA.SetDataTree(2, critParameterTree);
-            DA.SetData("Success", success);
-            DA.SetDataList("Log", log);
+                    if (bucklingRes.Count == 0)
+                        throw new Exception("Stability results have not been found. Have you run the Stability analysis?");
+
+                    // Validate filters
+                    ValidateCombos(bucklingRes, _combos);
+                    ValidateShapes(bucklingRes, _shapeIds);
+
+                    // Build trees and filter
+                    var rawBucklingTree = CreateBucklingTree(bucklingRes);
+                    _bucklingTree = FilterBucklingTree(rawBucklingTree, _combos, _shapeIds);
+
+                    string critParamPropName = nameof(CriticalParameter.CaseIdentifier);
+                    var rawCritTree = critParamRes.CreateResultTree(critParamPropName);
+                    _critParameterTree = FilterCriticalTree(rawCritTree, _combos, _shapeIds);
+                }
+                finally
+                {
+                    connection.OnOutput -= onOutput;
+                }
+            }).GetAwaiter().GetResult();
+
+            _success = true;
+        }
+
+        protected override void SetOutputData(IGH_DataAccess DA)
+        {
+            DA.SetData("Connection", _handle);
+            DA.SetDataTree(1, _bucklingTree);
+            DA.SetDataTree(2, _critParameterTree);
+            DA.SetData("Success", _success);
+            DA.SetDataList("Log", _log);
+        }
+
+        protected override void SetDefaultOutputData(IGH_DataAccess DA)
+        {
+            DA.SetData("Connection", null);
+            DA.SetDataTree(1, new DataTree<FemDesign.Results.NodalBucklingShape>());
+            DA.SetDataTree(2, new DataTree<FemDesign.Results.CriticalParameter>());
+            DA.SetData("Success", false);
+            DA.SetDataList("Log", _log ?? new List<string>());
         }
 
         private static void ValidateCombos(List<FemDesign.Results.NodalBucklingShape> results, List<string> combos)
@@ -191,7 +217,7 @@ namespace FemDesign.Grasshopper
                 }
             }
 
-            // remove empty branches
+            // Remove empty branches
             var emptyPath = new List<GH_Path>();
             for (int i = 0; i < resultsTree.BranchCount; i++)
             {
@@ -306,5 +332,3 @@ namespace FemDesign.Grasshopper
         public override GH_Exposure Exposure => GH_Exposure.tertiary;
     }
 }
-
-

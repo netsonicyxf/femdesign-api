@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using Grasshopper;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
@@ -12,11 +13,26 @@ using FemDesign.Calculate;
 namespace FemDesign.Grasshopper
 {
     /// <summary>
-    /// Read load cases and load combinations results using the shared hub connection (standard GH_Component, UI-blocking).
-    /// Mirrors PipeReadResults logic but executes via FemDesignConnectionHub.
+    /// Read load cases and load combinations results using the shared hub connection.
+    /// Supports both sync (UI-blocking) and async (non-blocking) modes via FemDesignSettings.
     /// </summary>
-    public class FemDesignGetCaseCombResults : FEM_Design_API_Component
+    public class FemDesignGetCaseCombResults : FemDesignHybridComponent
     {
+        // Input data
+        private FemDesignHubHandle _handle;
+        private List<string> _resultTypes;
+        private List<string> _caseNames;
+        private List<string> _comboNames;
+        private List<FemDesign.GenericClasses.IStructureElement> _elements;
+        private Results.UnitResults _units;
+        private Options _options;
+        private bool _runNode;
+
+        // Output data
+        private DataTree<object> _resultsTree;
+        private List<string> _log;
+        private bool _success;
+
         public FemDesignGetCaseCombResults() : base("FEM-Design.GetCaseCombResults", "CaseCombResults", "Read load cases and load combinations results from current model using shared connection. Result files (.csv) are saved into the output directory.", CategoryName.Name(), SubCategoryName.Cat8())
         {
         }
@@ -48,121 +64,135 @@ namespace FemDesign.Grasshopper
             pManager.AddTextParameter("Log", "Log", "Operation log.", GH_ParamAccess.list);
         }
 
-        protected override void SolveInstance(IGH_DataAccess DA)
+        protected override void CollectInputData(IGH_DataAccess DA)
         {
-            FemDesignHubHandle handle = null;
-            DA.GetData("Connection", ref handle);
+            _handle = null;
+            DA.GetData("Connection", ref _handle);
 
-            var resultTypes = new List<string>();
-            DA.GetDataList("ResultType", resultTypes);
+            _resultTypes = new List<string>();
+            DA.GetDataList("ResultType", _resultTypes);
 
-            var caseNames = new List<string>();
-            DA.GetDataList("Case Name", caseNames);
+            _caseNames = new List<string>();
+            DA.GetDataList("Case Name", _caseNames);
 
-            var comboNames = new List<string>();
-            DA.GetDataList("Combination Name", comboNames);
+            _comboNames = new List<string>();
+            DA.GetDataList("Combination Name", _comboNames);
 
-            var elements = new List<FemDesign.GenericClasses.IStructureElement>();
-            DA.GetDataList("Elements", elements);
+            _elements = new List<FemDesign.GenericClasses.IStructureElement>();
+            DA.GetDataList("Elements", _elements);
 
-            Results.UnitResults units = null;
-            DA.GetData("Units", ref units);
+            _units = null;
+            DA.GetData("Units", ref _units);
 
-            Options options = null;
-            DA.GetData("Options", ref options);
+            _options = null;
+            DA.GetData("Options", ref _options);
 
-            bool runNode = true;
-            DA.GetData("RunNode", ref runNode);
+            _runNode = true;
+            DA.GetData("RunNode", ref _runNode);
 
-            var log = new List<string>();
-            bool success = false;
-            var resultsTree = new DataTree<object>();
+            // Reset output data
+            _resultsTree = new DataTree<object>();
+            _log = new List<string>();
+            _success = false;
+        }
 
-            if (!runNode)
+        protected override bool ShouldExecute()
+        {
+            if (!_runNode)
             {
                 this.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Run node set to false.");
-                DA.SetData("Connection", null);
-                DA.SetDataTree(1, resultsTree);
-                DA.SetData("Success", false);
-                DA.SetDataList("Log", log);
-                return;
+                return false;
             }
-
-            try
+            if (_handle == null)
             {
-                FemDesignConnectionHub.InvokeAsync(handle.Id, connection =>
+                this.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Connection input is null.");
+                return false;
+            }
+            return true;
+        }
+
+        protected override void ExecuteWork(CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            FemDesignConnectionHub.InvokeAsync(_handle.Id, connection =>
+            {
+                void onOutput(string s) { _log.Add(s); }
+                connection.OnOutput += onOutput;
+                try
                 {
-                    void onOutput(string s) { log.Add(s); }
-                    connection.OnOutput += onOutput;
-                    try
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    int resIndex = 0;
+                    foreach (var rt in _resultTypes)
                     {
-                        int resIndex = 0;
-                        foreach (var rt in resultTypes)
+                        int caseIndex = 0;
+                        int combIndex = 0;
+
+                        string typeName = $"FemDesign.Results.{rt}, FemDesign.Core";
+                        Type resultType = Type.GetType(typeName);
+
+                        // Helper to invoke private generic methods on FemDesignConnection
+                        List<Results.IResult> InvokeGeneric(string methodName, Type genericType, object[] args)
                         {
-                            int caseIndex = 0;
-                            int combIndex = 0;
-
-                            string typeName = $"FemDesign.Results.{rt}, FemDesign.Core";
-                            Type resultType = Type.GetType(typeName);
-                            
-
-                            // Helper to invoke private generic methods on FemDesignConnection
-                            List<Results.IResult> InvokeGeneric(string methodName, Type genericType, object[] args)
-                            {
-                                var mi = connection.GetType().GetMethod(methodName, BindingFlags.Instance | BindingFlags.NonPublic).MakeGenericMethod(genericType);
-                                var res = (IEnumerable<Results.IResult>)mi.Invoke(connection, args);
-                                return res.ToList();
-                            }
-
-                            if (!comboNames.Any() && !caseNames.Any())
-                            {
-                                var res = InvokeGeneric(nameof(FemDesign.FemDesignConnection._getResults), resultType, new object[] { units, options, elements, true });
-                                resultsTree.AddRange(res, new GH_Path(resIndex));
-                            }
-
-                            if (caseNames.Any())
-                            {
-                                foreach (var c in caseNames)
-                                {
-                                    var res = InvokeGeneric(nameof(FemDesign.FemDesignConnection._getLoadCaseResults), resultType, new object[] { new List<string> { c }, elements, units, options, true });
-                                    resultsTree.AddRange(res, new GH_Path(resIndex, caseIndex));
-                                    caseIndex++;
-                                }
-                            }
-
-                            if (comboNames.Any())
-                            {
-                                combIndex = caseIndex;
-                                foreach (var cmb in comboNames)
-                                {
-                                    var res = InvokeGeneric(nameof(FemDesign.FemDesignConnection._getLoadCombinationResults), resultType, new object[] { new List<string> { cmb }, elements, units, options, true });
-                                    resultsTree.AddRange(res, new GH_Path(resIndex, combIndex));
-                                    combIndex++;
-                                }
-                            }
-
-                            resIndex++;
+                            var mi = connection.GetType().GetMethod(methodName, BindingFlags.Instance | BindingFlags.NonPublic).MakeGenericMethod(genericType);
+                            var res = (IEnumerable<Results.IResult>)mi.Invoke(connection, args);
+                            return res.ToList();
                         }
-                    }
-                    finally
-                    {
-                        connection.OnOutput -= onOutput;
-                    }
-                }).GetAwaiter().GetResult();
 
-                success = true;
-            }
-            catch (Exception ex)
-            {
-                this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, ex.Message);
-                log.Add(ex.InnerException?.Message ?? ex.Message);
-                success = false;
-            }
+                        if (!_comboNames.Any() && !_caseNames.Any())
+                        {
+                            var res = InvokeGeneric(nameof(FemDesign.FemDesignConnection._getResults), resultType, new object[] { _units, _options, _elements, true });
+                            _resultsTree.AddRange(res, new GH_Path(resIndex));
+                        }
 
-            DA.SetData("Connection", handle);
-            DA.SetDataTree(1, resultsTree);
-            DA.SetData("Success", success);
-            DA.SetDataList("Log", log);
+                        if (_caseNames.Any())
+                        {
+                            foreach (var c in _caseNames)
+                            {
+                                var res = InvokeGeneric(nameof(FemDesign.FemDesignConnection._getLoadCaseResults), resultType, new object[] { new List<string> { c }, _elements, _units, _options, true });
+                                _resultsTree.AddRange(res, new GH_Path(resIndex, caseIndex));
+                                caseIndex++;
+                            }
+                        }
+
+                        if (_comboNames.Any())
+                        {
+                            combIndex = caseIndex;
+                            foreach (var cmb in _comboNames)
+                            {
+                                var res = InvokeGeneric(nameof(FemDesign.FemDesignConnection._getLoadCombinationResults), resultType, new object[] { new List<string> { cmb }, _elements, _units, _options, true });
+                                _resultsTree.AddRange(res, new GH_Path(resIndex, combIndex));
+                                combIndex++;
+                            }
+                        }
+
+                        resIndex++;
+                    }
+                }
+                finally
+                {
+                    connection.OnOutput -= onOutput;
+                }
+            }).GetAwaiter().GetResult();
+
+            _success = true;
+        }
+
+        protected override void SetOutputData(IGH_DataAccess DA)
+        {
+            DA.SetData("Connection", _handle);
+            DA.SetDataTree(1, _resultsTree);
+            DA.SetData("Success", _success);
+            DA.SetDataList("Log", _log);
+        }
+
+        protected override void SetDefaultOutputData(IGH_DataAccess DA)
+        {
+            DA.SetData("Connection", null);
+            DA.SetDataTree(1, new DataTree<object>());
+            DA.SetData("Success", false);
+            DA.SetDataList("Log", _log ?? new List<string>());
         }
 
         protected override System.Drawing.Bitmap Icon => FemDesign.Properties.Resources.FEM_readresult;
@@ -170,6 +200,3 @@ namespace FemDesign.Grasshopper
         public override GH_Exposure Exposure => GH_Exposure.tertiary;
     }
 }
-
- 
-

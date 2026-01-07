@@ -205,6 +205,8 @@
     <Compile Include="Calculate\CalculationParametersStabilityDefine.cs" />
     <Compile Include="Calculate\DesignGroup.cs" />
     <Compile Include="Components\FEM_Design_API_Component.cs" />
+    <Compile Include="Components\FemDesignHybridComponent.cs" />
+    <Compile Include="Settings\FemDesignSettings.cs" />
     <Compile Include="ConstructionStages\ActivatedLoadCase.cs" />
     <Compile Include="Deconstruct\ModellingTools\AdvancedFemDeconstruct.cs" />
     <Compile Include="Deconstruct\ModelDeconstruct.cs" />

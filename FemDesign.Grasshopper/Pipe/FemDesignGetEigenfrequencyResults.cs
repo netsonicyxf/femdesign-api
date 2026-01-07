@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 
 using Grasshopper;
 using Grasshopper.Kernel;
@@ -15,11 +16,24 @@ using FemDesign.Results.Utils;
 namespace FemDesign.Grasshopper
 {
     /// <summary>
-    /// Read eigenfrequency results using the shared hub connection (standard GH_Component, UI-blocking).
-    /// Mirrors PipeEigenFrequencyResults behavior without the async workaround.
+    /// Read eigenfrequency results using the shared hub connection.
+    /// Supports both sync (UI-blocking) and async (non-blocking) modes via FemDesignSettings.
     /// </summary>
-    public class FemDesignGetEigenfrequencyResults : FEM_Design_API_Component
+    public class FemDesignGetEigenfrequencyResults : FemDesignHybridComponent
     {
+        // Input data
+        private FemDesignHubHandle _handle;
+        private List<int> _shapeIds;
+        private Options _options;
+        private Results.UnitResults _units;
+        private bool _runNode;
+
+        // Output data
+        private DataTree<FemDesign.Results.NodalVibration> _vibrationTree;
+        private DataTree<FemDesign.Results.EigenFrequencies> _frequencyTree;
+        private List<string> _log;
+        private bool _success;
+
         public FemDesignGetEigenfrequencyResults() : base("FEM-Design.GetEigenfrequencyResults", "EigenfrequencyResults", "Read eigenfrequency results from current model using shared connection. Result files (.csv) are saved into the output directory.", CategoryName.Name(), SubCategoryName.Cat8())
         {
         }
@@ -46,99 +60,109 @@ namespace FemDesign.Grasshopper
             pManager.AddTextParameter("Log", "Log", "Operation log.", GH_ParamAccess.list);
         }
 
-        protected override void SolveInstance(IGH_DataAccess DA)
+        protected override void CollectInputData(IGH_DataAccess DA)
         {
-            FemDesignHubHandle handle = null;
-            DA.GetData("Connection", ref handle);
+            _handle = null;
+            DA.GetData("Connection", ref _handle);
 
-            var shapeIds = new List<int>();
-            DA.GetDataList("ShapeId", shapeIds);
+            _shapeIds = new List<int>();
+            DA.GetDataList("ShapeId", _shapeIds);
 
-            Options options = null;
-            DA.GetData("Options", ref options);
+            _options = null;
+            DA.GetData("Options", ref _options);
 
-            Results.UnitResults units = null;
-            DA.GetData("Units", ref units);
+            _units = null;
+            DA.GetData("Units", ref _units);
 
-            bool runNode = true;
-            DA.GetData("RunNode", ref runNode);
+            _runNode = true;
+            DA.GetData("RunNode", ref _runNode);
 
-            var log = new List<string>();
-            bool success = false;
+            // Reset output data
+            _vibrationTree = new DataTree<FemDesign.Results.NodalVibration>();
+            _frequencyTree = new DataTree<FemDesign.Results.EigenFrequencies>();
+            _log = new List<string>();
+            _success = false;
+        }
 
-            var vibrationTree = new DataTree<FemDesign.Results.NodalVibration>();
-            var frequencyTree = new DataTree<FemDesign.Results.EigenFrequencies>();
-
-            if (!runNode)
+        protected override bool ShouldExecute()
+        {
+            if (!_runNode)
             {
                 this.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Run node set to false.");
-                DA.SetData("Connection", null);
-                DA.SetDataTree(1, vibrationTree);
-                DA.SetDataTree(2, frequencyTree);
-                DA.SetData("Success", false);
-                DA.SetDataList("Log", log);
-                return;
+                return false;
             }
-
-            // check inputs
-            if (handle == null)
-                throw new Exception("Connection handle is null.");
-
-            try
+            if (_handle == null)
             {
-                FemDesignConnectionHub.InvokeAsync(handle.Id, connection =>
+                this.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Connection input is null.");
+                return false;
+            }
+            return true;
+        }
+
+        protected override void ExecuteWork(CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            FemDesignConnectionHub.InvokeAsync(_handle.Id, connection =>
+            {
+                void onOutput(string s) { _log.Add(s); }
+                connection.OnOutput += onOutput;
+                try
                 {
-                    void onOutput(string s) { log.Add(s); }
-                    connection.OnOutput += onOutput;
-                    try
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    // Helper to invoke private generic _getResults
+                    List<IResult> InvokeGetResults(Type resultType)
                     {
-                        // helper to invoke private generic _getResults
-                        List<IResult> InvokeGetResults(Type resultType)
-                        {
-                            string methodName = nameof(FemDesign.FemDesignConnection._getResults);
-                            MethodInfo genericMethod = connection.GetType().GetMethod(methodName, BindingFlags.Instance | BindingFlags.NonPublic).MakeGenericMethod(resultType);
-                            var res = (IEnumerable<IResult>)genericMethod.Invoke(connection, new object[] { units, options, null, false });
-                            return res.ToList();
-                        }
-
-                        var vibrationRes = InvokeGetResults(typeof(FemDesign.Results.NodalVibration)).Cast<FemDesign.Results.NodalVibration>().ToList();
-                        var frequencyRes = InvokeGetResults(typeof(FemDesign.Results.EigenFrequencies)).Cast<FemDesign.Results.EigenFrequencies>().ToList();
-
-                        if (vibrationRes.Count == 0 && frequencyRes.Count == 0)
-                            throw new Exception("Eigenfrequencies results have not been found. Have you run the eigenfrequencies analysis?");
-
-                        string vibPropName = nameof(FemDesign.Results.NodalVibration.ShapeId);
-                        string freqPropName = nameof(FemDesign.Results.EigenFrequencies.ShapeId);
-
-                        if (shapeIds.Any())
-                        {
-                            vibrationRes = vibrationRes.FilterResultsByShapeId(vibPropName, shapeIds);
-                            frequencyRes = frequencyRes.FilterResultsByShapeId(freqPropName, shapeIds);
-                        }
-
-                        vibrationTree = vibrationRes.CreateResultTree(vibPropName);
-                        frequencyTree = frequencyRes.CreateResultTree(freqPropName);
+                        string methodName = nameof(FemDesign.FemDesignConnection._getResults);
+                        MethodInfo genericMethod = connection.GetType().GetMethod(methodName, BindingFlags.Instance | BindingFlags.NonPublic).MakeGenericMethod(resultType);
+                        var res = (IEnumerable<IResult>)genericMethod.Invoke(connection, new object[] { _units, _options, null, false });
+                        return res.ToList();
                     }
-                    finally
+
+                    var vibrationRes = InvokeGetResults(typeof(FemDesign.Results.NodalVibration)).Cast<FemDesign.Results.NodalVibration>().ToList();
+                    var frequencyRes = InvokeGetResults(typeof(FemDesign.Results.EigenFrequencies)).Cast<FemDesign.Results.EigenFrequencies>().ToList();
+
+                    if (vibrationRes.Count == 0 && frequencyRes.Count == 0)
+                        throw new Exception("Eigenfrequencies results have not been found. Have you run the eigenfrequencies analysis?");
+
+                    string vibPropName = nameof(FemDesign.Results.NodalVibration.ShapeId);
+                    string freqPropName = nameof(FemDesign.Results.EigenFrequencies.ShapeId);
+
+                    if (_shapeIds.Any())
                     {
-                        connection.OnOutput -= onOutput;
+                        vibrationRes = vibrationRes.FilterResultsByShapeId(vibPropName, _shapeIds);
+                        frequencyRes = frequencyRes.FilterResultsByShapeId(freqPropName, _shapeIds);
                     }
-                }).GetAwaiter().GetResult();
 
-                success = true;
-            }
-            catch (Exception ex)
-            {
-                this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, ex.Message);
-                log.Add(ex.Message);
-                success = false;
-            }
+                    _vibrationTree = vibrationRes.CreateResultTree(vibPropName);
+                    _frequencyTree = frequencyRes.CreateResultTree(freqPropName);
+                }
+                finally
+                {
+                    connection.OnOutput -= onOutput;
+                }
+            }).GetAwaiter().GetResult();
 
-            DA.SetData("Connection", handle);
-            DA.SetDataTree(1, vibrationTree);
-            DA.SetDataTree(2, frequencyTree);
-            DA.SetData("Success", success);
-            DA.SetDataList("Log", log);
+            _success = true;
+        }
+
+        protected override void SetOutputData(IGH_DataAccess DA)
+        {
+            DA.SetData("Connection", _handle);
+            DA.SetDataTree(1, _vibrationTree);
+            DA.SetDataTree(2, _frequencyTree);
+            DA.SetData("Success", _success);
+            DA.SetDataList("Log", _log);
+        }
+
+        protected override void SetDefaultOutputData(IGH_DataAccess DA)
+        {
+            DA.SetData("Connection", null);
+            DA.SetDataTree(1, new DataTree<FemDesign.Results.NodalVibration>());
+            DA.SetDataTree(2, new DataTree<FemDesign.Results.EigenFrequencies>());
+            DA.SetData("Success", false);
+            DA.SetDataList("Log", _log ?? new List<string>());
         }
 
         protected override System.Drawing.Bitmap Icon => FemDesign.Properties.Resources.FEM_readresult;
@@ -146,5 +170,3 @@ namespace FemDesign.Grasshopper
         public override GH_Exposure Exposure => GH_Exposure.tertiary;
     }
 }
-
-

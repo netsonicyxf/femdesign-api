@@ -1,6 +1,7 @@
 // https://strusoft.com/
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Grasshopper.Kernel;
 
 using FemDesign.Results;
@@ -8,11 +9,20 @@ using FemDesign.Results;
 namespace FemDesign.Grasshopper
 {
     /// <summary>
-    /// Read the finite element model using the shared hub connection (standard GH_Component, UI-blocking).
-    /// Mirrors PipeGetFeaModel behavior without the async workaround.
+    /// Read the finite element model using the shared hub connection.
+    /// Supports both sync (UI-blocking) and async (non-blocking) modes via FemDesignSettings.
     /// </summary>
-    public class FemDesignGetFeaModel : FEM_Design_API_Component
+    public class FemDesignGetFeaModel : FemDesignHybridComponent
     {
+        // Input data
+        private FemDesignHubHandle _handle;
+        private Results.UnitResults _units;
+        private bool _runNode;
+
+        // Output data
+        private FiniteElement _feModel;
+        private bool _success;
+
         public FemDesignGetFeaModel() : base("FEM-Design.GetFeModel", "GetFeModel", "Read the finite element data using the shared FEM-Design connection.", CategoryName.Name(), SubCategoryName.Cat8())
         {
         }
@@ -33,54 +43,66 @@ namespace FemDesign.Grasshopper
             pManager.AddBooleanParameter("Success", "Success", "True if operation succeeded.", GH_ParamAccess.item);
         }
 
-        protected override void SolveInstance(IGH_DataAccess DA)
+        protected override void CollectInputData(IGH_DataAccess DA)
         {
-            FemDesignHubHandle handle = null;
-            DA.GetData("Connection", ref handle);
+            _handle = null;
+            DA.GetData("Connection", ref _handle);
 
-            Results.UnitResults units = null;
-            DA.GetData("Units", ref units);
+            _units = null;
+            DA.GetData("Units", ref _units);
 
-            bool runNode = true;
-            DA.GetData("RunNode", ref runNode);
+            _runNode = true;
+            DA.GetData("RunNode", ref _runNode);
 
-            bool success = false;
-            FiniteElement feModel = null;
+            // Reset output data
+            _feModel = null;
+            _success = false;
+        }
 
-            if (!runNode)
+        protected override bool ShouldExecute()
+        {
+            if (!_runNode)
             {
                 this.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Run node set to false.");
-                DA.SetData("Connection", null);
-                DA.SetData("FiniteElement", feModel);
-                DA.SetData("Success", false);
-                return;
+                return false;
             }
-
-            try
+            if (_handle == null)
             {
-                if (handle == null)
-                    throw new Exception("Connection handle is null.");
-
-                if (units == null)
-                    units = Results.UnitResults.Default();
-
-                FemDesignConnectionHub.InvokeAsync(handle.Id, connection =>
-                {
-                    connection.GenerateFeaModel();
-                    feModel = connection.GetFeaModel(units.Length);
-                }).GetAwaiter().GetResult();
-
-                success = true;
+                this.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Connection input is null.");
+                return false;
             }
-            catch (Exception ex)
+            return true;
+        }
+
+        protected override void ExecuteWork(CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            if (_units == null)
+                _units = Results.UnitResults.Default();
+
+            FemDesignConnectionHub.InvokeAsync(_handle.Id, connection =>
             {
-                this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, ex.Message);
-                success = false;
-            }
+                cancellationToken.ThrowIfCancellationRequested();
+                connection.GenerateFeaModel();
+                _feModel = connection.GetFeaModel(_units.Length);
+            }).GetAwaiter().GetResult();
 
-            DA.SetData("Connection", handle);
-            DA.SetData("FiniteElement", feModel);
-            DA.SetData("Success", success);
+            _success = true;
+        }
+
+        protected override void SetOutputData(IGH_DataAccess DA)
+        {
+            DA.SetData("Connection", _handle);
+            DA.SetData("FiniteElement", _feModel);
+            DA.SetData("Success", _success);
+        }
+
+        protected override void SetDefaultOutputData(IGH_DataAccess DA)
+        {
+            DA.SetData("Connection", null);
+            DA.SetData("FiniteElement", null);
+            DA.SetData("Success", false);
         }
 
         protected override System.Drawing.Bitmap Icon => FemDesign.Properties.Resources.FEM_GetMesh;
@@ -88,5 +110,3 @@ namespace FemDesign.Grasshopper
         public override GH_Exposure Exposure => GH_Exposure.tertiary;
     }
 }
-
-

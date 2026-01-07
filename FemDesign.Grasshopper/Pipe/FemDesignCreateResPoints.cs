@@ -2,8 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Grasshopper.Kernel;
-using Grasshopper.Kernel.Data;
 
 using FemDesign.AuxiliaryResults;
 using FemDesign.Calculate;
@@ -11,11 +11,20 @@ using FemDesign.Calculate;
 namespace FemDesign.Grasshopper
 {
     /// <summary>
-    /// Create result points using the shared hub connection (standard GH_Component, UI-blocking).
-    /// Mirrors PipeResultPoints behavior without the async workaround.
+    /// Create result points using the shared hub connection.
+    /// Supports both sync (UI-blocking) and async (non-blocking) modes via FemDesignSettings.
     /// </summary>
-    public class FemDesignCreateResPoints : FEM_Design_API_Component
+    public class FemDesignCreateResPoints : FemDesignHybridComponent
     {
+        // Input data
+        private FemDesignHubHandle _handle;
+        private List<ResultPoint> _resultPoints;
+        private bool _runNode;
+
+        // Output data
+        private List<string> _log;
+        private bool _success;
+
         public FemDesignCreateResPoints() : base("FEM-Design.CreateResPoints", "CreateResPoints", "Create result points using the shared FEM-Design connection.", CategoryName.Name(), SubCategoryName.Cat8())
         {
         }
@@ -35,65 +44,76 @@ namespace FemDesign.Grasshopper
             pManager.AddBooleanParameter("Success", "Success", "True if operation succeeded.", GH_ParamAccess.item);
         }
 
-        protected override void SolveInstance(IGH_DataAccess DA)
+        protected override void CollectInputData(IGH_DataAccess DA)
         {
-            FemDesignHubHandle handle = null;
-            DA.GetData("Connection", ref handle);
+            _handle = null;
+            DA.GetData("Connection", ref _handle);
 
-            var resultPoints = new List<ResultPoint>();
-            DA.GetDataList("ResultPoints", resultPoints);
+            _resultPoints = new List<ResultPoint>();
+            DA.GetDataList("ResultPoints", _resultPoints);
 
-            bool runNode = true;
-            DA.GetData("RunNode", ref runNode);
+            _runNode = true;
+            DA.GetData("RunNode", ref _runNode);
 
-            var log = new List<string>();
-            bool success = false;
+            // Reset output data
+            _log = new List<string>();
+            _success = false;
+        }
 
-            if (!runNode)
+        protected override bool ShouldExecute()
+        {
+            if (!_runNode)
             {
                 this.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Run node set to false.");
-                DA.SetData("Connection", null);
-                DA.SetDataList("Log", log);
-                DA.SetData("Success", false);
-                return;
+                return false;
             }
-
-            // check inputs
-            if (!resultPoints.Any())
-                    throw new Exception("ResultPoints is empty.");
-
-            try
+            if (_handle == null)
             {
-                if (handle == null)
-                    throw new Exception("Connection handle is null.");
+                this.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Connection input is null.");
+                return false;
+            }
+            return true;
+        }
 
-                FemDesignConnectionHub.InvokeAsync(handle.Id, connection =>
+        protected override void ExecuteWork(CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            // Check inputs
+            if (!_resultPoints.Any())
+                throw new Exception("ResultPoints is empty.");
+
+            FemDesignConnectionHub.InvokeAsync(_handle.Id, connection =>
+            {
+                void onOutput(string s) { _log.Add(s); }
+                connection.OnOutput += onOutput;
+                try
                 {
-                    void onOutput(string s) { log.Add(s); }
-                    connection.OnOutput += onOutput;
-                    try
-                    {
-                        var resPoints = resultPoints.Select(x => (CmdResultPoint)x).ToList();
-                        connection.CreateResultPoint(resPoints);
-                    }
-                    finally
-                    {
-                        connection.OnOutput -= onOutput;
-                    }
-                }).GetAwaiter().GetResult();
+                    cancellationToken.ThrowIfCancellationRequested();
+                    var resPoints = _resultPoints.Select(x => (CmdResultPoint)x).ToList();
+                    connection.CreateResultPoint(resPoints);
+                }
+                finally
+                {
+                    connection.OnOutput -= onOutput;
+                }
+            }).GetAwaiter().GetResult();
 
-                success = true;
-            }
-            catch (Exception ex)
-            {
-                this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, ex.Message);
-                log.Add(ex.Message);
-                success = false;
-            }
+            _success = true;
+        }
 
-            DA.SetData("Connection", handle);
-            DA.SetDataList("Log", log);
-            DA.SetData("Success", success);
+        protected override void SetOutputData(IGH_DataAccess DA)
+        {
+            DA.SetData("Connection", _handle);
+            DA.SetDataList("Log", _log);
+            DA.SetData("Success", _success);
+        }
+
+        protected override void SetDefaultOutputData(IGH_DataAccess DA)
+        {
+            DA.SetData("Connection", null);
+            DA.SetDataList("Log", _log ?? new List<string>());
+            DA.SetData("Success", false);
         }
 
         protected override System.Drawing.Bitmap Icon => FemDesign.Properties.Resources.FEM_readresult;
@@ -101,5 +121,3 @@ namespace FemDesign.Grasshopper
         public override GH_Exposure Exposure => GH_Exposure.tertiary;
     }
 }
-
-

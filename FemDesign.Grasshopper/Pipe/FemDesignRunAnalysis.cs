@@ -1,16 +1,27 @@
 // https://strusoft.com/
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Grasshopper.Kernel;
 using FemDesign.Calculate;
 
 namespace FemDesign.Grasshopper
 {
     /// <summary>
-    /// Run analysis using the shared hub connection (standard GH_Component, UI-blocking).
+    /// Run analysis using the shared hub connection.
+    /// Supports both sync (UI-blocking) and async (non-blocking) modes via FemDesignSettings.
     /// </summary>
-    public class FemDesignRunAnalysis : FEM_Design_API_Component
+    public class FemDesignRunAnalysis : FemDesignHybridComponent
     {
+        // Input data
+        private FemDesignHubHandle _handle;
+        private Analysis _analysis;
+        private bool _runNode;
+
+        // Output data
+        private List<string> _log;
+        private bool _success;
+
         public FemDesignRunAnalysis() : base("FEM-Design.RunAnalysis", "RunAnalysis", "Run analysis on current/open model using shared connection.", CategoryName.Name(), SubCategoryName.Cat8())
         {
         }
@@ -30,61 +41,75 @@ namespace FemDesign.Grasshopper
             pManager.AddTextParameter("Log", "Log", "Operation log.", GH_ParamAccess.list);
         }
 
-        protected override void SolveInstance(IGH_DataAccess DA)
+        protected override void CollectInputData(IGH_DataAccess DA)
         {
-            FemDesign.Grasshopper.FemDesignHubHandle handle = null;
-            DA.GetData("Connection", ref handle);
+            _handle = null;
+            DA.GetData("Connection", ref _handle);
 
-            Analysis analysis = null;
-            DA.GetData("Analysis", ref analysis);
+            _analysis = null;
+            DA.GetData("Analysis", ref _analysis);
 
-            bool runNode = true;
-            DA.GetData("RunNode", ref runNode);
+            _runNode = true;
+            DA.GetData("RunNode", ref _runNode);
 
-            var log = new List<string>();
-            bool success = false;
+            // Reset output data
+            _log = new List<string>();
+            _success = false;
+        }
 
-            if (!runNode)
+        protected override bool ShouldExecute()
+        {
+            if (!_runNode)
             {
                 this.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Run node set to false.");
-                DA.SetData("Connection", null);
-                DA.SetData("Success", false);
-                DA.SetDataList("Log", log);
-                return;
+                return false;
             }
+            if (_handle == null)
+            {
+                this.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Connection input is null.");
+                return false;
+            }
+            return true;
+        }
 
-            // check inputs
-            if (analysis == null) 
+        protected override void ExecuteWork(CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            // Check inputs
+            if (_analysis == null)
                 throw new Exception("'Analysis' input is null.");
 
-            try
+            FemDesignConnectionHub.InvokeAsync(_handle.Id, connection =>
             {
-                FemDesignConnectionHub.InvokeAsync(handle.Id, connection =>
+                void onOutput(string s) { _log.Add(s); }
+                connection.OnOutput += onOutput;
+                try
                 {
-                    void onOutput(string s) { log.Add(s); }
-                    connection.OnOutput += onOutput;
-                    try
-                    {
-                        connection.RunAnalysis(analysis);
-                    }
-                    finally
-                    {
-                        connection.OnOutput -= onOutput;
-                    }
-                }).GetAwaiter().GetResult();
+                    cancellationToken.ThrowIfCancellationRequested();
+                    connection.RunAnalysis(_analysis);
+                }
+                finally
+                {
+                    connection.OnOutput -= onOutput;
+                }
+            }).GetAwaiter().GetResult();
 
-                success = true;
-            }
-            catch (Exception ex)
-            {
-                this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, ex.Message);
-                log.Add(ex.Message);
-                success = false;
-            }
+            _success = true;
+        }
 
-            DA.SetData("Connection", handle);
-            DA.SetData("Success", success);
-            DA.SetDataList("Log", log);
+        protected override void SetOutputData(IGH_DataAccess DA)
+        {
+            DA.SetData("Connection", _handle);
+            DA.SetData("Success", _success);
+            DA.SetDataList("Log", _log);
+        }
+
+        protected override void SetDefaultOutputData(IGH_DataAccess DA)
+        {
+            DA.SetData("Connection", null);
+            DA.SetData("Success", false);
+            DA.SetDataList("Log", _log ?? new List<string>());
         }
 
         protected override System.Drawing.Bitmap Icon => FemDesign.Properties.Resources.FEM_RunAnalysis;
@@ -92,6 +117,3 @@ namespace FemDesign.Grasshopper
         public override GH_Exposure Exposure => GH_Exposure.secondary;
     }
 }
-
-
-

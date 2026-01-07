@@ -59,6 +59,29 @@ namespace FemDesign.Grasshopper.UI
 
         private static void PopulateSub(ToolStripMenuItem menuItem)
         {
+            // Async mode toggle
+            var asyncModeItem = new ToolStripMenuItem("Async Mode (Non-blocking UI)")
+            {
+                CheckOnClick = true,
+                Checked = FemDesignSettings.AsyncModeEnabled,
+                ToolTipText = "When enabled, FEM-Design operations run in the background without blocking the Grasshopper UI."
+            };
+            asyncModeItem.CheckedChanged += (sender, e) =>
+            {
+                FemDesignSettings.AsyncModeEnabled = asyncModeItem.Checked;
+
+                // Log the change to Rhino command line
+                if (asyncModeItem.Checked)
+                    Rhino.RhinoApp.WriteLine("FEM-Design: Async mode enabled - UI won't block during operations");
+                else
+                    Rhino.RhinoApp.WriteLine("FEM-Design: Sync mode enabled - Operations run sequentially");
+            };
+            menuItem.DropDown.Items.Add(asyncModeItem);
+
+            // Separator
+            menuItem.DropDown.Items.Add(new ToolStripSeparator());
+
+            // Links
             menuItem.DropDown.Items.Add("Documentation", null/*Properties.Resources.MainMenu_Documentation*/,
                 (sender, e) => OpenBrowser(sender, e, documentationUrl));
 
