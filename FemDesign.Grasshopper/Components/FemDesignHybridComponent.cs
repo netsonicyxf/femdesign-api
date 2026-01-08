@@ -3,6 +3,7 @@ using Grasshopper.Kernel;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Timer = System.Timers.Timer;
 
 namespace FemDesign.Grasshopper
 {
@@ -20,9 +21,84 @@ namespace FemDesign.Grasshopper
         private bool _hasResult;
         private Exception _asyncException;
 
+        // Spinner animation for async processing
+        private Timer _spinnerTimer;
+        private int _spinnerFrame;
+        private static readonly string[] SpinnerFrames = new[]
+        {
+            @"\Processing\",
+            @"|Processing|",
+            @"/Processing/",
+            @"-Processing-"
+        };
+
         protected FemDesignHybridComponent(string name, string nickname, string description, string category, string subCategory)
             : base(name, nickname, description, category, subCategory)
         {
+            // Initialize spinner timer (updates every 250ms)
+            _spinnerTimer = new Timer(250) { AutoReset = true };
+            _spinnerTimer.Elapsed += OnSpinnerTick;
+
+            // Set initial message based on current mode
+            UpdateAsyncMessage();
+        }
+
+        public override void AddedToDocument(GH_Document document)
+        {
+            base.AddedToDocument(document);
+
+            // Subscribe to async mode changes
+            FemDesignSettings.AsyncModeChanged += OnAsyncModeChanged;
+
+            // Update message when added to document
+            UpdateAsyncMessage();
+        }
+
+        private void OnAsyncModeChanged()
+        {
+            // Update message when async mode changes (only if not currently running)
+            if (!_isRunning)
+            {
+                UpdateAsyncMessage();
+
+                // Refresh display on UI thread
+                Rhino.RhinoApp.InvokeOnUiThread((Action)(() =>
+                {
+                    OnDisplayExpired(true);
+                }));
+            }
+        }
+
+        private void UpdateAsyncMessage()
+        {
+            // Show "Async" when async mode is enabled, nothing when sync mode
+            Message = FemDesignSettings.AsyncModeEnabled ? "Async" : null;
+        }
+
+        private void OnSpinnerTick(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            if (!_isRunning) return;
+
+            _spinnerFrame = (_spinnerFrame + 1) % SpinnerFrames.Length;
+            Message = SpinnerFrames[_spinnerFrame];
+
+            // Update display on UI thread
+            Rhino.RhinoApp.InvokeOnUiThread((Action)(() =>
+            {
+                OnDisplayExpired(true);
+            }));
+        }
+
+        private void StartSpinner()
+        {
+            _spinnerFrame = 0;
+            Message = SpinnerFrames[0];
+            _spinnerTimer?.Start();
+        }
+
+        private void StopSpinner()
+        {
+            _spinnerTimer?.Stop();
         }
 
         /// <summary>
@@ -81,19 +157,18 @@ namespace FemDesign.Grasshopper
 
         private void SolveSync(IGH_DataAccess DA)
         {
-            Message = "Running...";
+            // In sync mode, don't show any message annotation
+            Message = null;
 
             try
             {
                 ExecuteWork(CancellationToken.None);
                 SetOutputData(DA);
-                Message = "Done";
             }
             catch (Exception ex)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, ex.Message);
                 SetDefaultOutputData(DA);
-                Message = "Error";
             }
         }
 
@@ -112,7 +187,7 @@ namespace FemDesign.Grasshopper
                 else
                 {
                     SetOutputData(DA);
-                    Message = "Done";
+                    Message = "Async";
                 }
 
                 // Reset state for next run
@@ -124,7 +199,6 @@ namespace FemDesign.Grasshopper
             // Already running, wait for completion
             if (_isRunning)
             {
-                Message = "Processing...";
                 return;
             }
 
@@ -135,6 +209,7 @@ namespace FemDesign.Grasshopper
             if (!ShouldExecute())
             {
                 SetDefaultOutputData(DA);
+                Message = "Async";
                 return;
             }
 
@@ -146,7 +221,7 @@ namespace FemDesign.Grasshopper
 
             _isRunning = true;
             _asyncException = null;
-            Message = "Processing...";
+            StartSpinner();
 
             // Start background task
             Task.Run(() =>
@@ -159,6 +234,7 @@ namespace FemDesign.Grasshopper
                 {
                     // Cancelled - don't expire solution
                     _isRunning = false;
+                    StopSpinner();
                     return;
                 }
                 catch (Exception ex)
@@ -169,6 +245,7 @@ namespace FemDesign.Grasshopper
                 {
                     _isRunning = false;
                     _hasResult = true;
+                    StopSpinner();
                 }
 
                 // Schedule solution update on UI thread
@@ -192,7 +269,14 @@ namespace FemDesign.Grasshopper
 
         public override void RemovedFromDocument(GH_Document document)
         {
-            // Cancel any pending async work
+            // Unsubscribe from async mode changes
+            FemDesignSettings.AsyncModeChanged -= OnAsyncModeChanged;
+
+            // Stop spinner and cancel any pending async work
+            StopSpinner();
+            _spinnerTimer?.Dispose();
+            _spinnerTimer = null;
+
             _cts?.Cancel();
             _cts?.Dispose();
             _cts = null;
@@ -207,6 +291,10 @@ namespace FemDesign.Grasshopper
             // Cancel async work when document is closing
             if (context == GH_DocumentContext.Close || context == GH_DocumentContext.Unloaded)
             {
+                StopSpinner();
+                _spinnerTimer?.Dispose();
+                _spinnerTimer = null;
+
                 _cts?.Cancel();
                 _cts?.Dispose();
                 _cts = null;
