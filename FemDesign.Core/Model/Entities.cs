@@ -75,7 +75,7 @@ namespace FemDesign
         [XmlElement("punching_reinforcement", Order = 20)]
         public List<Reinforcement.PunchingReinforcement> PunchingReinforcements { get; set; } = new List<Reinforcement.PunchingReinforcement>();
 
-        [Obsolete("Use `NoShearControlRegions`", true)]
+        [Obsolete("Use `NoShearControlRegions`")]
         [XmlElement("no-shear_region", Order = 21)]
         public List<Reinforcement.NoShearRegionType> NoShearRegions { get; set; } = new List<Reinforcement.NoShearRegionType>();
 
