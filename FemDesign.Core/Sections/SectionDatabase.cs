@@ -54,9 +54,7 @@ namespace FemDesign.Sections
         public Section SectionByName(string sectionName)
         {
             var sections = this.Sections.Section;
-            var sectionNames = sections.Select(x => x._sectionName).ToArray();
-            var index = FuzzySharp.Process.ExtractOne(sectionName, sectionNames).Index;
-            return sections[index];
+            return sections.SectionByName(sectionName);
         }
 
         /// <summary>

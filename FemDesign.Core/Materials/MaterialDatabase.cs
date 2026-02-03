@@ -6,6 +6,7 @@ using System.IO;
 using System.Reflection;
 using System.Linq;
 using System.Xml.Serialization;
+using FemDesign.Materials;
 
 namespace FemDesign.Materials
 {
@@ -106,37 +107,7 @@ namespace FemDesign.Materials
         /// <returns></returns>
         public Material MaterialByName(string materialName)
         {
-            if (this.Materials != null)
-            {
-                foreach (Material material in this.Materials.Material)
-                {
-                    if (material.Name == materialName)
-                    {
-                        // update object information
-                        //material.Guid = System.Guid.NewGuid();
-                        material.EntityModified();
-
-                        // return
-                        return material;
-                    }
-                }
-            }
-            if (this.ReinforcingMaterials != null)
-            {
-                foreach (Material material in this.ReinforcingMaterials.Material)
-                {
-                    if (material.Name == materialName)
-                    {
-                        // update object information
-                        //material.Guid = System.Guid.NewGuid();
-                        material.EntityModified();
-
-                        // return
-                        return material;
-                    }
-                }
-            }
-            throw new System.ArgumentException($"Material was not found. Incorrect material name ({materialName}) or empty material database.");
+            return this.Materials.Material.MaterialByName(materialName);
         }
 
         public List<Material> GetSoilMaterial()
