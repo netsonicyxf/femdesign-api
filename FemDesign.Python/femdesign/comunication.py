@@ -298,7 +298,7 @@ class Verbosity(Enum):
 
 class FemDesignConnection(_FdConnect):
     def __init__(self,
-                 fd_path : str = r"C:\Program Files\StruSoft\FEM-Design 23\fd3dstruct.exe",
+                 fd_path : str = r"C:\Program Files\StruSoft\FEM-Design 24\fd3dstruct.exe",
                  pipe_name : str ="FdPipe1",
                  verbose : Verbosity = Verbosity.SCRIPT_LOG_LINES,
                  output_dir : str = None,

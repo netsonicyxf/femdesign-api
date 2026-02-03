@@ -1,6 +1,10 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "FEM-Design"
-version = "0.0.7"
+version = "0.0.8"
 authors = [
   { name="FEM-Design", email="femdesign.api@strusoft.com" },
 ]
@@ -11,14 +15,21 @@ maintainers = [
 description = "The FEM-Design API package"
 readme = "README.md"
 requires-python = ">=3.8"
+dependencies = [
+    "pywin32>=306",
+]
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: Microsoft",
+    "Operating System :: Microsoft :: Windows",
 ]
+license = {text = "MIT"}
 keywords = ["fem", "fea", "structures", "strusoft", "FEM-Design API"]
 
 [project.urls]
 Homepage = "https://femdesign-api-docs.onstrusoft.com"
 Repository = "https://github.com/strusoft/femdesign-api/tree/master/FemDesign.Python"
 Issues = "https://github.com/strusoft/femdesign-api/issues"
+
+[tool.setuptools.packages.find]
+include = ["femdesign*"]
+exclude = ["test*", "packaging*"]
