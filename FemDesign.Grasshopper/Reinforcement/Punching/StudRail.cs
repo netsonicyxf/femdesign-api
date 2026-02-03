@@ -21,7 +21,7 @@ namespace FemDesign.Grasshopper
             mngr.RegisterUnit(evaluationUnit);
             evaluationUnit.Icon = FemDesign.Properties.Resources.StudRail;
 
-            evaluationUnit.RegisterInputParam(new Param_Plane(), "Point|Plane", "Point|Plane", "", GH_ParamAccess.item);
+            evaluationUnit.RegisterInputParam(new Param_Plane(), "Point|Plane", "Point|Plane", "End point of the column where the punchin reinforcement should be applied.", GH_ParamAccess.item);
             evaluationUnit.Inputs[evaluationUnit.Inputs.Count - 1].Parameter.Optional = false;
 
             evaluationUnit.RegisterInputParam(new Param_Brep(), "Region", "Region", "", GH_ParamAccess.item);
@@ -97,11 +97,27 @@ namespace FemDesign.Grasshopper
             DA.GetData(4, ref diameter);
             diameter /= 1000; // mm to m
 
-            var numberRails = 2;
+            var numberRails = 4;
             DA.GetData(5, ref numberRails);
+
+            if (numberRails < 4 || numberRails > 50)
+            {
+                msg = "Number of rails must be between 4 and 50.";
+                level = GH_RuntimeMessageLevel.Error;
+                return;
+            }
 
             var numberStudsPerMeter = 4;
             DA.GetData(6, ref numberStudsPerMeter);
+
+            if (numberStudsPerMeter < 2 || numberStudsPerMeter > 50)
+            {
+                msg = "Number of studs per meter must be between 2 and 20.";
+                level = GH_RuntimeMessageLevel.Error;
+                return;
+            }
+
+
 
             var so = 150.0;
             DA.GetData(7, ref so);
