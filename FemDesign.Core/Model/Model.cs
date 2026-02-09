@@ -344,7 +344,7 @@ namespace FemDesign
         /// <summary>
         /// Add entities to Model.
         /// </summary>
-        public Model AddEntities(List<Bars.Bar> bars, List<ModellingTools.FictitiousBar> fictitiousBars, List<Shells.Slab> shells, List<ModellingTools.FictitiousShell> fictitiousShells, List<Shells.Panel> panels, List<ModellingTools.Cover> covers, List<object> loads, List<Loads.LoadCase> loadCases, List<Loads.LoadCombination> loadCombinations, List<ISupportElement> supports, List<StructureGrid.Storey> storeys, List<StructureGrid.Axis> axes, List<Loads.ModelGeneralLoadGroup> loadGroups, bool overwrite)
+        public Model AddEntities(List<Bars.Bar> bars, List<ModellingTools.FictitiousBar> fictitiousBars, List<Shells.Slab> shells, List<ModellingTools.FictitiousShell> fictitiousShells, List<Shells.Panel> panels, List<ModellingTools.Cover> covers, List<ILoadElement> loads, List<Loads.LoadCase> loadCases, List<Loads.LoadCombination> loadCombinations, List<ISupportElement> supports, List<StructureGrid.Storey> storeys, List<StructureGrid.Axis> axes, List<Loads.ModelGeneralLoadGroup> loadGroups, bool overwrite)
         {
             // check if model contains entities, sections and materials
             if (this.Entities == null)
@@ -418,12 +418,7 @@ namespace FemDesign
             }
 
             if (loads != null)
-            {
-                foreach (object load in loads)
-                {
-                    this.AddLoad(load, overwrite);
-                }
-            }
+                this.AddLoads(loads, overwrite);
 
             if (loadCases != null)
             {
