@@ -47,7 +47,7 @@ namespace FemDesign.Foundations
 
         [XmlAttribute("analythical_system")]
         [DefaultValue(FoundationSystem.Simple)]
-        public FoundationSystem FoundationSystem { get; set; }
+        public FoundationSystem FoundationSystem { get; set; } = FoundationSystem.Simple;
 
         #region MATERIAL
 

@@ -1,4 +1,5 @@
 using FemDesign.GenericClasses;
+using System.ComponentModel;
 using System.Xml.Serialization;
 
 
@@ -150,10 +151,10 @@ namespace FemDesign.Reinforcement
         public PeikkoPsbProduct PeikkoPsbProduct { get; set; }
 
         [XmlAttribute("pattern")]
-        public Pattern Pattern { get; set; }
+        public Pattern Pattern { get; set; } = Pattern.SemiOrthogonal;
 
         [XmlAttribute("s0")]
-        public double _s0 { get; set; }
+        public double _s0 { get; set; } = 0.075;
 
         [XmlIgnore]
         public double S0
@@ -163,7 +164,7 @@ namespace FemDesign.Reinforcement
         }
 
         [XmlAttribute("s1")]
-        public double _s1 { get; set; }
+        public double _s1 { get; set; } = 1.5;
 
         [XmlIgnore]
         public double S1
@@ -173,7 +174,7 @@ namespace FemDesign.Reinforcement
         }
 
         [XmlAttribute("s2")]
-        public double _s2 { get; set; }
+        public double _s2 { get; set; } = 1.5;
 
         [XmlIgnore]
         public double S2
@@ -183,7 +184,7 @@ namespace FemDesign.Reinforcement
         }
 
         [XmlAttribute("rails_on_circle")]
-        public int _railsOnCircle;
+        public int _railsOnCircle { get; set; } = 12;
 
         [XmlIgnore]
         public int RailsOnCircle
@@ -193,7 +194,7 @@ namespace FemDesign.Reinforcement
         }
 
         [XmlAttribute("studs_on_rail")]
-        public int _studsOnRail;
+        public int _studsOnRail { get; set; } = 3;
 
         [XmlIgnore]
         public int StudsOnRail
@@ -213,7 +214,8 @@ namespace FemDesign.Reinforcement
         }
 
         [XmlAttribute("use_minimal_elements")]
-        public bool UseMinimalElements { get; set; }
+        [DefaultValue(true)]
+        public bool UseMinimalElements { get; set; } = true;
     }
 
     [System.Serializable]

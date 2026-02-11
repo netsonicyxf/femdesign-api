@@ -533,23 +533,23 @@ namespace FemDesign.Bars
 
         [XmlAttribute("ecc_crack")]
         [DefaultValue(false)]
-        public bool EccCrack { get; set; }
+        public bool EccCrack { get; set; } = false;
 
         [XmlAttribute("first_order_analysis_U")]
         [DefaultValue(false)]
-        public bool FirstOrderAnalysisU { get; set; }
+        public bool FirstOrderAnalysisU { get; set; } = false;
 
         [XmlAttribute("first_order_analysis_Sq")]
         [DefaultValue(false)]
-        public bool FirstOrderAnalysisSq { get; set; }
+        public bool FirstOrderAnalysisSq { get; set; } = false;
 
         [XmlAttribute("first_order_analysis_Sf")]
         [DefaultValue(false)]
-        public bool FirstOrderAnalysisSf { get; set; }
+        public bool FirstOrderAnalysisSf { get; set; } = false;
 
         [XmlAttribute("first_order_analysis_Sc")]
         [DefaultValue(false)]
-        public bool FirstOrderAnalysisSc { get; set; }
+        public bool FirstOrderAnalysisSc { get; set; } = false;
 
         /// <summary>
         /// Parameterless constructor for serialization.
