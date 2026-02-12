@@ -4,19 +4,19 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "FEM-Design"
-version = "0.0.8"
+version = "0.0.9"
 authors = [
   { name="FEM-Design", email="femdesign.api@strusoft.com" },
 ]
 maintainers = [
   {name = "Marco Pellegrino", email = "marco.pellegrino@strusoft.com"},
-  {name = "Illyés Zoltán", email = "sinnach@strusoft.hu"},
 ]
 description = "The FEM-Design API package"
 readme = "README.md"
 requires-python = ">=3.8"
 dependencies = [
     "pywin32>=306",
+    "xsdata>=24.1",
 ]
 classifiers = [
     "Programming Language :: Python :: 3",

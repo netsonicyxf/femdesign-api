@@ -502,11 +502,11 @@ class CmdConfig(Command):
 class CmdInteractionSurface(Command):
     """class to represent the fdscript cmdinteraction surface command
     """
-    def __init__(self, guid : uuid.UUID, outfile : str, offset : float = 0.0, fUlt : bool = False):
+    def __init__(self, guid : str, outfile : str, offset : float = 0.0, fUlt : bool = False):
         """Constructor for the CmdInteractionSurface class
 
         Args:
-            guid (uuid.UUID): guid of an existing bar. make sure you pass the analytical bar!
+            guid (str): guid of an existing bar. make sure you pass the analytical bar!
             outfile (str): path to the output file
             offset (float): offset is cross-section position, measured along the bar from the starting point [m]
             fUlt (bool): fUlt is true for Ultimate, false for Accidental or Seismic combination (different gammaC)

@@ -50,3 +50,6 @@ FemDesign.Tests/Results/**/*.log
 /FemDesign.Examples/Python/jupyter-notebook/.ipynb_checkpoints
 /FemDesign.Python/packaging/src
 /FemDesign.Python/FEM-Design API
+*.whl
+*.gz
+/FemDesign.Python/FEM_Design.egg-info

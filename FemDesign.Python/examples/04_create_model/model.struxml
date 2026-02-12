@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<database xmlns="urn:strusoft" struxml_version="01.00.000" source_software="FemDesign API Python" start_time="2026-02-12T16:59:04.572677" end_time="2026-02-12T16:59:04.572703" guid="c7e0108d-a055-4ed6-80ee-89c2075e4354" soil_as_solid="false" convertid="00000000-0000-0000-0000-000000000000" standard="EC" country="common">
+  <entities>
+    <supports>
+      <point_support guid="91ab9b37-8387-4ac1-80bf-e3c5c6a64457" last_change="2026-02-12T16:59:04.572764" action="added" hash_order_id="-1" name="S1" stage="1" end_stage="last_stage">
+        <group detach="" seven_degrees_of_freedom="false">
+          <local_x x="1.0" y="0.0" z="0.0"/>
+          <local_y x="0.0" y="1.0" z="0.0"/>
+          <rigidity detach="" Wx="0.0">
+            <motions x_neg="100000.0" x_pos="100000.0" y_neg="100000.0" y_pos="100000.0" z_neg="100000.0" z_pos="100000.0"/>
+            <rotations x_neg="0.0" x_pos="0.0" y_neg="0.0" y_pos="0.0" z_neg="0.0" z_pos="0.0"/>
+          </rigidity>
+        </group>
+        <position x="10.0" y="10.0" z="10.0"/>
+      </point_support>
+    </supports>
+  </entities>
+  <end/>
+</database>

@@ -298,7 +298,7 @@ class Verbosity(Enum):
 
 class FemDesignConnection(_FdConnect):
     def __init__(self,
-                 fd_path : str = r"C:\Program Files\StruSoft\FEM-Design 24\fd3dstruct.exe",
+                 fd_path : str = r"C:\Program Files\StruSoft\FEM-Design 25\fd3dstruct.exe",
                  pipe_name : str ="FdPipe1",
                  verbose : Verbosity = Verbosity.SCRIPT_LOG_LINES,
                  output_dir : str = None,
@@ -491,11 +491,11 @@ class FemDesignConnection(_FdConnect):
         fdscript = Fdscript(log, [cmd_child])
         self.RunScript(fdscript, "apply_documentation_template")
 
-    def GenerateInteractionSurface(self, guid : uuid.UUID, outfile : str, offset : float = 0.0, fUlt : bool = True):
+    def GenerateInteractionSurface(self, guid : str, outfile : str, offset : float = 0.0, fUlt : bool = True):
         """Generate interaction surface
 
         Args:
-            guid (uuid.UUID): guid of an existing bar. make sure you pass the analytical bar!
+            guid (str): guid of an existing bar. make sure you pass the analytical bar!
             outfile (str): path to the output file
             offset (float): offset is cross-section position, measured along the bar from the starting point [m]
             fUlt (bool): fUlt is true for Ultimate, false for Accidental or Seismic combination (different gammaC)
