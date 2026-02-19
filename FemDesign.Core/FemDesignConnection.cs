@@ -32,7 +32,7 @@ namespace FemDesign
     /// </summary>
     public class FemDesignConnection : IDisposable
     {
-        private readonly int fdVersion = 24;
+        private readonly int fdVersion = 25;
         private readonly PipeConnection _connection;
         private readonly Process _process;
         public bool HasExited { get; private set; }
