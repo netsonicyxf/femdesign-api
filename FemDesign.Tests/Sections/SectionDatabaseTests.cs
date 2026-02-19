@@ -34,25 +34,50 @@ namespace FemDesign.Sections
         }
 
 
-        [TestMethod("Fuzz")]
-        public void test()
+        [TestMethod]
+        public void TestFuzzySearch()
         {
             var db = SectionDatabase.GetDefault();
 
-            var choices = db.Sections.Section.Select(s => s._sectionName).ToArray();
-            var a = FuzzySharp.Process.ExtractOne("HEA100", choices);
-            var b = FuzzySharp.Process.ExtractOne("CHS, 30-5.6", choices);
-            var c = FuzzySharp.Process.ExtractOne("CHS 30/5.6", choices);
-            var d = FuzzySharp.Process.ExtractOne("hea 100", choices);
-            var e = FuzzySharp.Process.ExtractOne("150x300", choices);
+            var section1 = db.SectionByName("HEA100");
+            var targetName = "Steel section, HE-A, 100";
+            Assert.IsTrue(section1.Name == targetName);
 
-            var f = FuzzySharp.Process.ExtractOne("150x20", choices);
+            section1 = db.SectionByName("HEA-100");
+            Assert.IsTrue(section1.Name == targetName);
 
-            var test = 1;
+            section1 = db.SectionByName("HEA_100");
+            Assert.IsTrue(section1.Name == targetName);
 
-            f = FuzzySharp.Process.ExtractOne("150", choices);
+            section1 = db.SectionByName("HEA100");
+            Assert.IsTrue(section1.Name == targetName);
 
-            test = 1;
+            section1 = db.SectionByName("Steel section, HE-A, 100");
+            Assert.IsTrue(section1.Name == targetName);
+
+
+
+            section1 = db.SectionByName("CHS 323.9-8.8");
+            targetName = "Steel section, CHS, 323.9-8.8";
+            Assert.IsTrue(section1.Name == targetName);
+
+            section1 = db.SectionByName("CHS 323.9/8.8");
+            Assert.IsTrue(section1.Name == targetName);
+
+            section1 = db.SectionByName("CHS, 323.9-8.8");
+            Assert.IsTrue(section1.Name == targetName);
+
+            //Timber section, Rectangle, 66x225
+            section1 = db.SectionByName("Timber section, Rectangle, 66x225");
+            targetName = "Timber section, Rectangle, 66x225";
+            Assert.IsTrue(section1.Name == targetName);
+
+            section1 = db.SectionByName("Rectangle 66x225");
+            Assert.IsTrue(section1.Name == targetName);
+
+            section1 = db.SectionByName("Timber 66x225");
+            Assert.IsTrue(section1.Name == targetName);
+
 
         }
     }

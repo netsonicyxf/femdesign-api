@@ -18,11 +18,13 @@ class OutputFileHelper:
     _strFileExtension = ".str"
     _struxmlFileExtension = ".struxml"
 
+    @staticmethod
     def GetLogFilePath(outputDirectory: str) -> str:
         if not os.path.exists(outputDirectory):
             os.makedirs(outputDirectory)
         return os.path.abspath( os.path.join(outputDirectory, OutputFileHelper._logFileName) )
-    
+        
+    @staticmethod
     def GetFdscriptFilePath(outputDirectory: str, file_name: str = "script") -> str:
         dir = os.path.join(outputDirectory, OutputFileHelper._scriptsDirectory)
         if not os.path.exists(dir):
@@ -30,7 +32,8 @@ class OutputFileHelper:
 
         path = os.path.abspath( os.path.join(dir, f"{file_name}" + OutputFileHelper._fdscriptFileExtension) )
         return path
-    
+        
+    @staticmethod
     def GetBscFilePath(outputDirectory: str, file_name: str) -> str:
         dir = os.path.join(outputDirectory, OutputFileHelper._scriptsDirectory, OutputFileHelper._bscDirectory)
         if not os.path.exists(dir):

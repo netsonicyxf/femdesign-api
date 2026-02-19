@@ -16,7 +16,7 @@ namespace FemDesign.Foundations
 
         [XmlAttribute("abobe")]
         [DefaultValue(false)]
-        public bool Above { get; set; }
+        public bool Above { get; set; } = false;
 
         [XmlElement("region")]
         public FemDesign.Geometry.Region Region { get; set; }

@@ -106,7 +106,7 @@ namespace FemDesign
         public List<StruSoft.Interop.StruXml.Data.Bolt_lib_type> BoltTypes { get; set; }
 
         [XmlElement("bar_end_lib_type", Order = 19)]
-        public List<StruSoft.Interop_24.Bar_end_lib_type> BarEndReleaseTypes { get; set; }
+        public List<StruSoft.Interop_25.Bar_end_lib_type> BarEndReleaseTypes { get; set; }
 
         [XmlElement("geometry", Order = 20)]
         public StruSoft.Interop.StruXml.Data.DatabaseGeometry Geometry { get; set; }
@@ -344,7 +344,7 @@ namespace FemDesign
         /// <summary>
         /// Add entities to Model.
         /// </summary>
-        public Model AddEntities(List<Bars.Bar> bars, List<ModellingTools.FictitiousBar> fictitiousBars, List<Shells.Slab> shells, List<ModellingTools.FictitiousShell> fictitiousShells, List<Shells.Panel> panels, List<ModellingTools.Cover> covers, List<object> loads, List<Loads.LoadCase> loadCases, List<Loads.LoadCombination> loadCombinations, List<ISupportElement> supports, List<StructureGrid.Storey> storeys, List<StructureGrid.Axis> axes, List<Loads.ModelGeneralLoadGroup> loadGroups, bool overwrite)
+        public Model AddEntities(List<Bars.Bar> bars, List<ModellingTools.FictitiousBar> fictitiousBars, List<Shells.Slab> shells, List<ModellingTools.FictitiousShell> fictitiousShells, List<Shells.Panel> panels, List<ModellingTools.Cover> covers, List<ILoadElement> loads, List<Loads.LoadCase> loadCases, List<Loads.LoadCombination> loadCombinations, List<ISupportElement> supports, List<StructureGrid.Storey> storeys, List<StructureGrid.Axis> axes, List<Loads.ModelGeneralLoadGroup> loadGroups, bool overwrite)
         {
             // check if model contains entities, sections and materials
             if (this.Entities == null)
@@ -418,12 +418,7 @@ namespace FemDesign
             }
 
             if (loads != null)
-            {
-                foreach (object load in loads)
-                {
-                    this.AddLoad(load, overwrite);
-                }
-            }
+                this.AddLoads(loads, overwrite);
 
             if (loadCases != null)
             {

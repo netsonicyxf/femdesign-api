@@ -38,7 +38,7 @@ try:
     pipe.RunAnalysis(Analysis.FrequencyAnalysis(num_shapes=5))
     pipe.Save(r"simple_beam_out_2.str")
 
-    pipe.Exit()
+    pipe.Detach()
 except Exception as err:
     pipe.KillProgramIfExists()
     raise err

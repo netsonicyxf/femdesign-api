@@ -27,3 +27,4 @@ def test_design():
 
     assert xmlDesign.find("gmax") != None
     assert xmlDesign.find("cmax") == None
+

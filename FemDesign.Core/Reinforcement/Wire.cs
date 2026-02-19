@@ -45,7 +45,7 @@ namespace FemDesign.Reinforcement
         [XmlAttribute("reinforcing_material")]
         public System.Guid ReinforcingMaterialGuid { get; set; } // guidtype
         [XmlAttribute("profile")]
-        [DefaultValue(1)]
+        [DefaultValue(WireProfileType.Ribbed)]
         public WireProfileType Profile { get; set; } = WireProfileType.Ribbed;
 
         /// <summary>

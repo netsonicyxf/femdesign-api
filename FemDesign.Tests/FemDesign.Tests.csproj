@@ -171,6 +171,7 @@
     <Compile Include="Examples\Examples.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Assets\sections.struxml" />
     <None Include="Bars\materials.struxml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

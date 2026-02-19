@@ -28,7 +28,7 @@ namespace FemDesign.Calculate
 
         [DefaultValue(0)]
         [XmlElement("step")]
-        public double _step { get; set; }
+        public double _step { get; set; } = 0;
 
         [XmlIgnore]
         public double Step

@@ -51,12 +51,19 @@ namespace FemDesign.Sections
         }
 
 
+
+        /// <summary>
+        /// Returns the first <see cref="Section"/> in the database with the specified name.
+        /// Use <see cref="SectionNames"/> to get a list of all section names in the database.
+        /// You can also use abbreviated names as used in FEM-Design results.
+        /// i.e. "HEA100", "IPE200", "CHS 323.9-8.8" etc.
+        /// </summary>
+        /// <param name="sectionName">The name of the section to find.</param>
+        /// <returns>The <see cref="Section"/> with the specified name, or null if not found.</returns>
         public Section SectionByName(string sectionName)
         {
             var sections = this.Sections.Section;
-            var sectionNames = sections.Select(x => x._sectionName).ToArray();
-            var index = FuzzySharp.Process.ExtractOne(sectionName, sectionNames).Index;
-            return sections[index];
+            return sections.SectionByName(sectionName);
         }
 
         /// <summary>

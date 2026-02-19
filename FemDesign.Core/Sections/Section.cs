@@ -199,6 +199,7 @@ namespace FemDesign.Sections
             return sectionByFamily;
         }
 
+
         public static Section SectionByName(this List<FemDesign.Sections.Section> sections, string sectionName)
         {
             // abbreviation HEA 100
@@ -213,7 +214,7 @@ namespace FemDesign.Sections
             ExtractedResult<string> extr = extracted.Score > extract.Score ? extracted : extract;
 
             if (extr.Score < Section._fuzzyScore)
-                throw new Exception($"{sectionName} can not be found!");
+                throw new Exception($"{sectionName} can not be found! Try different naming conventions.");
             else
                 return sections[extr.Index];
         }
