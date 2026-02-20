@@ -34,7 +34,9 @@ namespace FemDesign.Sections
         }
 
 
-        [TestMethod]
+        [TestMethod("SectionDatabase - Fuzzy search")]
+        [TestCategory("FEM-Design required")]
+
         public void TestFuzzySearch()
         {
             var db = SectionDatabase.GetDefault();
