@@ -9,10 +9,10 @@ namespace FemDesign.Grasshopper
     /// <summary>
     /// Configures the shared FemDesignConnectionHub and exposes a lightweight handle.
     /// </summary>
-    public class FemDesignConnectionComponent: FEM_Design_API_Component
+    public class FemDesignConnectionComponent_OBSOLETE2500: FEM_Design_API_Component
     {
         private Guid _handle = Guid.Empty;
-        public FemDesignConnectionComponent() : base("FEM-Design.Connection", "Connection", "Create or configure a shared FEM-Design connection. Use it to specify the 'Connection' for the LiveLink components.\n\n" +
+        public FemDesignConnectionComponent_OBSOLETE2500() : base("FEM-Design.Connection", "Connection", "Create or configure a shared FEM-Design connection. Use it to specify the 'Connection' for the LiveLink components.\n\n" +
             "Note: Removing this component will automatically close the FEM-Design window. To keep FEM-Design open after closing the connection, use the 'Disconnect' component.", CategoryName.Name(), SubCategoryName.Cat8())
         {
             ObjectChanged += FemDesignConnectionComponent_ObjectChanged;
@@ -74,20 +74,11 @@ namespace FemDesign.Grasshopper
                 System.IO.Directory.SetCurrentDirectory(currentDir);
             }
 
-            try
-            {
-                CloseConnection();
-                _handle = FemDesignConnectionHub.Create(fdDir, minimized, outputDir, deleteOutput);
+            CloseConnection();
+            _handle = FemDesignConnectionHub.Create(fdDir, minimized, outputDir, deleteOutput);
 
-                // Emit a handle object to wire downstream
-                DA.SetData("Connection", new FemDesign.Grasshopper.FemDesignHubHandle(_handle));
-            }
-            catch (Exception ex)
-            {
-                _handle = Guid.Empty;
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, ex.Message);
-                DA.SetData("Connection", null);
-            }
+            // Emit a handle object to wire downstream
+            DA.SetData("Connection", new FemDesign.Grasshopper.FemDesignHubHandle(_handle));
         }
 
         private void CloseConnection()
@@ -111,9 +102,8 @@ namespace FemDesign.Grasshopper
         }
 
         protected override System.Drawing.Bitmap Icon => FemDesign.Properties.Resources.FEM_Connection;
-        public override Guid ComponentGuid => new Guid("{A3F7B2D1-E4C8-4A6F-9D3E-1B5C7F8A2E09}");
-        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override Guid ComponentGuid => new Guid("{CBDD03EE-9F56-42FC-AA8D-7C45C152EF1C}");
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
     }
 }
-
 

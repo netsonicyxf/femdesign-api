@@ -236,6 +236,7 @@
     <Compile Include="Model\ModelConstruct.cs" />
     <Compile Include="Model\OBSOLETE\ModelConstruct_OBSOLETE.cs" />
     <Compile Include="Pipe\OBSOLETE\FemDesignConnectionComponent_OBSOLETE2403.cs" />
+    <Compile Include="Pipe\OBSOLETE\FemDesignConnectionComponent_OBSOLETE2500.cs" />
     <Compile Include="Pipe\FemDesignConnectionComponent.cs" />
     <Compile Include="Pipe\FemDesignOpen.cs" />
     <Compile Include="Pipe\OBSOLETE\PipeEigenFrequencyResults_OBSOLETE2403.cs" />
