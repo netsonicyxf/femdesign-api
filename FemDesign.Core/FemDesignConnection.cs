@@ -144,8 +144,9 @@ namespace FemDesign
             {
                 @"C:\Program Files\StruSoft\FEM-Design 25\",
                 @"C:\Program Files\StruSoft\FEM-Design 25 Educational\",
-                @"C:\Program Files\StruSoft\FEM-Design 25 Student\",
-                @"C:\Program Files\StruSoft\FEM-Design 25 Night Install\"   // for StruSoft employees
+                @"C:\Program Files\StruSoft\FEM-Design 25 Educational_University\",
+                @"C:\Program Files\StruSoft\FEM-Design 25 Night Install\",              // for StruSoft employees
+                @"C:\Program Files\StruSoft\FEM-Design 25 Silent\"                      // not used for now, but might be used in the future
             };
 
             foreach (var dir in defaultDirs)
