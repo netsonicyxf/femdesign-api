@@ -74,11 +74,20 @@ namespace FemDesign.Grasshopper
                 System.IO.Directory.SetCurrentDirectory(currentDir);
             }
 
-            CloseConnection();
-            _handle = FemDesignConnectionHub.Create(fdDir, minimized, outputDir, deleteOutput);
+            try
+            {
+                CloseConnection();
+                _handle = FemDesignConnectionHub.Create(fdDir, minimized, outputDir, deleteOutput);
 
-            // Emit a handle object to wire downstream
-            DA.SetData("Connection", new FemDesign.Grasshopper.FemDesignHubHandle(_handle));
+                // Emit a handle object to wire downstream
+                DA.SetData("Connection", new FemDesign.Grasshopper.FemDesignHubHandle(_handle));
+            }
+            catch (Exception ex)
+            {
+                _handle = Guid.Empty;
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, ex.Message);
+                DA.SetData("Connection", null);
+            }
         }
 
         private void CloseConnection()

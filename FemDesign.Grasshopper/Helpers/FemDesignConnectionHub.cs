@@ -1,6 +1,7 @@
 // https://strusoft.com/
 using System;
 using System.Collections.Concurrent;
+using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -28,9 +29,30 @@ namespace FemDesign.Grasshopper
         {
             var id = Guid.NewGuid();
             var inst = new Instance();
+            var initialized = new ManualResetEventSlim(false);
+            Exception startupException = null;
+
             inst.WorkerThread = new Thread(() =>
             {
-                inst.Connection = new FemDesign.FemDesignConnection(fdDir, minimized, outputDir: outputDir, tempOutputDir: deleteOutput);
+                try
+                {
+                    inst.Connection = new FemDesign.FemDesignConnection(fdDir, minimized, outputDir: outputDir, tempOutputDir: deleteOutput);
+                }
+                catch (Exception ex)
+                {
+                    startupException = ex;
+                }
+                finally
+                {
+                    initialized.Set();
+                }
+
+                if (inst.Connection == null)
+                {
+                    inst.Queue.CompleteAdding();
+                    return;
+                }
+
                 foreach (var action in inst.Queue.GetConsumingEnumerable())
                 {
                     try { action(); }
@@ -45,6 +67,15 @@ namespace FemDesign.Grasshopper
                 throw new InvalidOperationException("Failed to create FemDesign connection instance.");
 
             inst.WorkerThread.Start();
+            initialized.Wait();
+
+            if (startupException != null)
+            {
+                _instances.TryRemove(id, out _);
+                inst.Queue.Dispose();
+                ExceptionDispatchInfo.Capture(startupException).Throw();
+            }
+
             return id;
         }
 
