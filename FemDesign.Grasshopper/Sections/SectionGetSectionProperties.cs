@@ -40,8 +40,8 @@ namespace FemDesign.Grasshopper
             pManager.Register_DoubleParam("Wz", "Wz", "Section modulus about the local z-axis.");
             pManager.Register_DoubleParam("It", "It", "Torsional moment of inertia.");
             pManager.Register_GenericParam("General", "Gen", "General section properties.\n" +
-                "0 - Height\n1 - Width\n2 - A\n3 - P\n4 - A/P\n5 - Yg\n6 - Zg\n7 - Ys\n8 - Zs\n9 - Iy\n10 - Wy\n11 - ez.max\n12 - ez.min\n13 - iy\n14 - Sy\n" +
-                "15 - Iz\n16 - Wz\n17 - ey.max\n18 - ey.min\n19 - iz\n20 - Sz\n21 - It\n22 - Wt\n23 - Iw\n24 - Iyz\n25 - zomega");
+                "0 - Height\n1 - Width\n2 - A\n3 - P\n4 - A/P\n5 - Ys\n6 - Zs\n7 - Iy\n8 - Wy\n9 - ez.max\n10 - ez.min\n11 - iy\n12 - Sy\n" +
+                "13 - Iz\n14 - Wz\n15 - ey.max\n16 - ey.min\n17 - iz\n18 - Sz\n19 - It\n20 - WSVt\n21 - Iomega\n22 - Iyz\n23 - zomega");
             pManager.Register_GenericParam("Principal 1", "Principal 1", "Section properties computed around the first principal axis.\n" +
                 "0 - alfa1\n1 - I1\n2 - W1.min\n3 - W1.max\n4 - e2.max\n5 - e2.min\n6 - i1\n7 - S1\n8 - S01\n9 - c1\n10 - rho1\n11 - z2");
             pManager.Register_GenericParam("Principal 2", "Principal 2", "Section properties computed around the second principal axis.\n" +
@@ -105,8 +105,6 @@ namespace FemDesign.Grasshopper
                 nameof(Results.SectionProperties.A),
                 nameof(Results.SectionProperties.P),
                 nameof(Results.SectionProperties.AP),
-                nameof(Results.SectionProperties.Yg),
-                nameof(Results.SectionProperties.Zg),
                 nameof(Results.SectionProperties.Ys),
                 nameof(Results.SectionProperties.Zs),
                 nameof(Results.SectionProperties.Iy),
@@ -122,8 +120,8 @@ namespace FemDesign.Grasshopper
                 nameof(Results.SectionProperties.iz),
                 nameof(Results.SectionProperties.Sz),
                 nameof(Results.SectionProperties.It),
-                nameof(Results.SectionProperties.Wt),
-                nameof(Results.SectionProperties.Iw),
+                nameof(Results.SectionProperties.WSVt),
+                nameof(Results.SectionProperties.Iomega),
                 nameof(Results.SectionProperties.Iyz),
                 nameof(Results.SectionProperties.zomega)
             };

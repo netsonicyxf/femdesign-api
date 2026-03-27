@@ -84,7 +84,7 @@ namespace FemDesign.Results
         {
             get
             {
-                return new Regex(@"^(?'type'Bars), (?'result'End forces), ((?'loadcasetype'[\w\s\-]+)? - )?Load (?'casecomb'case|comb\.+): (?'casename'[\w\ ]+?)(?: - selected objects)?$|^ID\tEnd\tN\tTy'\tTz'\tMt\tMy'\tMz'\t(Case|Comb\.)|^\[.*\]");
+                return new Regex(@"^(?'type'Bars), (?'result'End forces), ((?'loadcasetype'[\w\s\-]+)? - )?Load (?'casecomb'case|comb\.+): (?'casename'[\w\ ]+?)(?: - selected objects)?$|^ID\tEnd\tN\tTy'\tTz'\tMt,SV\tMy'\tMz'\tB\tMt,w\tMt,tot\t(Case|Comb\.)|^\[.*\]");
             }
         }
 
