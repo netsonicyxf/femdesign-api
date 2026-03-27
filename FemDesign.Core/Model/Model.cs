@@ -118,7 +118,7 @@ namespace FemDesign
         public StruSoft.Interop.StruXml.Data.DatabaseUser_defined_views UserDefinedViews { get; set; }
 
         [XmlElement("end", Order = 23)]
-        public string End { get; set; }
+        public string End { get; set; } = "";
 
         internal static bool HasResults(string filePath)
         {
