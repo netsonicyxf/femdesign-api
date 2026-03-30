@@ -201,6 +201,11 @@ namespace FemDesign.Bars
             }
         }
 
+        [System.ComponentModel.DefaultValue("00000000-0000-0000-0000-000000000000")]
+        [XmlAttribute("predefined_connectivity")]
+        public string Predefined_connectivity { get; set; }
+
+
         public bool IsRigid
         {
             get
@@ -217,6 +222,17 @@ namespace FemDesign.Bars
             get
             {
                 if (this.Tx && this.Ty && this.Tz && this.Rx && this.Ry == false && this.Rz == false)
+                    return true;
+                else
+                    return false;
+            }
+        }
+
+        public bool IsPredefined
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(this.Predefined_connectivity) && this.Predefined_connectivity != "00000000-0000-0000-0000-000000000000")
                     return true;
                 else
                     return false;
@@ -319,6 +335,8 @@ namespace FemDesign.Bars
                 return $"{this.GetType().Name} Rigid";
             else if (IsHinged)
                 return $"{this.GetType().Name} Hinged";
+            else if (IsPredefined)
+                return $"{this.GetType().Name} Predefined";
             else
             {
                 var tx = this.Tx == true ? "Rigid" : $"{this.TxRelease} kN/m";
